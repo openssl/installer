@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<?define BusinessName = "OpenSSL" ?>
+	<?define BusinessURL = "https://www.openssl.org/" ?>
+	<?define AppName = "OpenSSL [[DOTTED_VERSION]] Light (64-bit ARM)" ?>
+	<?define AppRealVer = "OpenSSL [[DOTTED_VERSION]] Light (64-bit ARM)" ?>
+	<?define AppVer = "[[MSI_DOTTED_VERSION]]" ?>
+	<?define AppURL = "https://www.openssl.org/" ?>
+	<?define AppComments = "Built by OpenSSL Installer Team" ?>
+	<?define SupportURL = "https://github.com/openssl/installer" ?>
+	<?define SourceSetupFile = "OpenSSL-[[DOTTED_VERSION]]-arm64-light.exe" ?>
+	<?define UpgradeGUID = "99C28AFA-6419-40B1-B88D-32B810BB4234" ?>
+
+	<!-- Don't modify the rest of this file. -->
+	<?define DestSetupFile = "setup-$(var.UpgradeGUID)-$(var.AppVer)-arm64-light.exe" ?>
+
+	<Product Id="*" Name="$(var.AppName)" Manufacturer="$(var.BusinessName)" UpgradeCode="$(var.UpgradeGUID)" Language="1033" Version="$(var.AppVer)">
+		<Package Id="*" Keywords="Installer" Description="$(var.AppRealVer) Installer" Comments="$(var.AppComments)" Manufacturer="$(var.BusinessName)" InstallerVersion="500" Compressed="yes" />
+
+		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="TempFolder">
+				<Directory Id="INSTALLLOCATION" Name="~_tmpdir">
+					<Component Id="MainComponent" DiskId="1" Guid="*">
+						<File Id="MainInstaller" Name="$(var.DestSetupFile)" Source="$(var.SourceSetupFile)" />
+					</Component>
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<Feature Id="InstallFeature" Title="Install Feature" Level="1">
+			<ComponentRef Id="MainComponent" />
+		</Feature>
+
+		<!-- Uninstaller. -->
+		<Property Id="UNINSTALLINNOSETUP">
+			<RegistrySearch Id="UninstallInnoSetup" Root="HKLM" Key="SOFTWARE\Inno Setup MSIs\$(var.UpgradeGUID)" Type="raw" />
+		</Property>
+
+		<SetProperty Id="RunWrapUninstall_UILevel_2" Value='"[UNINSTALLINNOSETUP]" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /RESTARTEXITCODE=0 /MSI' Before="RunWrapUninstall_UILevel_2" Sequence="execute" />
+		<SetProperty Id="RunWrapUninstall_UILevel_3_4" Value='"[UNINSTALLINNOSETUP]" /SILENT /SUPPRESSMSGBOXES /NORESTART /RESTARTEXITCODE=0 /MSI' Before="RunWrapUninstall_UILevel_3_4" Sequence="execute" />
+		<SetProperty Id="RunWrapUninstall_UILevel_5" Value='"[UNINSTALLINNOSETUP]" /NORESTART /RESTARTEXITCODE=0 /MSI' Before="RunWrapUninstall_UILevel_5" Sequence="execute" />
+
+		<?if $(sys.BUILDARCH) = x64 ?>
+			<CustomAction Id="RunWrapUninstall_UILevel_2" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" />
+			<CustomAction Id="RunWrapUninstall_UILevel_3_4" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" />
+			<CustomAction Id="RunWrapUninstall_UILevel_5" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" />
+		<?else?>
+			<CustomAction Id="RunWrapUninstall_UILevel_2" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="check" />
+			<CustomAction Id="RunWrapUninstall_UILevel_3_4" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="check" />
+			<CustomAction Id="RunWrapUninstall_UILevel_5" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="check" />
+		<?endif?>
+
+		<!-- Installer. -->
+		<CustomAction Id="RunWrapInstall_UILevel_2" Execute="deferred" FileKey="MainInstaller" ExeCommand="/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /RESTARTEXITCODE=0 /MSI=$(var.UpgradeGUID)" HideTarget="no" Impersonate="no" Return="check" />
+		<CustomAction Id="RunWrapInstall_UILevel_3_4" Execute="deferred" FileKey="MainInstaller" ExeCommand="/SILENT /SUPPRESSMSGBOXES /NORESTART /RESTARTEXITCODE=0 /MSI=$(var.UpgradeGUID)" HideTarget="no" Impersonate="no" Return="check" />
+		<CustomAction Id="RunWrapInstall_UILevel_5" Execute="deferred" FileKey="MainInstaller" ExeCommand="/NORESTART /RESTARTEXITCODE=0 /MSI=$(var.UpgradeGUID)" HideTarget="no" Impersonate="no" Return="check" />
+
+		<!-- The uninstaller and installer line to use is selected based on the UILevel.  This allows msiexec to run the installer and uninstaller silently. -->
+		<InstallExecuteSequence>
+			<Custom Action="RunWrapUninstall_UILevel_2" Before="RemoveFiles">UILevel=2 AND REMOVE AND UNINSTALLINNOSETUP</Custom>
+			<Custom Action="RunWrapUninstall_UILevel_3_4" Before="RemoveFiles">(UILevel=3 OR UILevel=4) AND REMOVE AND UNINSTALLINNOSETUP</Custom>
+			<Custom Action="RunWrapUninstall_UILevel_5" Before="RemoveFiles">UILevel=5 AND REMOVE AND UNINSTALLINNOSETUP</Custom>
+
+			<Custom Action="RunWrapInstall_UILevel_2" After="InstallFiles">UILevel=2 AND (NOT Installed OR UPGRADINGPRODUCTCODE)</Custom>
+			<Custom Action="RunWrapInstall_UILevel_3_4" After="InstallFiles">(UILevel=3 OR UILevel=4) AND (NOT Installed OR UPGRADINGPRODUCTCODE)</Custom>
+			<Custom Action="RunWrapInstall_UILevel_5" After="InstallFiles">UILevel=5 AND (NOT Installed OR UPGRADINGPRODUCTCODE)</Custom>
+
+			<!-- Uncomment the following if the installer or uninstaller require a reboot. -->
+			<!-- <ScheduleReboot After="InstallFinalize" /> -->
+		</InstallExecuteSequence>
+
+		<Property Id="ARPURLUPDATEINFO" Value="$(var.BusinessURL)" />
+		<Property Id="ARPURLINFOABOUT" Value="$(var.AppURL)" />
+		<Property Id="ARPHELPLINK" Value="$(var.SupportURL)" />
+	</Product>
+</Wix>

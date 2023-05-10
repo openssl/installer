@@ -1,0 +1,7 @@
+Support Library Sources
+=======================
+
+The files in this directory come from these open source libraries:
+
+https://github.com/cubiclesoft/php-misc (MIT license)
+https://github.com/cubiclesoft/ultimate-web-scraper (MIT license)

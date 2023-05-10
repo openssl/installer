@@ -1,0 +1,227 @@
+{
+	"name": "OpenSSL 3.0",
+	"download_type": "tar.gz",
+	"download_extract_path": "[[VERSION_DIR]]/source",
+	"download": "https://www.openssl.org/source/openssl-[[DOTTED_VERSION]].tar.gz",
+	"download_sha256_url": "https://www.openssl.org/source/openssl-[[DOTTED_VERSION]].tar.gz.sha256",
+	"architectures": [
+		{
+			"name": "Intel/AMD x86 (32-bit)",
+			"architecture": "x86",
+			"dependencies": [
+				{
+					"name": "Visual C++ compiler",
+					"purpose": "Main C compiler",
+					"verify": "cl.exe",
+					"verify_opts": "",
+					"required_output": "/Microsoft .* C\\/C\\+\\+ .* x86/",
+					"required_alert": "Incorrect architecture detected or invalid compiler.  Expected Microsoft Visual C++ x86."
+				},
+				{
+					"name": "Visual C++ object linker",
+					"purpose": "Main object file linker",
+					"verify": "link.exe",
+					"verify_opts": "/?",
+					"required_output": "/Microsoft .* Incremental Linker/",
+					"required_alert": "Missing Microsoft Visual C++ object linker."
+				},
+				{
+					"name": "Visual C++ nmake",
+					"purpose": "Main makefile processing utility",
+					"verify": "nmake.exe",
+					"verify_opts": "/?",
+					"required_output": "/Microsoft .* Program Maintenance Utility/",
+					"required_alert": "Missing Microsoft nmake."
+				},
+				{
+					"name": "Strawberry Perl Portable",
+					"purpose": "Running perl Configure to generate makefiles and also MinGW dlltool to create export libraries",
+					"verify": "perl.exe",
+					"verify_opts": "-v",
+					"required_output": "/perl .* \\(v5[.]/",
+					"required_alert": "Perl 5 is required.",
+					"preferred_output": "/perl .* \\(v5[.]32[.]1\\)/",
+					"preferred_alert": "Perl v5.32.1 is preferred.",
+					"env_paths": ["[[DEPS_DIR]]/perl/perl/site/bin", "[[DEPS_DIR]]/perl/perl/bin"],
+					"env_extras": {"TERM": "dumb"},
+					"download_type": "zip",
+					"download_extract_path": "[[DEPS_DIR]]/perl",
+					"download_x86": "https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-32bit-portable.zip",
+					"download_x86_sha256": "d9c5711d12573a0f6d977792caa58364b1d46217521ae5c25cf5cc378a7c23c0",
+					"download_x64": "https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-64bit-portable.zip",
+					"download_x64_sha256": "692646105b0f5e058198a852dc52a48f1cebcaf676d63bbdeae12f4eaee9bf5c"
+				},
+				{
+					"name": "Netwide Assembler (NASM)",
+					"purpose": "Building optimized assembly code",
+					"verify": "nasm.exe",
+					"verify_opts": "-v",
+					"preferred_output": "/NASM/",
+					"preferred_alert": "NASM is required.",
+					"preferred_output": "/NASM .* 2[.]16[.]01/",
+					"preferred_alert": "NASM v2.16.01 is preferred.",
+					"env_paths": ["[[DEPS_DIR]]/nasm/nasm-2.16.01"],
+					"env_extras": {},
+					"download_type": "zip",
+					"download_extract_path": "[[DEPS_DIR]]/nasm",
+					"download_x86": "https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/win32/nasm-2.16.01-win32.zip",
+					"download_x86_sha256": "e289fa70c88594b092c916344bb8bfcd6896b604bfab284ab57b1372997c820c",
+					"download_x64": "https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/win64/nasm-2.16.01-win64.zip",
+					"download_x64_sha256": "029eed31faf0d2c5f95783294432cbea6c15bf633430f254bb3c1f195c67ca3a"
+				},
+				{
+					"name": "Inno Setup 5",
+					"purpose": "Compiling .iss template files into .exe installers (32-bit only)",
+					"verify": "[[DEPS_DIR]]/innosetup5/iscc.exe",
+					"verify_opts": "",
+					"required_output": "/Inno Setup 5/",
+					"required_alert": "Inno Setup 5 is required.",
+					"download_type": "exe",
+					"download_extract_path": "[[DEPS_DIR]]/innosetup5",
+					"download_install_opts": "/PORTABLE=1 /verysilent /currentuser \"/DIR=[[DEPS_DIR]]\\innosetup5\"",
+					"download": "https://files.jrsoftware.org/is/5/innosetup-5.6.1.exe",
+					"download_sha256": "96fd6a5eaab473c61a19affff89618764b940ee3f15837c2944a5595aed5fde6"
+				},
+				{
+					"name": "Wix Toolset",
+					"purpose": "Generating .msi installers from .exe installers",
+					"verify": "[[DEPS_DIR]]/wixtoolset/candle.exe",
+					"verify_opts": "",
+					"env_extras": {"WIX": "[[DEPS_DIR]]\\wixtoolset\\"},
+					"required_output": "/Windows Installer XML Toolset Compiler version 3[.]14/",
+					"required_alert": "Wix toolset 3.14 is required.",
+					"download_type": "zip",
+					"download_extract_path": "[[DEPS_DIR]]/wixtoolset",
+					"download": "https://wixtoolset.org/downloads/v3.14.0.6526/wix314-binaries.zip",
+					"download_sha256": "4c89898df3bcab13e12f7ca54399c35ad273475ad2cb6284611d00ae2d063c2c"
+				}
+			],
+			"build": {
+				"configure_target": "VC-WIN32",
+				"configure_extra": "-D_USE_32BIT_TIME_T -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_WIN32_WINNT=0x0501",
+				"patches": {
+					"/Zi ": "/Z7 ",
+					"/subsystem:console ": "/subsystem:console,5.01 ",
+					"CNF_LDFLAGS=": "CNF_LDFLAGS=/subsystem:console,5.01 "
+				}
+			},
+			"package": {
+				"mingw_dlltool": "[[DEPS_DIR]]/perl/c/bin/dlltool.exe",
+				"inno_setup_dir": "[[DEPS_DIR]]/innosetup5",
+				"wix_toolset_dir": "[[DEPS_DIR]]/wixtoolset",
+				"wix_toolset_target": ""
+			}
+		},
+		{
+			"name": "Intel/AMD x64 (64-bit)",
+			"architecture": "x64",
+			"dependencies": [
+				{
+					"name": "Visual C++ compiler",
+					"purpose": "Main C compiler",
+					"verify": "cl.exe",
+					"verify_opts": "",
+					"required_output": "/Microsoft .* C\\/C\\+\\+ .* x64/",
+					"required_alert": "Incorrect architecture detected or invalid compiler.  Expected Microsoft Visual C++ x64."
+				},
+				{
+					"name": "Visual C++ object linker",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Visual C++ nmake",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Strawberry Perl Portable",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Netwide Assembler (NASM)",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Inno Setup 5",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Wix Toolset",
+					"expand_from": "x86"
+				}
+			],
+			"build": {
+				"configure_target": "VC-WIN64A",
+				"configure_extra": "-D_WINSOCK_DEPRECATED_NO_WARNINGS -D_WIN32_WINNT=0x0502",
+				"patches": {
+					"/Zi ": "/Z7 ",
+					"/subsystem:console ": "/subsystem:console,5.02 ",
+					"CNF_LDFLAGS=": "CNF_LDFLAGS=/subsystem:console,5.02 "
+				}
+			},
+			"package": {
+				"inno_setup_dir": "[[DEPS_DIR]]/innosetup5",
+				"wix_toolset_dir": "[[DEPS_DIR]]/wixtoolset",
+				"wix_toolset_target": "-arch x64"
+			}
+		},
+		{
+			"name": "ARM64 (64-bit)",
+			"architecture": "arm64",
+			"dependencies": [
+				{
+					"name": "Visual C++ compiler",
+					"purpose": "Main C compiler",
+					"verify": "cl.exe",
+					"verify_opts": "",
+					"required_output": "/Microsoft .* C\\/C\\+\\+ .* ARM64/",
+					"required_alert": "Incorrect architecture detected or invalid compiler.  Expected Microsoft Visual C++ ARM64."
+				},
+				{
+					"name": "Visual C++ object linker",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Visual C++ nmake",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Strawberry Perl Portable",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Netwide Assembler (NASM)",
+					"expand_from": "x86"
+				},
+				{
+					"name": "Inno Setup 6",
+					"purpose": "Compiling .iss template files into .exe installers (64-bit only)",
+					"verify": "[[DEPS_DIR]]/innosetup6/iscc.exe",
+					"verify_opts": "",
+					"required_output": "/Inno Setup 6/",
+					"required_alert": "Inno Setup 6 is required.",
+					"download_type": "exe",
+					"download_extract_path": "[[DEPS_DIR]]/innosetup6",
+					"download_install_opts": "/PORTABLE=1 /verysilent /currentuser \"/DIR=[[DEPS_DIR]]\\innosetup6\"",
+					"download": "https://files.jrsoftware.org/is/6/innosetup-6.2.2.exe",
+					"download_sha256": "8117d10d00a2ad33a1390978ea3872861c330e087914410a6377b22c4c5b8563"
+				},
+				{
+					"name": "Wix Toolset",
+					"expand_from": "x86"
+				}
+			],
+			"build": {
+				"configure_target": "VC-WIN64-ARM",
+				"configure_extra": "",
+				"patches": {
+					"/Zi ": "/Z7 "
+				}
+			},
+			"package": {
+				"inno_setup_dir": "[[DEPS_DIR]]/innosetup6",
+				"wix_toolset_dir": "[[DEPS_DIR]]/wixtoolset",
+				"wix_toolset_target": "-arch arm64"
+			}
+		}
+	]
+}

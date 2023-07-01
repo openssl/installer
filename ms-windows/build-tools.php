@@ -1,6 +1,14 @@
 <?php
-	// Tools to build/generate OpenSSL installer packages for Windows.
+/*
+ * Copyright 2016-2019 The OpenSSL Project Authors. All Rights Reserved.
+ *
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
+ */
 
+	// Tools to build/generate OpenSSL installer packages for Windows.
 	if (!isset($_SERVER["argc"]) || !$_SERVER["argc"])
 	{
 		echo "This file is intended to be run from the command-line.";
@@ -383,7 +391,6 @@
 
 			$fp = fopen($tempfilename, "wb");
 
-			$web = new WebBrowser();
 			$options = array(
 				"read_body_callback" => "DownloadFileCallback",
 				"read_body_callback_opts" => $fp
@@ -485,7 +492,6 @@
 		if (!isset($depinfo["verify"]))  return true;
 
 		$tempenv = GetCleanEnvironment();
-//		$tempenv["OPENSSL_DEPS_DIR"] = str_replace("/", "\\", $pathmap["[[DEPS_DIR]]"]);
 
 		$tempenvkeymap = GetEnvironmentKeymap($tempenv);
 
@@ -1317,8 +1323,6 @@
 
 		if (!is_dir($pathmap["[[BUILD_OUTPUT_DIR]]"] . "/static_MD"))  RunBuild($ver, $arch, $baseenv, 5, $pathmap, $archinfo, "no-shared no-tests", "/MD", "static_MD", array("apps"));
 		if (!is_dir($pathmap["[[BUILD_OUTPUT_DIR]]"] . "/static_MT"))  RunBuild($ver, $arch, $baseenv, 6, $pathmap, $archinfo, "no-shared no-tests", "/MT", "static_MT", array("apps"));
-//		if (!is_dir($pathmap["[[BUILD_OUTPUT_DIR]]"] . "/static_MDd"))  RunBuild($ver, $arch, $baseenv, 7, $pathmap, $archinfo, "--debug no-shared no-tests", "/MDd", "static_MDd", array());
-//		if (!is_dir($pathmap["[[BUILD_OUTPUT_DIR]]"] . "/static_MTd"))  RunBuild($ver, $arch, $baseenv, 8, $pathmap, $archinfo, "--debug no-shared no-tests", "/MTd", "static_MTd", array());
 
 		// Remove the temporary build directory.
 		DeleteDirectory($pathmap["[[SOURCE_TEMP_DIR]]"]);
@@ -1558,4 +1562,3 @@
 
 		echo $echoprefix . " Finished building and packaging at " . date("Y-m-d H:i:s") . ".  Total time:  " . $mins . " min " . $secs . " sec\n";
 	}
-?>

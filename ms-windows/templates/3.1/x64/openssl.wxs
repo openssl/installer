@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<!--
+	Copyright 2016-2019 The OpenSSL Project Authors. All Rights Reserved.
+
+	Licensed under the OpenSSL license (the "License").  You may not use
+	this file except in compliance with the License.  You can obtain a copy
+	in the file LICENSE in the source distribution or at
+	https://www.openssl.org/source/license.html
+	-->
+
 	<?define BusinessName = "OpenSSL" ?>
 	<?define BusinessURL = "https://www.openssl.org/" ?>
 	<?define AppName = "OpenSSL [[DOTTED_VERSION]] (64-bit)" ?>
 	<?define AppRealVer = "OpenSSL [[DOTTED_VERSION]] (64-bit)" ?>
 	<?define AppVer = "[[MSI_DOTTED_VERSION]]" ?>
 	<?define AppURL = "https://www.openssl.org/" ?>
-	<?define AppComments = "Built by OpenSSL Installer Team" ?>
+	<?define AppComments = "Built by OpenSSL" ?>
 	<?define SupportURL = "https://github.com/openssl/installer" ?>
 	<?define SourceSetupFile = "OpenSSL-[[DOTTED_VERSION]]-x64.exe" ?>
 	<?define UpgradeGUID = "50A9FBE2-0F8C-4D5D-97A4-A63A71C4EA1E" ?>

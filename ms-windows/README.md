@@ -19,6 +19,8 @@ Running Build Tools
 
 The main 'build-tools.php' script performs all of the work to download required dependencies (Perl, NASM, Inno Setup, Wix toolset) from HTTPS enabled websites (hence why the 'openssl' extension in PHP is required to build OpenSSL), validate environments, download, validate and extract OpenSSL release tarballs, run `perl Configure` and `nmake`, and run Inno Setup and Wix toolset.
 
+Inno Setup is an installer builder.  It intakes a plain text .iss script file (INI-like) and outputs an EXE that installs bundled files into locations specified by the aforementioned .iss script.  It supports custom code via a Pascal-like language.  Wix toolset is another installer builder.  It intakes a plain text .wxs file (XML) and outputs a MSI.  For this project, Wix toolset is used to wrap the EXEs output by Inno Setup in a MSI.  MSI is used by mass deployment tools (SCCM/GPO) to deploy applications to large organizations.  Some people prefer EXE installers while others prefer MSI while others want a portable ZIP file.
+
 Avoid moving or renaming parent directories after running the build tools script.  It is easier to just start from a completely fresh copy of this repository if you need to move or rename parent folders.  A number of paths get mapped to the current directory structure during the initialization/preparation and build process and will probably result in errors if the parent directories are moved or renamed.
 
 From a Command Prompt, run:
@@ -106,7 +108,7 @@ The base version 'init' will probably break if dependencies vanish from their so
 Directory Structure
 -------------------
 
-This directory structure layout should help with understanding the output of each major step (init, save-profile, prepare, build/build-all):
+This directory structure layout, relative to this directory, should help with understanding the output of each major step (init, save-profile, prepare, build/build-all):
 
 * /templates - Main base version JSON and templated Inno Setup and Wix toolset scripts.  The base version JSON files drive the entire process to produce consistent results.
 * /versions/3.1/deps - Verified binary dependencies.  Required to build and package OpenSSL.  Output of 'init'.

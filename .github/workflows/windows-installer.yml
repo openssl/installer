@@ -1,0 +1,87 @@
+# Copyright 2021-2024 The OpenSSL Project Authors. All Rights Reserved.
+#
+# Licensed under the Apache License 2.0 (the "License").  You may not use
+# this file except in compliance with the License.  You can obtain a copy
+# in the file LICENSE in the source distribution or at
+# https://www.openssl.org/source/license.html
+
+name: Build Windows Installer
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        required: true
+        description: The tag to build
+      version:
+        type: string
+        required: true
+        description: The version to assign the installer
+permissions:
+  contents: read
+
+jobs:
+  build_installer:
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+      with:
+        repository: 'openssl/openssl'
+        ref: ${{ github.event.inputs.tag }}
+        path: 'openssl'
+
+    - name: Setup directories 
+      run: |
+        mkdir _installer
+        mkdir openssl/_build64
+        mkdir openssl/_build32
+        dir
+    - name: download NSIS installer
+      uses: suisei-cn/actions-download-file@v1.6.0
+      with:
+        url: "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.10/nsis-3.10-setup.exe?ts=gAAAAABmMQBRN5Sft3h4QFuuBHnXpM1ogwBVwXxqccE-hQlHvAbv4FWo3xaP3npNcOL7TF9wV_XXe7jriMBJ5TTcP1e_7av5LA%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnsis%2Ffiles%2FNSIS%25203%2F3.10%2Fnsis-3.10-setup.exe%2Fdownload"
+        target: _installer/
+    - name: Install NSIS 3.10
+      working-directory: _installer
+      run:  .\nsis-3.10-setup.exe /s
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: win64
+    - uses: ilammy/setup-nasm@v1
+      with:
+        platform: win64
+    - name: config x64
+      working-directory: openssl/_build64
+      run: |
+        perl ..\Configure --banner=Configured no-makedepend enable-fips VC-WIN64A
+        perl configdata.pm --dump
+    - name: build x64 binaries
+      working-directory: openssl/_build64
+      run: nmake /S
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: win32
+    - uses: ilammy/setup-nasm@v1
+      with:
+        platform: win32
+    - name: config x32
+      working-directory: openssl/_build32
+      run: |
+        perl ..\Configure --banner=Configured no-makedepend enable-fips VC-WIN32
+        perl configdata.pm --dump
+    - name: build x32 binaries
+      working-directory: openssl/_build32
+      run: nmake /S
+    - name: build installer
+      working-directory: windows-installer
+      run:  nmake INSTVERSION=${{ github.event.inputs.version }} INSTBUILD32=../openssl/_build32 INSTBUILD64=../openssl/_build64 INSTLICENSE=../openssl/LICENSE.txt openssl-installer
+    - name: Upload installer as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: openssl-installer
+        path: windows-installer/openssl*.exe
+
+
+

@@ -15,7 +15,7 @@ NSISOPTS=$(NSISOPTS) /DLICENSE_FILE=$(INSTLICENSE)
 
 openssl-installer: openssl.nsi
 	echo $(NSISOPTS)
-	makensis.exe $(NSISOPTS) .\openssl.nsi
+	makensis.exe $(NSISOPTS) /V4 .\openssl.nsi
 
 signed-openssl-installer: openssl.nsi
 	makecert.exe /n "CN=TestCompany" /r /h 0 /eku "1.3.6.1.5.5.7.3.3,1.3.6.1.4.1.311.10.3.13" /sv testcert.pvk testcert.cer

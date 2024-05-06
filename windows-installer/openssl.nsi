@@ -27,81 +27,48 @@ Function .onInit
 FunctionEnd
 
 # This section is run if installation of 32 bit binaries are selected
-!ifdef BUILD32
-SectionGroup "32 Bit Installation"
-	Section "32 Bit Binaries"
-		SetOutPath $INSTDIR\x32
-		File /NONFATAL ${BUILD32}\libcrypto-3.dll
-		File /NONFATAL ${BUILD32}\libssl-3.dll
-		File ${BUILD32}\libcrypto.lib
-		File ${BUILD32}\libssl.lib
-		File ${BUILD32}\apps\openssl.exe
-		SetOutPath $INSTDIR\x32\providers
-		File /NONFATAL ${BUILD32}\providers\fips.dll
-		File ${BUILD32}\providers\legacy.dll
-	SectionEnd
-	Section "x32 Development Headers"
-		SetOutPath $INSTDIR\x32\include\openssl
-		!tempfile headerlist
-		!system 'FOR /R "${BUILD32}\include\openssl" %A IN (*.h) DO @( >> "${headerlist}" echo.File "%~A" )'
-		!include "${headerlist}"
-		!delfile "${headerlist}"
-		!undef headerlist
-
-		SetOutPath $INSTDIR\x32\include\crypto
-		!tempfile headerlist
-		!system 'FOR /R "${BUILD32}\include\crypto" %A IN (*.h) DO @( >> "${headerlist}" echo.File "%~A" )'
-		!include "${headerlist}"
-		!delfile "${headerlist}"
-		!undef headerlist
-
-		SetOutPath $INSTDIR\x32\include\internal
-		!tempfile headerlist
-		!system 'FOR /R "${BUILD32}\include\internal" %A IN (*.h) DO @( >> "${headerlist}" echo.File "%~A" )'
-		!include "${headerlist}"
-		!delfile "${headerlist}"
-		!undef headerlist
-	SectionEnd
-SectionGroupEnd
-!endif
 
 !ifdef BUILD64
 # This section is run if installation of the 64 bit binaries are selectd
 SectionGroup "64 Bit Installation"
 	Section "64 Bit Binaries"
-		SetOutPath $INSTDIR\x64
-		File /NONFATAL ${BUILD64}\libcrypto-3-x64.dll
-		File /NONFATAL ${BUILD64}\libssl-3-x64.dll
-		File ${BUILD64}\libcrypto.lib
-		File ${BUILD64}\libssl.lib
-		File ${BUILD64}\apps\\openssl.exe
-		SetOutPath $INSTDIR\x64\providers
-		File /NONFATAL ${BUILD64}\providers\fips.dll
-		File ${BUILD64}\providers\legacy.dll
+		SetOutPath $INSTDIR\x64\lib
+		File /r "${BUILD64}\Program Files\OpenSSL\lib\"
+		SetOutPath $INSTDIR\x64\bin
+		File /r "${BUILD64}\Program Files\OpenSSL\bin\"
+		SetOutPath "$INSTDIR\x64\Common Files"
+		File /r "${BUILD64}\Program Files\Common Files\"
 	SectionEnd
 	Section "x64 Development Headers"
-		SetOutPath $INSTDIR\x64\include\openssl
-		!tempfile headerlist
-		!system 'FOR /R "${BUILD64}\include\openssl" %A IN (*.h) DO @( >> "${headerlist}" echo.File "%~A" )'
-		!include "${headerlist}"
-		!delfile "${headerlist}"
-		!undef headerlist
-
-		SetOutPath $INSTDIR\x64\include\crypto
-		!tempfile headerlist
-		!system 'FOR /R "${BUILD64}\include\crypto" %A IN (*.h) DO @( >> "${headerlist}" echo.File "%~A" )'
-		!include "${headerlist}"
-		!delfile "${headerlist}"
-		!undef headerlist
-
-		SetOutPath $INSTDIR\x64\include\internal
-		!tempfile headerlist
-		!system 'FOR /R "${BUILD64}\include\internal" %A IN (*.h) DO @( >> "${headerlist}" echo.File "%~A" )'
-		!include "${headerlist}"
-		!delfile "${headerlist}"
-		!undef headerlist
+		SetOutPath $INSTDIR\x64\include
+		File /r "${BUILD64}\Program Files\OpenSSL\include\"
 	SectionEnd
 SectionGroupEnd
+!endif
+
+!ifdef BUILD32
+# This section is run if installation of the 64 bit binaries are selectd
+SectionGroup "32 Bit Installation"
+	Section "32 Bit Binaries"
+		SetOutPath $INSTDIR\x64\lib
+		File /r "${BUILD32}\Program Files\OpenSSL\lib\"
+		SetOutPath $INSTDIR\x64\bin
+		File /r "${BUILD32}\Program Files\OpenSSL\bin\"
+		SetOutPath "$INSTDIR\x64\Common Files"
+		File /r "${BUILD32}\Program Files\Common Files\"
+	SectionEnd
+	Section "x32 Development Headers"
+		SetOutPath $INSTDIR\x64\include
+		File /r "${BUILD32}\Program Files\OpenSSL\include\"
+	SectionEnd
+SectionGroupEnd
+!endif
+
+!ifdef BUILD64
+Section "Documentation"
+	SetOutPath $INSTDIR\html
+	File /r "${BUILD64}\Program Files\OpenSSL\html\"
+SectionEnd
 !endif
 
 # Always install the uninstaller
@@ -119,15 +86,14 @@ SectionEnd
 !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
 
 Function CheckRunUninstaller
-	IfFileExists $INSTDIR\uninstall.exe 0 +2
-	ExecWait '"$INSTDIR\uninstall.exe" /S _?=$INSTDIR'
+        ifFileExists $INSTDIR\uninstall.exe 0 +2
+        ExecWait "$INSTDIR\uninstall.exe /S _?=$INSTDIR"
 FunctionEnd
+!insertmacro MUI_PAGE_COMPONENTS
 
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE CheckRunUninstaller
 !define MUI_DIRECTORYPAGE_TEXT_DESTINATION "Installation Directory"
 !insertmacro MUI_PAGE_DIRECTORY
-
-!insertmacro MUI_PAGE_COMPONENTS
 
 !insertmacro MUI_PAGE_INSTFILES
 

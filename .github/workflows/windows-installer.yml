@@ -60,6 +60,9 @@ jobs:
     - name: build x64 binaries
       working-directory: openssl/_build64
       run: nmake /S
+    - name: install x64 binaries
+      working-directory: openssl/_build64
+      run: nmake /S DESTDIR=..\_install64 install
     - uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: win32
@@ -74,9 +77,12 @@ jobs:
     - name: build x32 binaries
       working-directory: openssl/_build32
       run: nmake /S
+    - name: install x32 binaries
+      working-directory: openssl/_build32
+      run: nmake /S DESTDIR=..\_install32 install
     - name: build installer
       working-directory: windows-installer
-      run:  nmake INSTVERSION=${{ github.event.inputs.version }} INSTBUILD32=../openssl/_build32 INSTBUILD64=../openssl/_build64 INSTLICENSE=../openssl/LICENSE.txt openssl-installer
+      run:  nmake INSTVERSION=${{ github.event.inputs.version }} INSTBUILD32=../openssl/_install32 INSTBUILD64=../openssl/_install64 INSTLICENSE=../openssl/LICENSE.txt openssl-installer
     - name: Upload installer as artifact
       uses: actions/upload-artifact@v4
       with:

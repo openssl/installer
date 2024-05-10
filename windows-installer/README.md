@@ -88,5 +88,5 @@ Installer build options
 
 * /DSIGNPASS
   - Required if /DSIGN is provided
-  - Password strign to decrypt the pfx file
+  - Password string to decrypt the pfx file
 

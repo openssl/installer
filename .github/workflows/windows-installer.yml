@@ -41,7 +41,7 @@ jobs:
     - name: download NSIS installer
       uses: suisei-cn/actions-download-file@v1.6.0
       with:
-        url: "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.10/nsis-3.10-setup.exe?ts=gAAAAABmMQBRN5Sft3h4QFuuBHnXpM1ogwBVwXxqccE-hQlHvAbv4FWo3xaP3npNcOL7TF9wV_XXe7jriMBJ5TTcP1e_7av5LA%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnsis%2Ffiles%2FNSIS%25203%2F3.10%2Fnsis-3.10-setup.exe%2Fdownload"
+        url: "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.10/nsis-3.10-setup.exe"
         target: _installer/
     - name: Install NSIS 3.10
       working-directory: _installer

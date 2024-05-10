@@ -26,8 +26,6 @@ Function .onInit
 	StrCpy $INSTDIR "C:\Program Files\openssl-${VERSION}"
 FunctionEnd
 
-# This section is run if installation of 32 bit binaries are selected
-
 !ifdef BUILD64
 # This section is run if installation of the 64 bit binaries are selectd
 SectionGroup "64 Bit Installation"
@@ -47,18 +45,18 @@ SectionGroupEnd
 !endif
 
 !ifdef BUILD32
-# This section is run if installation of the 64 bit binaries are selectd
+# This section is run if installation of the 32 bit binaries are selectd
 SectionGroup "32 Bit Installation"
 	Section "32 Bit Binaries"
-		SetOutPath $INSTDIR\x64\lib
+		SetOutPath $INSTDIR\x32\lib
 		File /r "${BUILD32}\Program Files\OpenSSL\lib\"
-		SetOutPath $INSTDIR\x64\bin
+		SetOutPath $INSTDIR\x32\bin
 		File /r "${BUILD32}\Program Files\OpenSSL\bin\"
 		SetOutPath "$INSTDIR\x64\Common Files"
 		File /r "${BUILD32}\Program Files\Common Files\"
 	SectionEnd
 	Section "x32 Development Headers"
-		SetOutPath $INSTDIR\x64\include
+		SetOutPath $INSTDIR\x324\include
 		File /r "${BUILD32}\Program Files\OpenSSL\include\"
 	SectionEnd
 SectionGroupEnd

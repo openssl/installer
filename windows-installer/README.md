@@ -14,9 +14,9 @@ Requirements
 * [NSIS](https://nsis.sourceforge.io/Main_Page) version 3.0.8 or later
 * Windows 2022 or later
 * The Windows SDK
-  - The makecert.exe utility (to demonstrate installer signing)
-  - The Pvk2Pfx.exe utility (to demonstrate installer signing)
-  - The SignTool.exe utility (to demonstrate installer signing)
+  - The `makecert.exe` utility (to demonstrate installer signing)
+  - The `Pvk2Pfx.exe` utility (to demonstrate installer signing)
+  - The `SignTool.exe` utility (to demonstrate installer signing)
 
 Notes on Signing
 ----------------
@@ -32,7 +32,7 @@ risk
 
 Installer Build Prerequisites
 -----------------------------
-
+```
 1) Build Openssl from the parent of this directory:
     a) clone the openssl repository
     b) cd path\to\openssl\
@@ -42,6 +42,7 @@ Installer Build Prerequisites
     f) nmake
     g) nmake DESTDIR=..\install64
     h) repeat steps b-g substituting 32 for 64 to build VC-WIN32
+```
 
 Building the installer
 ----------------------
@@ -65,28 +66,28 @@ or the signing process will fail.
 Installer build options
 -----------------------
 
-* /DBUILD64
+* `/DBUILD64`
   - Optional
-  - Path to the fully qualified 64 bit install directory (ex c:\path\to\openssl\_install64)
+  - Path to the fully qualified 64 bit install directory (ex `c:\path\to\openssl\_install64`)
 
-* /DBUILD32
+* `/DBUILD32`
   - Optional
-  - Path to the fully qualified 32 bit build direcotry (ex c:\path\to\openssl\_install32)
+  - Path to the fully qualified 32 bit build direcotry (ex `c:\path\to\openssl\_install32`)
 
-* /DLICENSE\_FILE
+* `/DLICENSE_FILE`
   - Required
   - Path to the openssl LICENSE.TXT file
 
-* /DVERSION
+* `/DVERSION`
   - Required
   - Version number to insert in the openssl installer file name and meta data
   - Should match the version of openssl being built
 
-* /DSIGN
+* `/DSIGN`
   - Optional
   - Path to the fully qualified location of the code signing certificate pfx file
 
-* /DSIGNPASS
+* `/DSIGNPASS`
   - Required if /DSIGN is provided
   - Password string to decrypt the pfx file
 

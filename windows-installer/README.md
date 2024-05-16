@@ -68,11 +68,11 @@ Installer build options
 
 * `/DBUILD64`
   - Optional
-  - Path to the fully qualified 64 bit install directory (ex `c:\path\to\openssl\_install64`)
+  - Path to the fully qualified 64 bit install directory (ex `c:\path\to\openssl_install64`)
 
 * `/DBUILD32`
   - Optional
-  - Path to the fully qualified 32 bit build direcotry (ex `c:\path\to\openssl\_install32`)
+  - Path to the fully qualified 32 bit build direcotry (ex `c:\path\to\openssl_install32`)
 
 * `/DLICENSE_FILE`
   - Required

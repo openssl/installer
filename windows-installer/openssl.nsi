@@ -87,12 +87,9 @@ SectionEnd
 # This is run on uninstall
 Section "Uninstall"
 	RMDIR /r $INSTDIR
-	DeleteRegValue ${env_hklm} OPENSSL_CONF
-	DeleteRegValue ${env_hklm} SSL_CERT_FILE
-	DeleteRegValue ${env_hklm} CTLOG_FILE
-	DeleteRegValue ${env_hklm} OPENSSL_MODULES
-	DeleteRegValue ${env_hklm} OPENSSL_ENGINES
-        DeleteRegValue ${openssl_hklm} OPENSSLDIR
+    DeleteRegValue ${openssl_hklm} OPENSSLDIR
+    DeleteRegValue ${openssl_hklm} MODULESLDIR
+    DeleteRegValue ${openssl_hklm} ENGINESDIR
 	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 SectionEnd
 
@@ -111,12 +108,9 @@ Function CheckRunUninstaller
         ifFileExists $INSTDIR\uninstall.exe 0 +2
         ExecWait "$INSTDIR\uninstall.exe /S _?=$INSTDIR"
 
-	WriteRegExpandStr ${env_hklm} OPENSSL_CONF "$DataDir\openssl.cnf"
-	WriteRegExpandStr ${env_hklm} SSL_CERT_FILE "$DataDir\cert.pem"
-	WriteRegExpandStr ${env_hklm} CTLOG_FILE "$DataDir\ct_log_list.cnf"
-	WriteRegExpandStr ${env_hklm} OPENSSL_MODULES "$ModDir"
-	WriteRegExpandStr ${env_hklm} OPENSSL_ENGINES "$ModDir"
-        WriteRegExpandStr ${openssl_hklm} OPENSSLDIR "$DataDir"
+    WriteRegExpandStr ${openssl_hklm} OPENSSLDIR "$DataDir"
+    WriteRegExpandStr ${openssl_hklm} ENGINESDIR "$ModDir"
+    WriteRegExpandStr ${openssl_hklm} MODULESDIR "$ModDir"
 	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 FunctionEnd
 !insertmacro MUI_PAGE_COMPONENTS

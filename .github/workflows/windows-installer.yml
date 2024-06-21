@@ -55,7 +55,7 @@ jobs:
     - name: config x64
       working-directory: openssl/_build64
       run: |
-        perl ..\Configure --banner=Configured no-makedepend enable-fips VC-WIN64A
+        perl ..\Configure --banner=Configured no-makedepend enable-fips VC-WIN64A -DOSSL_WINCTX=openssl
         perl configdata.pm --dump
     - name: build x64 binaries
       working-directory: openssl/_build64
@@ -72,7 +72,7 @@ jobs:
     - name: config x32
       working-directory: openssl/_build32
       run: |
-        perl ..\Configure --banner=Configured no-makedepend enable-fips VC-WIN32
+        perl ..\Configure --banner=Configured no-makedepend enable-fips VC-WIN32 -DOSSL_WINCTX=openssl
         perl configdata.pm --dump
     - name: build x32 binaries
       working-directory: openssl/_build32
@@ -82,7 +82,7 @@ jobs:
       run: nmake /S DESTDIR=..\_install32 install
     - name: build installer
       working-directory: windows-installer
-      run:  nmake INSTVERSION=${{ github.event.inputs.version }} INSTBUILD32=../openssl/_install32 INSTBUILD64=../openssl/_install64 INSTLICENSE=../openssl/LICENSE.txt openssl-installer
+      run:  nmake INSTVERSION=${{ github.event.inputs.version }} INSTCTX=openssl INSTBUILD32=../openssl/_install32 INSTBUILD64=../openssl/_install64 INSTLICENSE=../openssl/LICENSE.txt openssl-installer
     - name: Upload installer as artifact
       uses: actions/upload-artifact@v4
       with:

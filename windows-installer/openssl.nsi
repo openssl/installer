@@ -82,7 +82,7 @@ Section
 SectionEnd
 
 !define env_hklm 'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
-!define openssl_hklm 'HKLM "SOFTWARE\OpenSSL"'
+!define openssl_hklm 'HKLM "SOFTWARE\OpenSSL-${VERSION}-${CTX}"'
 
 # This is run on uninstall
 Section "Uninstall"

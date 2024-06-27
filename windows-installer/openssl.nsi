@@ -14,6 +14,7 @@
 !include "winmessages.nsh"
 
 !define PRODUCT_NAME "OpenSSL"
+!define VERSION "${MAJOR}.${MINOR}.${PATCH}"
 
 # The name of the output file we create when building this
 # NOTE version is passed with the /D option on the command line
@@ -24,11 +25,12 @@ NAME "${PRODUCT_NAME} ${VERSION}"
 
 ShowInstDetails show
 
+
 Var DataDir
 Var ModDir
 
 Function .onInit
-	StrCpy $INSTDIR "C:\Program Files\openssl-${VERSION}"
+	StrCpy $INSTDIR "C:\Program Files\openssl-${MAJOR}.${MINOR}"
 FunctionEnd
 
 # This section is run if installation of 32 bit binaries are selected
@@ -82,15 +84,15 @@ Section
 SectionEnd
 
 !define env_hklm 'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
-!define openssl_hklm 'HKLM "SOFTWARE\OpenSSL-${VERSION}-${CTX}"'
+!define openssl_hklm 'HKLM "SOFTWARE\OpenSSL-${MAJOR}.${MINOR}-${CTX}"'
 
 # This is run on uninstall
 Section "Uninstall"
-	RMDIR /r $INSTDIR
+    RMDIR /r $INSTDIR
     DeleteRegValue ${openssl_hklm} OPENSSLDIR
-    DeleteRegValue ${openssl_hklm} MODULESLDIR
+    DeleteRegValue ${openssl_hklm} MODULESDIR
     DeleteRegValue ${openssl_hklm} ENGINESDIR
-	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+    SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 SectionEnd
 
 !insertmacro MUI_PAGE_WELCOME
@@ -105,7 +107,7 @@ Function CheckRunUninstaller
 	StrCpy $DataDir "$INSTDIR\x32\Common Files\SSL"
         StrCpy $ModDir  "$INSTDIR\x32\lib\ossl-modules"
 !endif
-        ifFileExists $INSTDIR\uninstall.exe 0 +2
+    ifFileExists $INSTDIR\uninstall.exe 0 +2
         ExecWait "$INSTDIR\uninstall.exe /S _?=$INSTDIR"
 
     WriteRegExpandStr ${openssl_hklm} OPENSSLDIR "$DataDir"

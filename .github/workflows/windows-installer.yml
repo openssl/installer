@@ -14,10 +14,18 @@ on:
         type: string
         required: true
         description: The tag to build
-      version:
+      major:
         type: string
         required: true
-        description: The version to assign the installer
+        description: The major version to assign to the installer
+      minor:
+        type: string
+        required: true
+        description: The minor version to assign to the installer
+      patch:
+        type: string
+        required: true
+        description: The patch level to assign to the installer
 permissions:
   contents: read
 
@@ -82,7 +90,7 @@ jobs:
       run: nmake /S DESTDIR=..\_install32 install
     - name: build installer
       working-directory: windows-installer
-      run:  nmake INSTVERSION=${{ github.event.inputs.version }} INSTCTX=openssl INSTBUILD32=../openssl/_install32 INSTBUILD64=../openssl/_install64 INSTLICENSE=../openssl/LICENSE.txt openssl-installer
+      run:  nmake INSTMAJOR=${{ github.event.inputs.major }} INSTMINOR=${{ github.event.inputs.minor }} INSTPATCH=${{ github.event.inputs.patch }} INSTCTX=openssl INSTBUILD32=../openssl/_install32 INSTBUILD64=../openssl/_install64 INSTLICENSE=../openssl/LICENSE.txt openssl-installer
     - name: Upload installer as artifact
       uses: actions/upload-artifact@v4
       with:

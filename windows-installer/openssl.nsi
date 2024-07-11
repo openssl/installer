@@ -30,7 +30,7 @@ Var DataDir
 Var ModDir
 
 Function .onInit
-	StrCpy $INSTDIR "C:\Program Files\openssl-${MAJOR}.${MINOR}"
+    StrCpy $INSTDIR "C:\Program Files\openssl-${MAJOR}.${MINOR}"
 FunctionEnd
 
 # This section is run if installation of 32 bit binaries are selected
@@ -38,49 +38,49 @@ FunctionEnd
 !ifdef BUILD64
 # This section is run if installation of the 64 bit binaries are selectd
 SectionGroup "64 Bit Installation"
-	Section "64 Bit Binaries"
-		SetOutPath $INSTDIR\x64\lib
-		File /r "${BUILD64}\Program Files\OpenSSL\lib\"
-		SetOutPath $INSTDIR\x64\bin
-		File /r "${BUILD64}\Program Files\OpenSSL\bin\"
-		SetOutPath "$INSTDIR\x64\Common Files"
-		File /r "${BUILD64}\Program Files\Common Files\"
-	SectionEnd
-	Section "x64 Development Headers"
-		SetOutPath $INSTDIR\x64\include
-		File /r "${BUILD64}\Program Files\OpenSSL\include\"
-	SectionEnd
+    Section "64 Bit Binaries"
+        SetOutPath $INSTDIR\x64\lib
+        File /r "${BUILD64}\Program Files\OpenSSL\lib\"
+        SetOutPath $INSTDIR\x64\bin
+        File /r "${BUILD64}\Program Files\OpenSSL\bin\"
+        SetOutPath "$INSTDIR\x64\Common Files"
+        File /r "${BUILD64}\Program Files\Common Files\"
+    SectionEnd
+    Section "x64 Development Headers"
+        SetOutPath $INSTDIR\x64\include
+        File /r "${BUILD64}\Program Files\OpenSSL\include\"
+    SectionEnd
 SectionGroupEnd
 !endif
 
 !ifdef BUILD32
 # This section is run if installation of the 64 bit binaries are selectd
 SectionGroup "32 Bit Installation"
-	Section "32 Bit Binaries"
-		SetOutPath $INSTDIR\x32\lib
-		File /r "${BUILD32}\Program Files (x86)\OpenSSL\lib\"
-		SetOutPath $INSTDIR\x32\bin
-		File /r "${BUILD32}\Program Files(x86)\OpenSSL\bin\"
-		SetOutPath "$INSTDIR\x64\Common Files"
-		File /r "${BUILD32}\Program Files (x86)\Common Files\"
-	SectionEnd
-	Section "x32 Development Headers"
-		SetOutPath $INSTDIR\x32\include
-		File /r "${BUILD32}\Program Files (x86)\OpenSSL\include\"
-	SectionEnd
+    Section "32 Bit Binaries"
+        SetOutPath $INSTDIR\x32\lib
+        File /r "${BUILD32}\Program Files (x86)\OpenSSL\lib\"
+        SetOutPath $INSTDIR\x32\bin
+        File /r "${BUILD32}\Program Files (x86)\OpenSSL\bin\"
+        SetOutPath "$INSTDIR\x64\Common Files"
+        File /r "${BUILD32}\Program Files (x86)\Common Files\"
+    SectionEnd
+    Section "x32 Development Headers"
+        SetOutPath $INSTDIR\x32\include
+        File /r "${BUILD32}\Program Files (x86)\OpenSSL\include\"
+    SectionEnd
 SectionGroupEnd
 !endif
 
 !ifdef BUILD64
 Section "Documentation"
-	SetOutPath $INSTDIR\html
-	File /r "${BUILD64}\Program Files\OpenSSL\html\"
+    SetOutPath $INSTDIR\html
+    File /r "${BUILD64}\Program Files\OpenSSL\html\"
 SectionEnd
 !endif
 
 # Always install the uninstaller and set a registry key
 Section
-	WriteUninstaller $INSTDIR\uninstall.exe
+    WriteUninstaller $INSTDIR\uninstall.exe
 SectionEnd
 
 !define env_hklm 'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
@@ -101,11 +101,11 @@ SectionEnd
 
 Function CheckRunUninstaller
 !ifdef BUILD64
-	StrCpy $DataDir "$INSTDIR\x64\Common Files\SSL"
-        StrCpy $ModDir  "$INSTDIR\x64\lib\ossl-modules"
+    StrCpy $DataDir "$INSTDIR\x64\Common Files\SSL"
+    StrCpy $ModDir  "$INSTDIR\x64\lib\ossl-modules"
 !else
-	StrCpy $DataDir "$INSTDIR\x32\Common Files\SSL"
-        StrCpy $ModDir  "$INSTDIR\x32\lib\ossl-modules"
+    StrCpy $DataDir "$INSTDIR\x32\Common Files\SSL"
+    StrCpy $ModDir  "$INSTDIR\x32\lib\ossl-modules"
 !endif
     ifFileExists $INSTDIR\uninstall.exe 0 +2
         ExecWait "$INSTDIR\uninstall.exe /S _?=$INSTDIR"
@@ -113,7 +113,7 @@ Function CheckRunUninstaller
     WriteRegExpandStr ${openssl_hklm} OPENSSLDIR "$DataDir"
     WriteRegExpandStr ${openssl_hklm} ENGINESDIR "$ModDir"
     WriteRegExpandStr ${openssl_hklm} MODULESDIR "$ModDir"
-	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+    SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 FunctionEnd
 !insertmacro MUI_PAGE_COMPONENTS
 

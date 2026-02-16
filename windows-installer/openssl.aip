@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="18.9" version="23.3" Modules="enterprise" RootPath="." Language="en" Id="{AC2B6856-EDC2-4FAD-A624-ED761804420F}" Backup="false">
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="ADJUSTSYSTEMPATHENV" Value="1" Type="4"/>
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
+    <ROW Property="AI_UPGRADE" Value="No"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPCONTACT" Value="support@openssl.org"/>
+    <ROW Property="ARPHELPLINK" Value="https://openssl-corporation.org/solutions/support/"/>
+    <ROW Property="ARPNOREPAIR" MultiBuildValue="MsiBuild:1"/>
+    <ROW Property="ARPURLINFOABOUT" Value="https://openssl-corporation.org/solutions/support/"/>
+    <ROW Property="ARPURLUPDATEINFO" Value="https://openssl-library.org"/>
+    <ROW Property="FIPS_CONF" Value="openssl"/>
+    <ROW Property="FIPS_VALIDATED" Value="fips"/>
+    <ROW Property="INSTALL_APPS" Value="1" Type="4"/>
+    <ROW Property="INSTALL_FIPS" Value="0"/>
+    <ROW Property="INSTALL_FIPS_TYPE" Value="validated" Type="4"/>
+    <ROW Property="INSTALL_PERL_SCRIPTS" Value="1" Type="4"/>
+    <ROW Property="INSTALL_SDK" Value="1" Type="4"/>
+    <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
+    <ROW Property="Manufacturer" Value="OpenSSL Corporation"/>
+    <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp"/>
+    <ROW Property="PERL_INSTALLED" Value="False"/>
+    <ROW Property="ProductCode" Value="1033:{C4B034FE-4C95-48FC-BAC2-82DFB7367E8F} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="OpenSSL Project"/>
+    <ROW Property="ProductVersion" Value="4.0.0" Options="32"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
+    <ROW Property="UpgradeCode" Value="{CB59C1C5-679D-40E3-A155-31588BA99C1C}"/>
+    <ROW Property="VERSION_REGISTRY" Value="4.0-0"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME#MsiBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME#MsiBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT" MultiBuildValue="DefaultBuild:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0#MsiBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0#MsiBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000#MsiBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000#MsiBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003#MsiBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003#MsiBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008#MsiBuild:Windows Vista/Server 2008" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60Display" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008#MsiBuild:Windows Vista/Server 2008" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT64" MultiBuildValue="DefaultBuild:Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT64Display" MultiBuildValue="DefaultBuild:Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNTDisplay" MultiBuildValue="DefaultBuild:32-bit Windows versions" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="CommonFiles64Folder" Directory_Parent="TARGETDIR" DefaultDir="COMMON~3|CommonFiles64Folder" IsPseudoRoot="1"/>
+    <ROW Directory="SSL_Dir" Directory_Parent="CommonFiles64Folder" DefaultDir="SSL"/>
+    <ROW Directory="System64Folder" Directory_Parent="TARGETDIR" DefaultDir="SYSTEM~2|System64Folder" IsPseudoRoot="1"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="bin_Dir" Directory_Parent="APPDIR" DefaultDir="bin"/>
+    <ROW Directory="html_Dir" Directory_Parent="APPDIR" DefaultDir="html"/>
+    <ROW Directory="include_Dir" Directory_Parent="APPDIR" DefaultDir="include"/>
+    <ROW Directory="lib_Dir" Directory_Parent="APPDIR" DefaultDir="lib"/>
+    <ROW Directory="man1_Dir" Directory_Parent="html_Dir" DefaultDir="man1"/>
+    <ROW Directory="man3_Dir" Directory_Parent="html_Dir" DefaultDir="man3"/>
+    <ROW Directory="man5_Dir" Directory_Parent="html_Dir" DefaultDir="man5"/>
+    <ROW Directory="man7_Dir" Directory_Parent="html_Dir" DefaultDir="man7"/>
+    <ROW Directory="misc_Dir" Directory_Parent="SSL_Dir" DefaultDir="misc"/>
+    <ROW Directory="openssl_Dir" Directory_Parent="include_Dir" DefaultDir="openssl"/>
+    <ROW Directory="osslmodules_Dir" Directory_Parent="lib_Dir" DefaultDir="OSSL-M~1|ossl-modules"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SideBySideGuidComponent">
+    <ROW Component="AI_ExePath" Value="{E327DBF6-7263-4FED-A744-9E456CD140BD}"/>
+    <ROW Component="APPDIR" Value="{CE99F0E1-4C80-49BA-8C94-3FE76F0F8CC3}"/>
+    <ROW Component="CA.pl" Value="{64CC0964-964D-4CD0-B5F1-79D5B1AEE14B}"/>
+    <ROW Component="EnvPath" Value="{69B4391B-143B-4C67-AC45-5F02EAD4BB4C}"/>
+    <ROW Component="EnvPath_1" Value="{4215915C-2BD8-450B-AFF1-6E2E2FC44D3D}"/>
+    <ROW Component="FIPS_CONF.cnf" Value="{C1866B17-C227-43B3-9C96-10393CE96813}"/>
+    <ROW Component="FIPS_VALIDATED.pdb" Value="{E05DCA41-D3B9-4FCA-B5E0-95C61E62BDEE}"/>
+    <ROW Component="LICENSE.txt" Value="{BA52DCC3-31EA-4435-AD12-D7FE64B08F59}"/>
+    <ROW Component="MODULESDIR" Value="{61098566-24A1-4CDB-BD45-088E06C1632C}"/>
+    <ROW Component="MODULESDIR_1" Value="{92C36703-3F51-4B50-A9C4-98AB446895CB}"/>
+    <ROW Component="Manufacturer" Value="{F951997E-191C-4CFD-A853-404723D1162B}"/>
+    <ROW Component="OPENSSLDIR" Value="{9AF2158D-A454-4C73-A514-5FECA995945B}"/>
+    <ROW Component="OpenSSL4.00" Value="{787D7BC0-E253-4E30-836C-14747B58841E}"/>
+    <ROW Component="OpenSSLProductVersion" Value="{98FCB09B-520C-42AB-B831-38EF2B584594}"/>
+    <ROW Component="ProductInformation" Value="{80ED674E-4D63-415B-8B48-04CA5A028835}"/>
+    <ROW Component="Wow6432Node" Value="{DA47BB35-9226-4A1B-A4E3-BD56ED33C44B}"/>
+    <ROW Component="ct_log_list.cnf.dist" Value="{0FA4DDA7-EFFD-4DC4-9C2E-24410335D9A3}"/>
+    <ROW Component="ct_log_list.cnf_1" Value="{66536AE8-289B-4C91-88BA-9E734D3DD023}"/>
+    <ROW Component="doc_man1" Value="{9FC4CBE7-54F6-4DD3-A6BD-ABE1A92DF9F7}"/>
+    <ROW Component="doc_man3" Value="{F08F2E06-BE1B-4B0C-8623-EB73221ABD3C}"/>
+    <ROW Component="doc_man5" Value="{EDBCFA72-005E-4FA7-B678-C2DA9E7E87C7}"/>
+    <ROW Component="doc_man7" Value="{D348E48F-39A7-42CA-AF90-2EDEC4A09CAB}"/>
+    <ROW Component="fips.dll" Value="{269DE558-D981-4A61-AC6C-18EA536B904B}"/>
+    <ROW Component="fips.dll_1" Value="{1737E00D-0D9E-4E10-9F97-B769C46D3244}"/>
+    <ROW Component="fips.lib" Value="{DD563B91-9119-4A2F-9D80-05BEF429AB79}"/>
+    <ROW Component="fips.lib_1" Value="{4F1961B9-2C13-497E-A45B-30590F094DEC}"/>
+    <ROW Component="fips.pdb" Value="{BBE3C076-C78C-487F-BE12-C26D6416693E}"/>
+    <ROW Component="fipsmodule.cnf" Value="{43BE8DC1-6859-40E7-8565-A9F399A37C12}"/>
+    <ROW Component="fipsmodule.cnf_1" Value="{C053116E-91EF-4E33-9FE9-6C4C9F451788}"/>
+    <ROW Component="include" Value="{308326A7-6DA3-4D80-BF9C-FBA77C0706E4}"/>
+    <ROW Component="legacy.dll" Value="{B8ED308B-94C2-4080-AFCE-674D0D10A334}"/>
+    <ROW Component="legacy.lib" Value="{D8259343-0AFE-45C3-B11B-8A62F02D6996}"/>
+    <ROW Component="legacy.pdb" Value="{874DB910-DB62-45C1-8909-4BE93E00A192}"/>
+    <ROW Component="libcrypto.lib" Value="{15D2EE74-A5E6-41D2-B022-775D2138A236}"/>
+    <ROW Component="libcrypto4x64.dll" Value="{D36A1854-C368-4E23-B3A0-AA0F2CD9BA16}"/>
+    <ROW Component="libcrypto4x64.dll_1" Value="{11255F6E-12FC-4818-AF3A-D9E6FECAA53D}"/>
+    <ROW Component="libcrypto4x64.pdb" Value="{21ED537F-E8A4-4238-B530-6B67DF25AE38}"/>
+    <ROW Component="libssl.lib" Value="{99718AC4-B542-4465-820B-6CF895695CC4}"/>
+    <ROW Component="libssl4x64.dll" Value="{8B6DB64C-8CD1-4A1E-9A3A-5F3C02A54164}"/>
+    <ROW Component="libssl4x64.pdb" Value="{D994A4EB-87AF-443C-97ED-27B9ADA2C273}"/>
+    <ROW Component="libssl4x64.pdb_1" Value="{844470B4-C013-452D-87A0-14D4D1E7181D}"/>
+    <ROW Component="openssl.cnf.dist" Value="{54EBA58D-292C-41D4-B105-828E08B0EBFD}"/>
+    <ROW Component="openssl.cnf_2" Value="{853D1C89-8746-445C-AE96-8F9F0DEDEBE3}"/>
+    <ROW Component="openssl.exe" Value="{314880C1-A176-4DC1-B961-0B2EF1F191A2}"/>
+    <ROW Component="tsget.pl" Value="{10054424-12CA-4B2D-AC4B-E73AE71A09A1}"/>
+    <ROW Component="version.dat" Value="{F311415A-A562-456A-87CE-E9EC0C3DC9E6}"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="AI_ExePath" ComponentId="{66C609BD-B2CF-4670-AEFA-21B7976D3C08}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
+    <ROW Component="APPDIR" ComponentId="{7E5D7034-1B13-4160-B674-591B4D96D031}" Directory_="APPDIR" Attributes="256"/>
+    <ROW Component="CA.pl" ComponentId="{32467E6D-870E-48B5-87A9-33EB6326774B}" Directory_="misc_Dir" Attributes="0" KeyPath="CA.pl"/>
+    <ROW Component="EnvPath" ComponentId="{AA00D10F-F777-43F4-98F2-32DB6EC3BD75}" Directory_="APPDIR" Attributes="260" Condition="ADJUSTSYSTEMPATHENV=&quot;1&quot;" KeyPath="EnvPath"/>
+    <ROW Component="EnvPath_1" ComponentId="{9C364237-C9B2-447C-944C-04E408D9F502}" Directory_="APPDIR" Attributes="260" KeyPath="EnvPath_1"/>
+    <ROW Component="FIPS_CONF.cnf" ComponentId="{43B2D5B3-5634-4413-A90A-A23D3ADE4E40}" Directory_="SSL_Dir" Attributes="144" Condition="INSTALL_FIPS = &quot;1&quot;" KeyPath="openssl_fips.cnf"/>
+    <ROW Component="FIPS_VALIDATED.pdb" ComponentId="{FEC969D8-813D-4831-BB93-88A82DFA6B4C}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.pdb" Type="4"/>
+    <ROW Component="LICENSE.txt" ComponentId="{6A1F00EB-DFE7-47B7-B559-0623EA47904F}" Directory_="APPDIR" Attributes="0" KeyPath="LICENSE.txt"/>
+    <ROW Component="MODULESDIR" ComponentId="{9CC1C632-E2E1-48A4-93B3-CE9A4D67DF28}" Directory_="APPDIR" Attributes="260" KeyPath="MODULESDIR"/>
+    <ROW Component="MODULESDIR_1" ComponentId="{7261A0A1-A972-484F-82F5-73ADC021C91F}" Directory_="APPDIR" Attributes="260" KeyPath="MODULESDIR_1"/>
+    <ROW Component="Manufacturer" ComponentId="{22A89C63-47B3-4C86-8B46-F38B6F40CCCB}" Directory_="APPDIR" Attributes="260" KeyPath="Manufacturer_1"/>
+    <ROW Component="OPENSSLDIR" ComponentId="{13664281-7CDD-457B-A6D5-2046E659539D}" Directory_="APPDIR" Attributes="260" KeyPath="OPENSSLDIR"/>
+    <ROW Component="OpenSSL4.00" ComponentId="{785313FD-1A66-4C8A-BB63-D9209CDFBCB4}" Directory_="APPDIR" Attributes="260" KeyPath="ProductNameProductVersion_1"/>
+    <ROW Component="OpenSSLProductVersion" ComponentId="{11E4FB66-E982-47C8-87EE-55E9069C8215}" Directory_="APPDIR" Attributes="260" KeyPath="ProductNameProductVersion"/>
+    <ROW Component="ProductInformation" ComponentId="{55CB06A0-DC3C-425F-B70B-7ED3855EB8DD}" Directory_="APPDIR" Attributes="260" KeyPath="Path"/>
+    <ROW Component="Wow6432Node" ComponentId="{FF007FD7-5DA7-4282-9B34-5C17AE65650B}" Directory_="APPDIR" Attributes="260" KeyPath="Wow6432Node"/>
+    <ROW Component="ct_log_list.cnf.dist" ComponentId="{3D7D4512-D5E1-4379-83A6-E405AE4BB763}" Directory_="SSL_Dir" Attributes="256" KeyPath="ct_log_list.cnf.dist"/>
+    <ROW Component="ct_log_list.cnf_1" ComponentId="{7711235F-B0B4-4376-90E3-3AC201DC1162}" Directory_="SSL_Dir" Attributes="16" KeyPath="ct_log_list.cnf"/>
+    <ROW Component="fips.dll" ComponentId="{6F78D564-844E-408E-BFA1-5C1A2F3BA2AB}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.dll"/>
+    <ROW Component="fips.dll_1" ComponentId="{1DEACB24-039A-4293-9C53-69B820827B9B}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;experimental&quot;" KeyPath="fips.dll_1"/>
+    <ROW Component="fips.lib" ComponentId="{71D3038C-A84D-4F24-96BA-F0D8D55509D3}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.lib"/>
+    <ROW Component="fips.lib_1" ComponentId="{30FC288B-DA15-437E-8454-F044B4207CE5}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;experimental&quot;" KeyPath="fips.lib_1"/>
+    <ROW Component="fips.pdb" ComponentId="{74B0C48D-CE5A-45A3-80AA-80655A9C125F}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;experimental&quot;" KeyPath="fips.pdb_1" Type="4"/>
+    <ROW Component="fipsmodule.cnf" ComponentId="{D09C4BFB-5F07-4D1A-917F-A327B918D642}" Directory_="SSL_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fipsmodule.cnf"/>
+    <ROW Component="fipsmodule.cnf_1" ComponentId="{BDAC1E9F-EFE5-4C07-915D-612175C31C23}" Directory_="SSL_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;experimental&quot;" KeyPath="fipsmodule.cnf_1" Type="0"/>
+    <ROW Component="include" ComponentId="{0B6BABEB-B9BE-41AD-A4A6-BA48E9835629}" Directory_="openssl_Dir" Attributes="256" KeyPath="aes.h"/>
+    <ROW Component="legacy.dll" ComponentId="{87885DBB-B06C-494F-8554-75CEA941BF72}" Directory_="osslmodules_Dir" Attributes="256" KeyPath="legacy.dll"/>
+    <ROW Component="legacy.lib" ComponentId="{3C6CD8EF-D532-45F2-BD82-A25CEBACDB37}" Directory_="osslmodules_Dir" Attributes="8" KeyPath="legacy.lib"/>
+    <ROW Component="legacy.pdb" ComponentId="{ABDAFA2A-6C63-4C9D-90F9-E035EA181884}" Directory_="osslmodules_Dir" Attributes="256" KeyPath="legacy.pdb" Type="4"/>
+    <ROW Component="libcrypto.lib" ComponentId="{C135CF2B-C40C-484A-89BB-A6100635270F}" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto.lib"/>
+    <ROW Component="libcrypto4x64.dll" ComponentId="{2D8679B9-4EEB-4D78-ADD5-EFD9C74C9747}" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto4x64.dll"/>
+    <ROW Component="libcrypto4x64.dll_1" ComponentId="{E228A8A2-BDA7-4566-A464-8CC56C8A1853}" Directory_="System64Folder" Attributes="256" KeyPath="libcrypto4x64.dll_1"/>
+    <ROW Component="libcrypto4x64.pdb" ComponentId="{C0C5F3F5-1312-4182-A7EC-DBE8F236B01A}" Directory_="lib_Dir" Attributes="0" KeyPath="libcrypto4x64.pdb" Type="4"/>
+    <ROW Component="libssl.lib" ComponentId="{C367994A-D027-411D-B12E-1B594EADD943}" Directory_="lib_Dir" Attributes="256" KeyPath="libssl.lib"/>
+    <ROW Component="libssl4x64.dll" ComponentId="{FD8F5B57-953D-4A35-9EF0-65E44E9EBF0F}" Directory_="lib_Dir" Attributes="256" KeyPath="libssl4x64.dll"/>
+    <ROW Component="libssl4x64.pdb" ComponentId="{5DFB0054-BD9B-4CEC-8A28-AF23B4872D59}" Directory_="lib_Dir" Attributes="0" KeyPath="libssl4x64.pdb" Type="4"/>
+    <ROW Component="libssl4x64.pdb_1" ComponentId="{CB48B6D5-3349-4B7D-B7E2-25E1527DE56A}" Directory_="System64Folder" Attributes="256" KeyPath="libssl4x64.dll_1"/>
+    <ROW Component="man1" ComponentId="{4AA964ED-3A40-44DB-87A9-8BD44E95229E}" Directory_="man1_Dir" Attributes="0"/>
+    <ROW Component="man3" ComponentId="{EE0D183A-4986-4E2D-90A4-2E2C15EE50D9}" Directory_="man3_Dir" Attributes="0"/>
+    <ROW Component="man5" ComponentId="{6C5EA9D1-11C9-4000-980C-0D6C1453626A}" Directory_="man5_Dir" Attributes="0"/>
+    <ROW Component="man7" ComponentId="{E6455362-A5B5-4511-A90D-37AA36C49E5F}" Directory_="man7_Dir" Attributes="0"/>
+    <ROW Component="openssl.cnf.dist" ComponentId="{1003322D-1805-490E-8912-DE85CCE79E03}" Directory_="SSL_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot;" KeyPath="openssl.cnf.dist"/>
+    <ROW Component="openssl.cnf_2" ComponentId="{E5296DCD-94FA-483B-8F5F-C3260272D221}" Directory_="SSL_Dir" Attributes="144" Condition="NOT INSTALL_FIPS = &quot;1&quot;" KeyPath="openssl.cnf"/>
+    <ROW Component="openssl.exe" ComponentId="{9F3E76EE-03E3-4C93-A36A-AD78A16DAD0E}" Directory_="bin_Dir" Attributes="256" KeyPath="openssl.exe"/>
+    <ROW Component="tsget.pl" ComponentId="{9CCF792C-2C7B-4FEB-91B4-F5E2C4B85652}" Directory_="misc_Dir" Attributes="0" KeyPath="tsget.pl"/>
+    <ROW Component="version.dat" ComponentId="{19EDED59-5672-45DD-8B53-F53EE433583C}" Directory_="APPDIR" Attributes="0" KeyPath="version.txt"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="AlwaysInstalled" Title="DLLs" Description="Always installed" Display="11" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ROW Feature="DebugFiles" Title="Debug Files" Description="Debug Files" Display="7" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ROW Feature="Development" Title="Development" Description="Development" Display="9" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ROW Feature="Feature" Title="Perl Scripts" Description="Description" Display="13" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ROW Feature="MainFeature" Title="Main Feature" Display="1" Level="1" Directory_="APPDIR" Attributes="24"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="libcrypto4x64.dll" Component_="libcrypto4x64.dll" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4-x64.dll" SelfReg="false"/>
+    <ROW File="libcrypto4x64.pdb" Component_="libcrypto4x64.pdb" FileName="LIBCRY~1.PDB|libcrypto-4-x64.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4-x64.pdb" SelfReg="false"/>
+    <ROW File="libssl4x64.dll" Component_="libssl4x64.dll" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4-x64.dll" SelfReg="false"/>
+    <ROW File="libssl4x64.pdb" Component_="libssl4x64.pdb" FileName="LIBSSL~1.PDB|libssl-4-x64.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4-x64.pdb" SelfReg="false"/>
+    <ROW File="openssl.exe" Component_="openssl.exe" FileName="openssl.exe" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.exe" SelfReg="false"/>
+    <ROW File="libcrypto.lib" Component_="libcrypto.lib" FileName="LIBCRY~1.LIB|libcrypto.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto.lib" SelfReg="false"/>
+    <ROW File="libssl.lib" Component_="libssl.lib" FileName="libssl.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl.lib" SelfReg="false"/>
+    <ROW File="legacy.dll" Component_="legacy.dll" FileName="legacy.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.dll" SelfReg="false"/>
+    <ROW File="legacy.pdb" Component_="legacy.pdb" FileName="legacy.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.pdb" SelfReg="false"/>
+    <ROW File="CA.pl" Component_="CA.pl" FileName="CA.pl" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\CA.pl" SelfReg="false"/>
+    <ROW File="tsget.pl" Component_="tsget.pl" FileName="tsget.pl" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\tsget.pl" SelfReg="false"/>
+    <ROW File="ct_log_list.cnf" Component_="ct_log_list.cnf_1" FileName="CT_LOG~1.CNF|ct_log_list.cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\ct_log_list.cnf" SelfReg="false"/>
+    <ROW File="ct_log_list.cnf.dist" Component_="ct_log_list.cnf.dist" FileName="CT_LOG~1.DIS|ct_log_list.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\ct_log_list.cnf" SelfReg="false"/>
+    <ROW File="openssl.cnf.dist" Component_="openssl.cnf.dist" FileName="OPENSS~1.DIS|openssl.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
+    <ROW File="aes.h" Component_="include" FileName="aes.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\aes.h" SelfReg="false"/>
+    <ROW File="asn1err.h" Component_="include" FileName="asn1err.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\asn1err.h" SelfReg="false"/>
+    <ROW File="asyncerr.h" Component_="include" FileName="asyncerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\asyncerr.h" SelfReg="false"/>
+    <ROW File="async.h" Component_="include" FileName="async.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\async.h" SelfReg="false"/>
+    <ROW File="bioerr.h" Component_="include" FileName="bioerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\bioerr.h" SelfReg="false"/>
+    <ROW File="blowfish.h" Component_="include" FileName="blowfish.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\blowfish.h" SelfReg="false"/>
+    <ROW File="bnerr.h" Component_="include" FileName="bnerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\bnerr.h" SelfReg="false"/>
+    <ROW File="bn.h" Component_="include" FileName="bn.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\bn.h" SelfReg="false"/>
+    <ROW File="buffererr.h" Component_="include" FileName="BUFFER~1.H|buffererr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\buffererr.h" SelfReg="false"/>
+    <ROW File="buffer.h" Component_="include" FileName="buffer.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\buffer.h" SelfReg="false"/>
+    <ROW File="byteorder.h" Component_="include" FileName="BYTEOR~1.H|byteorder.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\byteorder.h" SelfReg="false"/>
+    <ROW File="camellia.h" Component_="include" FileName="camellia.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\camellia.h" SelfReg="false"/>
+    <ROW File="cast.h" Component_="include" FileName="cast.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\cast.h" SelfReg="false"/>
+    <ROW File="cmac.h" Component_="include" FileName="cmac.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\cmac.h" SelfReg="false"/>
+    <ROW File="cmperr.h" Component_="include" FileName="cmperr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\cmperr.h" SelfReg="false"/>
+    <ROW File="cmp_util.h" Component_="include" FileName="cmp_util.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\cmp_util.h" SelfReg="false"/>
+    <ROW File="cmserr.h" Component_="include" FileName="cmserr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\cmserr.h" SelfReg="false"/>
+    <ROW File="comperr.h" Component_="include" FileName="comperr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\comperr.h" SelfReg="false"/>
+    <ROW File="conf_api.h" Component_="include" FileName="conf_api.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\conf_api.h" SelfReg="false"/>
+    <ROW File="conferr.h" Component_="include" FileName="conferr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\conferr.h" SelfReg="false"/>
+    <ROW File="configuration.h" Component_="include" FileName="CONFIG~1.H|configuration.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\configuration.h" SelfReg="false"/>
+    <ROW File="conftypes.h" Component_="include" FileName="CONFTY~1.H|conftypes.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\conftypes.h" SelfReg="false"/>
+    <ROW File="core_dispatch.h" Component_="include" FileName="CORE_D~1.H|core_dispatch.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\core_dispatch.h" SelfReg="false"/>
+    <ROW File="core.h" Component_="include" FileName="core.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\core.h" SelfReg="false"/>
+    <ROW File="crmferr.h" Component_="include" FileName="crmferr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\crmferr.h" SelfReg="false"/>
+    <ROW File="cryptoerr.h" Component_="include" FileName="CRYPTO~1.H|cryptoerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\cryptoerr.h" SelfReg="false"/>
+    <ROW File="cryptoerr_legacy.h" Component_="include" FileName="CRYPTO~2.H|cryptoerr_legacy.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\cryptoerr_legacy.h" SelfReg="false"/>
+    <ROW File="cterr.h" Component_="include" FileName="cterr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\cterr.h" SelfReg="false"/>
+    <ROW File="__DECC_INCLUDE_EPILOGUE.H" Component_="include" FileName="__DECC~1.H|__DECC_INCLUDE_EPILOGUE.H" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\__DECC_INCLUDE_EPILOGUE.H" SelfReg="false"/>
+    <ROW File="__DECC_INCLUDE_PROLOGUE.H" Component_="include" FileName="__DECC~2.H|__DECC_INCLUDE_PROLOGUE.H" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\__DECC_INCLUDE_PROLOGUE.H" SelfReg="false"/>
+    <ROW File="decodererr.h" Component_="include" FileName="DECODE~1.H|decodererr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\decodererr.h" SelfReg="false"/>
+    <ROW File="decoder.h" Component_="include" FileName="decoder.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\decoder.h" SelfReg="false"/>
+    <ROW File="des.h" Component_="include" FileName="des.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\des.h" SelfReg="false"/>
+    <ROW File="dherr.h" Component_="include" FileName="dherr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\dherr.h" SelfReg="false"/>
+    <ROW File="dh.h" Component_="include" FileName="dh.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\dh.h" SelfReg="false"/>
+    <ROW File="dsaerr.h" Component_="include" FileName="dsaerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\dsaerr.h" SelfReg="false"/>
+    <ROW File="dsa.h" Component_="include" FileName="dsa.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\dsa.h" SelfReg="false"/>
+    <ROW File="dtls1.h" Component_="include" FileName="dtls1.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\dtls1.h" SelfReg="false"/>
+    <ROW File="ebcdic.h" Component_="include" FileName="ebcdic.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ebcdic.h" SelfReg="false"/>
+    <ROW File="ecdh.h" Component_="include" FileName="ecdh.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ecdh.h" SelfReg="false"/>
+    <ROW File="ecdsa.h" Component_="include" FileName="ecdsa.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ecdsa.h" SelfReg="false"/>
+    <ROW File="ecerr.h" Component_="include" FileName="ecerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ecerr.h" SelfReg="false"/>
+    <ROW File="ec.h" Component_="include" FileName="ec.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ec.h" SelfReg="false"/>
+    <ROW File="encodererr.h" Component_="include" FileName="ENCODE~1.H|encodererr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\encodererr.h" SelfReg="false"/>
+    <ROW File="encoder.h" Component_="include" FileName="encoder.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\encoder.h" SelfReg="false"/>
+    <ROW File="engineerr.h" Component_="include" FileName="ENGINE~1.H|engineerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\engineerr.h" SelfReg="false"/>
+    <ROW File="engine.h" Component_="include" FileName="engine.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\engine.h" SelfReg="false"/>
+    <ROW File="e_os2.h" Component_="include" FileName="e_os2.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\e_os2.h" SelfReg="false"/>
+    <ROW File="e_ostime.h" Component_="include" FileName="e_ostime.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\e_ostime.h" SelfReg="false"/>
+    <ROW File="esserr.h" Component_="include" FileName="esserr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\esserr.h" SelfReg="false"/>
+    <ROW File="evperr.h" Component_="include" FileName="evperr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\evperr.h" SelfReg="false"/>
+    <ROW File="evp.h" Component_="include" FileName="evp.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\evp.h" SelfReg="false"/>
+    <ROW File="fips_names.h" Component_="include" FileName="FIPS_N~1.H|fips_names.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\fips_names.h" SelfReg="false"/>
+    <ROW File="hmac.h" Component_="include" FileName="hmac.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\hmac.h" SelfReg="false"/>
+    <ROW File="hpke.h" Component_="include" FileName="hpke.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\hpke.h" SelfReg="false"/>
+    <ROW File="httperr.h" Component_="include" FileName="httperr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\httperr.h" SelfReg="false"/>
+    <ROW File="http.h" Component_="include" FileName="http.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\http.h" SelfReg="false"/>
+    <ROW File="idea.h" Component_="include" FileName="idea.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\idea.h" SelfReg="false"/>
+    <ROW File="indicator.h" Component_="include" FileName="INDICA~1.H|indicator.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\indicator.h" SelfReg="false"/>
+    <ROW File="kdferr.h" Component_="include" FileName="kdferr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\kdferr.h" SelfReg="false"/>
+    <ROW File="kdf.h" Component_="include" FileName="kdf.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\kdf.h" SelfReg="false"/>
+    <ROW File="macros.h" Component_="include" FileName="macros.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\macros.h" SelfReg="false"/>
+    <ROW File="md2.h" Component_="include" FileName="md2.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\md2.h" SelfReg="false"/>
+    <ROW File="md4.h" Component_="include" FileName="md4.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\md4.h" SelfReg="false"/>
+    <ROW File="md5.h" Component_="include" FileName="md5.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\md5.h" SelfReg="false"/>
+    <ROW File="mdc2.h" Component_="include" FileName="mdc2.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\mdc2.h" SelfReg="false"/>
+    <ROW File="ml_kem.h" Component_="include" FileName="ml_kem.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ml_kem.h" SelfReg="false"/>
+    <ROW File="modes.h" Component_="include" FileName="modes.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\modes.h" SelfReg="false"/>
+    <ROW File="objectserr.h" Component_="include" FileName="OBJECT~1.H|objectserr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\objectserr.h" SelfReg="false"/>
+    <ROW File="objects.h" Component_="include" FileName="objects.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\objects.h" SelfReg="false"/>
+    <ROW File="obj_mac.h" Component_="include" FileName="obj_mac.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\obj_mac.h" SelfReg="false"/>
+    <ROW File="ocsperr.h" Component_="include" FileName="ocsperr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ocsperr.h" SelfReg="false"/>
+    <ROW File="opensslconf.h" Component_="include" FileName="OPENSS~1.H|opensslconf.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\opensslconf.h" SelfReg="false"/>
+    <ROW File="ossl_typ.h" Component_="include" FileName="ossl_typ.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ossl_typ.h" SelfReg="false"/>
+    <ROW File="param_build.h" Component_="include" FileName="PARAM_~1.H|param_build.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\param_build.h" SelfReg="false"/>
+    <ROW File="params.h" Component_="include" FileName="params.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\params.h" SelfReg="false"/>
+    <ROW File="pem2.h" Component_="include" FileName="pem2.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\pem2.h" SelfReg="false"/>
+    <ROW File="pemerr.h" Component_="include" FileName="pemerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\pemerr.h" SelfReg="false"/>
+    <ROW File="pem.h" Component_="include" FileName="pem.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\pem.h" SelfReg="false"/>
+    <ROW File="pkcs12err.h" Component_="include" FileName="PKCS12~1.H|pkcs12err.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\pkcs12err.h" SelfReg="false"/>
+    <ROW File="pkcs7err.h" Component_="include" FileName="pkcs7err.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\pkcs7err.h" SelfReg="false"/>
+    <ROW File="proverr.h" Component_="include" FileName="proverr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\proverr.h" SelfReg="false"/>
+    <ROW File="provider.h" Component_="include" FileName="provider.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\provider.h" SelfReg="false"/>
+    <ROW File="prov_ssl.h" Component_="include" FileName="prov_ssl.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\prov_ssl.h" SelfReg="false"/>
+    <ROW File="quic.h" Component_="include" FileName="quic.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\quic.h" SelfReg="false"/>
+    <ROW File="randerr.h" Component_="include" FileName="randerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\randerr.h" SelfReg="false"/>
+    <ROW File="rand.h" Component_="include" FileName="rand.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\rand.h" SelfReg="false"/>
+    <ROW File="rc2.h" Component_="include" FileName="rc2.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\rc2.h" SelfReg="false"/>
+    <ROW File="rc4.h" Component_="include" FileName="rc4.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\rc4.h" SelfReg="false"/>
+    <ROW File="rc5.h" Component_="include" FileName="rc5.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\rc5.h" SelfReg="false"/>
+    <ROW File="ripemd.h" Component_="include" FileName="ripemd.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ripemd.h" SelfReg="false"/>
+    <ROW File="rsaerr.h" Component_="include" FileName="rsaerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\rsaerr.h" SelfReg="false"/>
+    <ROW File="rsa.h" Component_="include" FileName="rsa.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\rsa.h" SelfReg="false"/>
+    <ROW File="seed.h" Component_="include" FileName="seed.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\seed.h" SelfReg="false"/>
+    <ROW File="self_test.h" Component_="include" FileName="SELF_T~1.H|self_test.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\self_test.h" SelfReg="false"/>
+    <ROW File="sha.h" Component_="include" FileName="sha.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\sha.h" SelfReg="false"/>
+    <ROW File="srtp.h" Component_="include" FileName="srtp.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\srtp.h" SelfReg="false"/>
+    <ROW File="ssl2.h" Component_="include" FileName="ssl2.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ssl2.h" SelfReg="false"/>
+    <ROW File="ssl3.h" Component_="include" FileName="ssl3.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ssl3.h" SelfReg="false"/>
+    <ROW File="sslerr.h" Component_="include" FileName="sslerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\sslerr.h" SelfReg="false"/>
+    <ROW File="sslerr_legacy.h" Component_="include" FileName="SSLERR~1.H|sslerr_legacy.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\sslerr_legacy.h" SelfReg="false"/>
+    <ROW File="stack.h" Component_="include" FileName="stack.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\stack.h" SelfReg="false"/>
+    <ROW File="storeerr.h" Component_="include" FileName="storeerr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\storeerr.h" SelfReg="false"/>
+    <ROW File="store.h" Component_="include" FileName="store.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\store.h" SelfReg="false"/>
+    <ROW File="symhacks.h" Component_="include" FileName="symhacks.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\symhacks.h" SelfReg="false"/>
+    <ROW File="thread.h" Component_="include" FileName="thread.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\thread.h" SelfReg="false"/>
+    <ROW File="tls1.h" Component_="include" FileName="tls1.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\tls1.h" SelfReg="false"/>
+    <ROW File="trace.h" Component_="include" FileName="trace.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\trace.h" SelfReg="false"/>
+    <ROW File="tserr.h" Component_="include" FileName="tserr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\tserr.h" SelfReg="false"/>
+    <ROW File="ts.h" Component_="include" FileName="ts.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\ts.h" SelfReg="false"/>
+    <ROW File="txt_db.h" Component_="include" FileName="txt_db.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\txt_db.h" SelfReg="false"/>
+    <ROW File="types.h" Component_="include" FileName="types.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\types.h" SelfReg="false"/>
+    <ROW File="uierr.h" Component_="include" FileName="uierr.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\uierr.h" SelfReg="false"/>
+    <ROW File="whrlpool.h" Component_="include" FileName="whrlpool.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\whrlpool.h" SelfReg="false"/>
+    <ROW File="x509err.h" Component_="include" FileName="x509err.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\x509err.h" SelfReg="false"/>
+    <ROW File="x509v3err.h" Component_="include" FileName="X509V3~1.H|x509v3err.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\x509v3err.h" SelfReg="false"/>
+    <ROW File="LICENSE.txt" Component_="LICENSE.txt" FileName="LICENSE.txt" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;LICENSE.txt" SelfReg="false"/>
+    <ROW File="version.txt" Component_="version.dat" FileName="version.dat" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;VERSION.dat" SelfReg="false"/>
+    <ROW File="posix_time.h" Component_="include" FileName="POSIX_~1.H|posix_time.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\posix_time.h" SelfReg="false"/>
+    <ROW File="core_object.h" Component_="include" FileName="CORE_O~1.H|core_object.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\core_object.h" SelfReg="false"/>
+    <ROW File="fipsmodule.cnf" Component_="fipsmodule.cnf" FileName="FIPSMO~2.CNF|[|FIPS_VALIDATED]module.cnf" Version="65535.65535.65535.65535" Attributes="0" SourcePath="fipsmodule_312.cnf" SelfReg="false"/>
+    <ROW File="libcrypto4x64.dll_1" Component_="libcrypto4x64.dll_1" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4-x64.dll" SelfReg="false"/>
+    <ROW File="libssl4x64.dll_1" Component_="libssl4x64.pdb_1" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4-x64.dll" SelfReg="false"/>
+    <ROW File="legacy.lib" Component_="legacy.lib" FileName="legacy.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.lib" SelfReg="false"/>
+    <ROW File="fips.dll" Component_="fips.dll" FileName="[|FIPS_VALIDATED].dll" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.dll" SelfReg="false"/>
+    <ROW File="fips.lib" Component_="fips.lib" FileName="[|FIPS_VALIDATED].lib" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.lib" SelfReg="false"/>
+    <ROW File="fips.pdb" Component_="FIPS_VALIDATED.pdb" FileName="[|FIPS_VALIDATED].pdb" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.pdb" SelfReg="false"/>
+    <ROW File="fips.dll_1" Component_="fips.dll_1" FileName="fips.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.dll" SelfReg="false"/>
+    <ROW File="fips.lib_1" Component_="fips.lib_1" FileName="fips.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.lib" SelfReg="false"/>
+    <ROW File="fips.pdb_1" Component_="fips.pdb" FileName="fips.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.pdb" SelfReg="false"/>
+    <ROW File="openssl_fips.cnf" Component_="FIPS_CONF.cnf" FileName="[|FIPS_CONF].cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl_fips.cnf" SelfReg="false"/>
+    <ROW File="openssl.cnf" Component_="openssl.cnf_2" FileName="openssl.cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
+    <ROW File="fipsmodule.cnf_1" Component_="fipsmodule.cnf_1" FileName="FIPSMO~1.CNF|fipsmodule.cnf" Attributes="0" SourcePath="fipsmodule.cnf" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentDataComponent">
+    <ROW PersistentRow="ct_log_list.cnf" Type="0" Condition="1"/>
+    <ROW PersistentRow="openssl.cnf" Type="0" Condition="1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.AppPathsComponent">
+    <ROW Name="OPENSSL_FIPS_SOURCE_DIR" Path="..\..\openssl-fips" Type="2" Content="0"/>
+    <ROW Name="OPENSSL_SOURCE_DIR" Path="..\..\openssl" Type="2" Content="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
+    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="249"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="251"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="..\..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-[|ProductVersion]" Languages="en" InstallationType="4" ExtUI="true" UseLargeSchema="true" MsiPackageType="x64"/>
+    <ROW BuildKey="MsiBuild" BuildName="MsiBuild" BuildOrder="2" BuildType="0" PackageFolder="openssl-MsiBuild-SetupFiles" PackageFileName="openssl" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DigCertStoreComponent">
+    <ROW TimeStampUrl="http://timestamp.digicert.com" SignerDescription="[|ProductName]" SignOptions="0" SignTool="0" UseSha256="1" Store="User\MY" KVTenantId="8046b243-a7d6-45eb-b70e-370ca5555870" KVAppId="7ed2e203-dc20-436a-981b-3319b446f6c2" KVName="FD-KV01" KVCertName="FireDaemon-Sectigo-2021" KVCertVersion="9e9cb504937e46a3a4598383a2728843"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="LicenseAgreementDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\LicenseAgreementDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="UpgradeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UpgradeDlg.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiActionTextComponent">
+    <ROW Action="AI_AiBackupImmediate" Description="Preparing backup operation" DescriptionLocId="ActionText.Description.AI_AiBackupImmediate" Template="Path: [1]" TemplateLocId="ActionText.Template.AI_AiBackupImmediate"/>
+    <ROW Action="AI_AiBackupRollback" Description="Rollback backup" DescriptionLocId="ActionText.Description.AI_AiBackupRollback" Template="Path: [1]" TemplateLocId="ActionText.Template.AI_AiBackupRollback"/>
+    <ROW Action="AI_AiBackupRollbackImpersonate" Description="Rollback backup" DescriptionLocId="ActionText.Description.AI_AiBackupRollback" Template="Path: [1]" TemplateLocId="ActionText.Template.AI_AiBackupRollback"/>
+    <ROW Action="AI_AiRestoreDeferred" Description="Executing restore operation" DescriptionLocId="ActionText.Description.AI_AiRestoreDeferred" Template="Path: [1]" TemplateLocId="ActionText.Template.AI_AiRestoreDeferred"/>
+    <ROW Action="AI_AiRestoreDeferredImpersonate" Description="Executing restore operation" DescriptionLocId="ActionText.Description.AI_AiRestoreDeferred" Template="Path: [1]" TemplateLocId="ActionText.Template.AI_AiRestoreDeferred"/>
+    <ROW Action="AI_AiRestoreRollback" Description="Rollback restore" DescriptionLocId="ActionText.Description.AI_AiRestoreRollback" Template="Path: [1]" TemplateLocId="ActionText.Template.AI_AiRestoreRollback"/>
+    <ROW Action="AI_DeleteLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
+    <ROW Action="AI_DeleteRLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
+    <ROW Action="AI_ExtractFiles" Description="Extracting files from archive" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
+    <ROW Action="AI_ExtractLzma" Description="Extracting files from archive" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
+    <ROW Property="PERL_INSTALLED" Signature_="AppSearchSign"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="MsiBuild"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="MsiBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="PowerShellScriptLauncher.dll" SourcePath="&lt;AI_CUSTACTS&gt;PowerShellScriptLauncher.dll"/>
+    <ROW Name="Prereq.dll" SourcePath="&lt;AI_CUSTACTS&gt;Prereq.dll"/>
+    <ROW Name="ResourceCleaner.dll" SourcePath="&lt;AI_CUSTACTS&gt;ResourceCleaner.dll"/>
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+    <ROW Name="lzmaextractor.dll" SourcePath="&lt;AI_CUSTACTS&gt;lzmaextractor.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCheckBoxComponent">
+    <ROW Property="ADJUSTSYSTEMPATHENV" Value="1"/>
+    <ROW Property="INSTALL_FIPS" Value="1"/>
+    <ROW Property="INSTALL_APPS" Value="1"/>
+    <ROW Property="INSTALL_SDK" Value="1"/>
+    <ROW Property="INSTALL_PERL_SCRIPTS" Value="1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiConditionComponent">
+    <ROW Feature_="DebugFiles" Level="4" Condition="NOT INSTALL_SDK"/>
+    <ROW Feature_="Development" Level="4" Condition="NOT INSTALL_SDK"/>
+    <ROW Feature_="MainFeature" Level="4" Condition="NOT INSTALL_APPS"/>
+    <ROW Feature_="Feature" Level="4" Condition="NOT INSTALL_APPS = &quot;1&quot; OR NOT INSTALL_PERL_SCRIPTS = &quot;1&quot;"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
+    <ROW Dialog_="AdditionalOptions" Control="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Next]" Order="100" Options="1"/>
+    <ROW Dialog_="AdditionalOptions" Control="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Cancel]" Order="200" Options="1"/>
+    <ROW Dialog_="AdditionalOptions" Control="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Back]" Order="300" Options="1"/>
+    <ROW Dialog_="AdditionalOptions" Control="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" Attributes="1048577" Text="[BannerBitmap]" Order="400"/>
+    <ROW Dialog_="AdditionalOptions" Control="BannerLine" Type="Line" X="0" Y="44" Width="372" Height="0" Attributes="1" Order="500"/>
+    <ROW Dialog_="AdditionalOptions" Control="BottomLine" Type="Line" X="5" Y="234" Width="368" Height="0" Attributes="1" Order="600"/>
+    <ROW Dialog_="AdditionalOptions" Control="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Attributes="196611" Text="Which options would you like to enable?" Order="700"/>
+    <ROW Dialog_="AdditionalOptions" Control="Logo" Type="Text" X="4" Y="228" Width="70" Height="12" Attributes="1" Text="Advanced Installer" Order="800"/>
+    <ROW Dialog_="AdditionalOptions" Control="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Attributes="196611" Text="Configuring additional Options" TextStyle="[DlgTitleFont]" Order="900"/>
+    <ROW Dialog_="AdditionalOptions" Control="AddToPathChk" Type="CheckBox" X="15" Y="70" Width="165" Height="13" Attributes="3" Property="ADJUSTSYSTEMPATHENV" Text="Adjust PATH system environment" Order="1000"/>
+    <ROW Dialog_="AdditionalOptions" Control="Text_1" Type="Text" X="25" Y="83" Width="298" Height="11" Attributes="65539" Property="TEXT_1_PROP" Text="openssl.exe will be usable for all users from the command line." Order="1100"/>
+    <ROW Dialog_="AdditionalOptions" Control="FipsInstall" Type="CheckBox" X="15" Y="104" Width="98" Height="13" Attributes="3" Property="INSTALL_FIPS" Text="Install FIPS provider" Order="1200"/>
+    <ROW Dialog_="AdditionalOptions" Control="RadioButtonGroup_1" Type="RadioButtonGroup" X="25" Y="115" Width="225" Height="44" Attributes="1" Property="INSTALL_FIPS_TYPE" Text="RadioButtonGroup" Order="1300"/>
+    <ROW Dialog_="AdditionalOptions" Control="CheckBox_1" Type="CheckBox" X="15" Y="167" Width="257" Height="13" Attributes="3" Property="INSTALL_PERL_SCRIPTS" Text="Install Perl scripts (Perl is currently not installed on the system)" Order="1400"/>
+    <ROW Dialog_="ExitDialog" Control="ViewReadmeText" Type="Text" X="148" Y="140" Width="220" Height="20" Attributes="196611" Text="Open [ProductName] homepage" Order="500" MsiKey="ExitDialog#ViewReadmeText"/>
+    <ROW Dialog_="ExitDialog" Control="Hyperlink" Type="Hyperlink" X="135" Y="140" Width="220" Height="20" Attributes="65539" Property="AiReadmeLink" Text="&lt;a href=&quot;http://[AiReadmeLink]&quot;&gt;Open [ProductName] homepage&lt;/a&gt;" Order="1200" MsiKey="ExitDialog#Hyperlink"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control="AgreementText" Type="ScrollableText" X="20" Y="60" Width="330" Height="120" Attributes="7" Text="license.rtf" Order="400" TextLocId="Control.Text.LicenseAgreementDlg#AgreementText" MsiKey="LicenseAgreementDlg#AgreementText"/>
+    <ROW Dialog_="NewDialog" Control="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Next]" Order="100" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog" Control="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Cancel]" Order="200" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog" Control="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Back]" Order="300" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog" Control="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" Attributes="1048577" Text="[BannerBitmap]" Order="400"/>
+    <ROW Dialog_="NewDialog" Control="BannerLine" Type="Line" X="0" Y="44" Width="372" Height="0" Attributes="1" Order="500"/>
+    <ROW Dialog_="NewDialog" Control="BottomLine" Type="Line" X="5" Y="234" Width="368" Height="0" Attributes="1" Order="600"/>
+    <ROW Dialog_="NewDialog" Control="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Attributes="196611" Text="New Dialog Description..." Order="700"/>
+    <ROW Dialog_="NewDialog" Control="Logo" Type="Text" X="4" Y="228" Width="70" Height="12" Attributes="1" Text="Advanced Installer" Order="800"/>
+    <ROW Dialog_="NewDialog" Control="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Attributes="196611" Text="New Dialog" TextStyle="[DlgTitleFont]" Order="900"/>
+    <ROW Dialog_="NewDialog_1" Control="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Next]" Order="100" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_1" Control="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Cancel]" Order="200" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_1" Control="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Back]" Order="300" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_1" Control="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" Attributes="1048577" Text="[BannerBitmap]" Order="400"/>
+    <ROW Dialog_="NewDialog_1" Control="BannerLine" Type="Line" X="0" Y="44" Width="372" Height="0" Attributes="1" Order="500"/>
+    <ROW Dialog_="NewDialog_1" Control="BottomLine" Type="Line" X="5" Y="234" Width="368" Height="0" Attributes="1" Order="600"/>
+    <ROW Dialog_="NewDialog_1" Control="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Attributes="196611" Text="New Dialog Description..." Order="700"/>
+    <ROW Dialog_="NewDialog_1" Control="Logo" Type="Text" X="4" Y="228" Width="70" Height="12" Attributes="1" Text="Advanced Installer" Order="800"/>
+    <ROW Dialog_="NewDialog_1" Control="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Attributes="196611" Text="New Dialog" TextStyle="[DlgTitleFont]" Order="900"/>
+    <ROW Dialog_="NewDialog_2" Control="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Next]" Order="100" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_2" Control="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Cancel]" Order="200" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_2" Control="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Back]" Order="300" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_2" Control="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" Attributes="1048577" Text="[BannerBitmap]" Order="400"/>
+    <ROW Dialog_="NewDialog_2" Control="BannerLine" Type="Line" X="0" Y="44" Width="372" Height="0" Attributes="1" Order="500"/>
+    <ROW Dialog_="NewDialog_2" Control="BottomLine" Type="Line" X="5" Y="234" Width="368" Height="0" Attributes="1" Order="600"/>
+    <ROW Dialog_="NewDialog_2" Control="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Attributes="196611" Text="New Dialog Description..." Order="700"/>
+    <ROW Dialog_="NewDialog_2" Control="Logo" Type="Text" X="4" Y="228" Width="70" Height="12" Attributes="1" Text="Advanced Installer" Order="800"/>
+    <ROW Dialog_="NewDialog_2" Control="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Attributes="196611" Text="New Dialog" TextStyle="[DlgTitleFont]" Order="900"/>
+    <ROW Dialog_="NewDialog_3" Control="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Next]" Order="100" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_3" Control="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Cancel]" Order="200" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_3" Control="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Back]" Order="300" TextLocId="-" Options="1"/>
+    <ROW Dialog_="NewDialog_3" Control="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" Attributes="1048577" Text="[BannerBitmap]" Order="400"/>
+    <ROW Dialog_="NewDialog_3" Control="BannerLine" Type="Line" X="0" Y="44" Width="372" Height="0" Attributes="1" Order="500"/>
+    <ROW Dialog_="NewDialog_3" Control="BottomLine" Type="Line" X="5" Y="234" Width="368" Height="0" Attributes="1" Order="600"/>
+    <ROW Dialog_="NewDialog_3" Control="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Attributes="196611" Text="New Dialog Description..." Order="700"/>
+    <ROW Dialog_="NewDialog_3" Control="Logo" Type="Text" X="4" Y="228" Width="70" Height="12" Attributes="1" Text="Advanced Installer" Order="800"/>
+    <ROW Dialog_="NewDialog_3" Control="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Attributes="196611" Text="New Dialog" TextStyle="[DlgTitleFont]" Order="900"/>
+    <ROW Dialog_="SDKDlg" Control="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Next]" Order="100" TextLocId="-" Options="1"/>
+    <ROW Dialog_="SDKDlg" Control="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Cancel]" Order="200" TextLocId="-" Options="1"/>
+    <ROW Dialog_="SDKDlg" Control="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Back]" Order="300" TextLocId="-" Options="1"/>
+    <ROW Dialog_="SDKDlg" Control="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" Attributes="1048577" Text="[BannerBitmap]" Order="400"/>
+    <ROW Dialog_="SDKDlg" Control="BannerLine" Type="Line" X="0" Y="44" Width="372" Height="0" Attributes="1" Order="500"/>
+    <ROW Dialog_="SDKDlg" Control="BottomLine" Type="Line" X="5" Y="234" Width="368" Height="0" Attributes="1" Order="600"/>
+    <ROW Dialog_="SDKDlg" Control="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Attributes="196611" Text="Choose wether to install the applications only or include the SDK" Order="700"/>
+    <ROW Dialog_="SDKDlg" Control="Logo" Type="Text" X="4" Y="228" Width="70" Height="12" Attributes="1" Text="Advanced Installer" Order="800"/>
+    <ROW Dialog_="SDKDlg" Control="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Attributes="196611" Text="Components to install" TextStyle="[DlgTitleFont]" Order="900"/>
+    <ROW Dialog_="SDKDlg" Control="InstApps" Type="CheckBox" X="47" Y="89" Width="98" Height="13" Attributes="3" Property="INSTALL_APPS" Text="Install applications" Order="1000"/>
+    <ROW Dialog_="SDKDlg" Control="InstSdk" Type="CheckBox" X="47" Y="119" Width="141" Height="13" Attributes="3" Property="INSTALL_SDK" Text="Install development kit (SDK)" Order="1100"/>
+    <ROW Dialog_="SDKDlg" Control="Text_1" Type="Text" X="59" Y="131" Width="177" Height="11" Attributes="65539" Property="TEXT_1_PROP_1" Text="(Header, .pdb, .lib files and documentation)" Order="1200"/>
+    <ROW Dialog_="SpawnDialog" Control="Yes" Type="PushButton" X="102" Y="57" Width="56" Height="17" Attributes="3" Text="[ButtonText_OK]" Order="100"/>
+    <ROW Dialog_="SpawnDialog" Control="Icon" Type="Icon" X="15" Y="15" Width="24" Height="24" Attributes="5242881" Text="[InfoIcon]" Order="200"/>
+    <ROW Dialog_="SpawnDialog" Control="Text" Type="Text" X="48" Y="15" Width="194" Height="30" Attributes="3" Text="Please choose at least one option." Order="300"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlConditionComponent">
+    <ROW Dialog_="AdditionalOptions" Control_="RadioButtonGroup_1" Action="Enable" Condition="INSTALL_FIPS = &quot;1&quot;"/>
+    <ROW Dialog_="AdditionalOptions" Control_="CheckBox_1" Action="Hide" Condition="PERL_INSTALLED = &quot;True&quot;"/>
+    <ROW Dialog_="AdditionalOptions" Control_="RadioButtonGroup_1" Action="Disable" Condition="NOT INSTALL_FIPS = &quot;1&quot;"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="LicenseAgreementDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="SDKDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="LicenseAgreementDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="AdditionalOptions" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+    <ROW Dialog_="AdditionalOptions" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
+    <ROW Dialog_="AdditionalOptions" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="AdditionalOptions" Control_="Back" Event="NewDialog" Argument="SDKDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="NewDialog" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
+    <ROW Dialog_="NewDialog_1" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
+    <ROW Dialog_="NewDialog_2" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="UpgradeDlg" Condition="AI_INSTALL AND OLDPRODUCTS" Ordering="202"/>
+    <ROW Dialog_="UpgradeDlg" Control_="Next" Event="NewDialog" Argument="SDKDlg" Condition="AI_INSTALL AND OLDPRODUCTS" Ordering="1"/>
+    <ROW Dialog_="UpgradeDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL AND OLDPRODUCTS" Ordering="1"/>
+    <ROW Dialog_="SDKDlg" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
+    <ROW Dialog_="SDKDlg" Control_="Next" Event="NewDialog" Argument="AdditionalOptions" Condition="AI_INSTALL AND ( INSTALL_APPS OR INSTALL_SDK )" Ordering="2"/>
+    <ROW Dialog_="SDKDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="SDKDlg" Control_="Back" Event="NewDialog" Argument="UpgradeDlg" Condition="AI_INSTALL AND OLDPRODUCTS" Ordering="2"/>
+    <ROW Dialog_="NewDialog_3" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
+    <ROW Dialog_="SDKDlg" Control_="Next" Event="SpawnDialog" Argument="SpawnDialog" Condition="AI_INSTALL AND ( NOT (INSTALL_APPS OR INSTALL_SDK) )" Ordering="1"/>
+    <ROW Dialog_="SpawnDialog" Control_="Yes" Event="EndDialog" Argument="Return" Condition="1" Ordering="100"/>
+    <ROW Dialog_="FatalError" Control_="Finish" Event="DoAction" Argument="AI_AiBackupCleanup" Condition="1" Ordering="102"/>
+    <ROW Dialog_="UserExit" Control_="Finish" Event="DoAction" Argument="AI_AiBackupCleanup" Condition="1" Ordering="101"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="man1_Dir" Component_="man1" ManualDelete="false"/>
+    <ROW Directory_="man3_Dir" Component_="man3" ManualDelete="false"/>
+    <ROW Directory_="man5_Dir" Component_="man5" ManualDelete="false"/>
+    <ROW Directory_="man7_Dir" Component_="man7" ManualDelete="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_AiBackupCleanup" Type="1" Source="ResourceCleaner.dll" Target="OnAiBackupCleanup" WithoutSeq="true"/>
+    <ROW Action="AI_AiBackupImmediate" Type="1" Source="ResourceCleaner.dll" Target="OnAiBackupImmediate"/>
+    <ROW Action="AI_AiBackupRollback" Type="11521" Source="ResourceCleaner.dll" Target="OnAiBackupRollback"/>
+    <ROW Action="AI_AiBackupRollbackImpersonate" Type="9473" Source="ResourceCleaner.dll" Target="OnAiBackupRollbackImpersonate"/>
+    <ROW Action="AI_AiRestoreDeferred" Type="11265" Source="ResourceCleaner.dll" Target="OnAiRestoreDeferred"/>
+    <ROW Action="AI_AiRestoreDeferredImpersonate" Type="9217" Source="ResourceCleaner.dll" Target="OnAiRestoreDeferredImpersonate"/>
+    <ROW Action="AI_AiRestoreRollback" Type="11521" Source="ResourceCleaner.dll" Target="OnAiRestoreRollback" WithoutSeq="true"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH_ORIGINAL" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DATA_SETTER" Type="51" Source="CustomActionData" Target="AEQAaQBnAGkAdABhAGwAbAB5AFMAaQBnAG4AUwBjAHIAaQBwAHQAAgAxAAEARgBsAGEAZwBzAAIANgABAEwAYQB1AG4AYwBoAEQAaQByAAIAAQBQAGEAcgBhAG0AcwACAAEAUwBjAHIAaQBwAHQAAgAjACAAQwBoAGUAYwBrACAAaQBmACAAcABlAHIAbAAgAGkAcwAgAGEAdgBhAGkAbABhAGIAbABlAA0ACgBwAGUAcgBsACAALQB2ACAAKgA+ACAAJABuAHUAbABsAA0ACgAkAHAAZQByAGwAQQB2AGEAaQBsAGEAYgBsAGUAIAA9ACAAJAA/AA0ACgBOAGUAdwAtAEkAdABlAG0AIAAnAEgASwBDAFUAOgBcAFMAbwBmAHQAdwBhAHIAZQBcAE8AcABlAG4AUwBTAEwAIABDAG8AcgBwAG8AcgBhAHQAaQBvAG4AXABPAHAAZQBuAFMAUwBMACAATABpAGIAcgBhAHIAeQBcAFQAZQBtAHAAJwAgAC0ARgBvAHIAYwBlACAAfAAgAE8AdQB0AC0ATgB1AGwAbAANAAoAUwBlAHQALQBJAHQAZQBtAFAAcgBvAHAAZQByAHQAeQAgAC0AUABhAHQAaAAgACcASABLAEMAVQA6AFwAUwBvAGYAdAB3AGEAcgBlAFwATwBwAGUAbgBTAFMATAAgAEMAbwByAHAAbwByAGEAdABpAG8AbgBcAE8AcABlAG4AUwBTAEwAIABMAGkAYgByAGEAcgB5AFwAVABlAG0AcAAnACAALQBOAGEAbQBlACAAJwBQAEUAUgBMAF8ASQBOAFMAVABBAEwATABFAEQAJwAgAC0AVgBhAGwAdQBlACAAJABwAGUAcgBsAEEAdgBhAGkAbABhAGIAbABl"/>
+    <ROW Action="AI_DATA_SETTER_1" Type="51" Source="CustomActionData" Target="AEQAaQBnAGkAdABhAGwAbAB5AFMAaQBnAG4AUwBjAHIAaQBwAHQAAgAxAAEARgBsAGEAZwBzAAIANgABAEwAYQB1AG4AYwBoAEQAaQByAAIAAQBQAGEAcgBhAG0AcwACAAEAUwBjAHIAaQBwAHQAAgAjACAAUgBlAG0AbwB2AGUAIAB0AGgAZQAgAHQAZQBtAHAAbwByAGEAcgB5ACAAUgBlAGcAaQBzAHQAcgB5ACAAawBlAHkAcwANAAoAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAALQBQAGEAdABoACAAJwBIAEsAQwBVADoAXABTAG8AZgB0AHcAYQByAGUAXABPAHAAZQBuAFMAUwBMACAAQwBvAHIAcABvAHIAYQB0AGkAbwBuACcAIAAtAFIAZQBjAHUAcgBzAGUAIAAtAEYAbwByAGMAZQAgAC0ARQByAHIAbwByAEEAYwB0AGkAbwBuACAAUwBpAGwAZQBuAHQAbAB5AEMAbwBuAHQAaQBuAHUAZQ=="/>
+    <ROW Action="AI_DATA_SETTER_2" Type="51" Source="CustomActionData" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DeleteCadLzma" Type="51" Source="AI_DeleteLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DeleteLzma" Type="1025" Source="lzmaextractor.dll" Target="DeleteLZMAFiles"/>
+    <ROW Action="AI_DeleteRCadLzma" Type="51" Source="AI_DeleteRLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DeleteRLzma" Type="1281" Source="lzmaextractor.dll" Target="DeleteLZMAFiles"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_ExtractCadLzma" Type="51" Source="AI_ExtractLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_ExtractFiles" Type="1" Source="Prereq.dll" Target="ExtractSourceFiles" AdditionalSeq="AI_DATA_SETTER_2"/>
+    <ROW Action="AI_ExtractLzma" Type="1025" Source="lzmaextractor.dll" Target="ExtractLZMAFiles"/>
+    <ROW Action="AI_FindExeLzma" Type="1" Source="lzmaextractor.dll" Target="FindEXE"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="PowerShellScriptInline" Type="65" Source="PowerShellScriptLauncher.dll" Target="RunPowerShellScript" Options="1" AdditionalSeq="AI_DATA_SETTER"/>
+    <ROW Action="PowerShellScriptInline_1" Type="65" Source="PowerShellScriptLauncher.dll" Target="RunPowerShellScript" Options="1" AdditionalSeq="AI_DATA_SETTER_1"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[ProductVersion]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]" MultiBuildTarget="DefaultBuild:[ProgramMenuFolder][ProductName]\openssl-[ProductVersion]#MsiBuild:[ProgramMenuFolder][ProductName]\openssl-[ProductVersion]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDialogComponent">
+    <ROW Dialog="AdditionalOptions" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Next" Control_Cancel="Cancel"/>
+    <ROW Dialog="NewDialog" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Next" Control_Cancel="Cancel"/>
+    <ROW Dialog="NewDialog_1" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Next" Control_Cancel="Cancel"/>
+    <ROW Dialog="NewDialog_2" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Next" Control_Cancel="Cancel"/>
+    <ROW Dialog="NewDialog_3" HCentering="50" VCentering="50" Width="350" Height="270" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Next" Control_Cancel="Cancel"/>
+    <ROW Dialog="SDKDlg" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Next" Control_Cancel="Cancel"/>
+    <ROW Dialog="SpawnDialog" HCentering="50" VCentering="50" Width="260" Height="85" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Yes" Control_Cancel="Yes"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiEnvComponent">
+    <ROW Environment="Include" Name="=-*Include" Value="[include_Dir];[~]" Component_="EnvPath"/>
+    <ROW Environment="Lib" Name="=-*Lib" Value="[lib_Dir];[~]" Component_="EnvPath"/>
+    <ROW Environment="Path" Name="=-*Path" Value="[bin_Dir];[~]" Component_="EnvPath"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="openssl.exe"/>
+    <ROW Feature_="DebugFiles" Component_="legacy.pdb"/>
+    <ROW Feature_="Development" Component_="libcrypto.lib"/>
+    <ROW Feature_="Development" Component_="libssl.lib"/>
+    <ROW Feature_="DebugFiles" Component_="libcrypto4x64.pdb"/>
+    <ROW Feature_="DebugFiles" Component_="libssl4x64.pdb"/>
+    <ROW Feature_="Feature" Component_="tsget.pl"/>
+    <ROW Feature_="Feature" Component_="CA.pl"/>
+    <ROW Feature_="AlwaysInstalled" Component_="legacy.dll"/>
+    <ROW Feature_="AlwaysInstalled" Component_="APPDIR"/>
+    <ROW Feature_="AlwaysInstalled" Component_="EnvPath"/>
+    <ROW Feature_="AlwaysInstalled" Component_="ProductInformation"/>
+    <ROW Feature_="AlwaysInstalled" Component_="version.dat"/>
+    <ROW Feature_="AlwaysInstalled" Component_="LICENSE.txt"/>
+    <ROW Feature_="AlwaysInstalled" Component_="openssl.cnf.dist"/>
+    <ROW Feature_="MainFeature" Component_="EnvPath_1"/>
+    <ROW Feature_="Development" Component_="legacy.lib"/>
+    <ROW Feature_="Development" Component_="fips.lib"/>
+    <ROW Feature_="Development" Component_="fips.lib_1"/>
+    <ROW Feature_="DebugFiles" Component_="FIPS_VALIDATED.pdb"/>
+    <ROW Feature_="DebugFiles" Component_="fips.pdb"/>
+    <ROW Feature_="AlwaysInstalled" Component_="fips.dll"/>
+    <ROW Feature_="AlwaysInstalled" Component_="FIPS_CONF.cnf"/>
+    <ROW Feature_="AlwaysInstalled" Component_="fipsmodule.cnf"/>
+    <ROW Feature_="AlwaysInstalled" Component_="fips.dll_1"/>
+    <ROW Feature_="AlwaysInstalled" Component_="libcrypto4x64.dll_1"/>
+    <ROW Feature_="DebugFiles" Component_="libssl4x64.pdb_1"/>
+    <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf.dist"/>
+    <ROW Feature_="AlwaysInstalled" Component_="MODULESDIR"/>
+    <ROW Feature_="AlwaysInstalled" Component_="MODULESDIR_1"/>
+    <ROW Feature_="AlwaysInstalled" Component_="Wow6432Node"/>
+    <ROW Feature_="AlwaysInstalled" Component_="OpenSSLProductVersion"/>
+    <ROW Feature_="AlwaysInstalled" Component_="OPENSSLDIR"/>
+    <ROW Feature_="AlwaysInstalled" Component_="OpenSSL4.00"/>
+    <ROW Feature_="AlwaysInstalled" Component_="libcrypto4x64.dll"/>
+    <ROW Feature_="AlwaysInstalled" Component_="libssl4x64.dll"/>
+    <ROW Feature_="AlwaysInstalled" Component_="openssl.cnf_2"/>
+    <ROW Feature_="MainFeature" Component_="fipsmodule.cnf_1"/>
+    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
+    <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf_1"/>
+    <ROW Feature_="Development" Component_="include"/>
+    <ROW Feature_="MainFeature" Component_="Manufacturer"/>
+    <ROW Feature_="Development" Component_="man1"/>
+    <ROW Feature_="Development" Component_="man3"/>
+    <ROW Feature_="Development" Component_="man5"/>
+    <ROW Feature_="Development" Component_="man7"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1503"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1397"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_AiBackupImmediate" Sequence="1401"/>
+    <ROW Action="AI_AiBackupRollback" Sequence="1502"/>
+    <ROW Action="AI_AiBackupRollbackImpersonate" Sequence="1501"/>
+    <ROW Action="AI_AiRestoreDeferredImpersonate" Sequence="6595"/>
+    <ROW Action="AI_AiRestoreDeferred" Sequence="6596"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="MsiBuild"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101" Builds="MsiBuild"/>
+    <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="MsiBuild"/>
+    <ROW Action="AI_DeleteRCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="198" Builds="MsiBuild"/>
+    <ROW Action="AI_ExtractCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="197" Builds="MsiBuild"/>
+    <ROW Action="AI_FindExeLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="196" Builds="MsiBuild"/>
+    <ROW Action="AI_ExtractLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1549" Builds="MsiBuild"/>
+    <ROW Action="AI_DeleteRLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1548" Builds="MsiBuild"/>
+    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="MsiBuild"/>
+    <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="MsiBuild"/>
+    <ROW Action="AI_DATA_SETTER_2" Sequence="1398"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_ResolveKnownFolders" Sequence="55"/>
+    <ROW Action="AI_DpiContentScale" Sequence="54"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="53"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="PowerShellScriptInline" Condition="( NOT Installed )" Sequence="52"/>
+    <ROW Action="AI_DATA_SETTER" Condition="( NOT Installed )" Sequence="51"/>
+    <ROW Action="PowerShellScriptInline_1" Condition="( NOT Installed )" Sequence="202"/>
+    <ROW Action="AI_DATA_SETTER_1" Condition="( NOT Installed )" Sequence="201"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="( Version9X OR ( NOT VersionNT64 ) OR ( VersionNT64 AND ((VersionNT64 &lt;&gt; 601) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 601) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 602) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 602) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 603) OR (MsiNTProductType &lt;&gt; 1)) ) )" Description="[ProductName] cannot be installed on the following Windows versions: [WindowsTypeNT64Display]." DescriptionLocId="AI.LaunchCondition.NoSpecificNT64" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="( Version9X OR VersionNT64 )" Description="[ProductName] cannot be installed on [WindowsTypeNTDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild;MsiBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild;MsiBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild;MsiBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 600)" Description="[ProductName] cannot be installed on [WindowsTypeNT60Display]." DescriptionLocId="AI.LaunchCondition.NoNT60" IsPredefined="true" Builds="DefaultBuild;MsiBuild"/>
+    <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="MsiBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild;MsiBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRadioButtonComponent">
+    <ROW Property="INSTALL_FIPS_TYPE" Order="1" Value="validated" X="1" Y="2" Width="210" Height="23" Text="Validated module (3.1.2)"/>
+    <ROW Property="INSTALL_FIPS_TYPE" Order="2" Value="experimental" X="1" Y="21" Width="210" Height="23" Text="Experimental (current version)"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegLocatorComponent">
+    <ROW Signature_="AI_EXE_PATH_CU" Root="1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Type="2"/>
+    <ROW Signature_="AI_EXE_PATH_LM" Root="2" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Type="2"/>
+    <ROW Signature_="AppSearchSign" Root="1" Key="SOFTWARE\OpenSSL Corporation\OpenSSL Library\Temp" Name="PERL_INSTALLED" Type="18"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="AI_ExePath" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath"/>
+    <ROW Registry="AdvancedInstaller" Root="-1" Key="Software\Caphyon\Advanced Installer" Name="\"/>
+    <ROW Registry="Caphyon" Root="-1" Key="Software\Caphyon" Name="\"/>
+    <ROW Registry="EnvPath" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="EnvPath" Value="[bin_Dir]" Component_="EnvPath"/>
+    <ROW Registry="EnvPath_1" Root="-1" Key="Software\Wow6432Node\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="EnvPath" Value="[bin_Dir]" Component_="EnvPath_1"/>
+    <ROW Registry="LZMA" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA" Name="\"/>
+    <ROW Registry="MODULESDIR" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="MODULESDIR" Value="[lib_Dir]ossl-modules" Component_="MODULESDIR"/>
+    <ROW Registry="MODULESDIR_1" Root="-1" Key="Software\Wow6432Node\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="MODULESDIR" Value="[lib_Dir]ossl-modules" Component_="MODULESDIR_1"/>
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Manufacturer_1" Root="-1" Key="Software\Wow6432Node\[Manufacturer]" Name="+" Component_="Manufacturer"/>
+    <ROW Registry="OPENSSLDIR" Root="-1" Key="Software\Wow6432Node\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="OPENSSLDIR" Value="[SSL_Dir]" Component_="OPENSSLDIR"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="OPENSSLDIR" Value="[SSL_Dir]" Component_="ProductInformation"/>
+    <ROW Registry="ProductCode" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]" Name="\"/>
+    <ROW Registry="ProductNameProductVersion" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="*" Component_="OpenSSLProductVersion"/>
+    <ROW Registry="ProductNameProductVersion_1" Root="-1" Key="Software\Wow6432Node\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="*" Component_="OpenSSL4.00"/>
+    <ROW Registry="ProductVersion" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Wow6432Node" Root="-1" Key="Software\Wow6432Node" Name="+" Component_="Wow6432Node"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MultipleInstancesComponent">
+    <ATTRIBUTE name="DynamicInstances" value="DefaultBuild:false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">
+    <ROW Directory_="openssl_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl" Feature="Development" IncludePattern="*.h" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
+    <ROW Directory_="man1_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man1" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
+    <ROW Directory_="man3_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man3" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
+    <ROW Directory_="man5_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man5" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
+    <ROW Directory_="man7_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
+  </COMPONENT>
+</DOCUMENT>

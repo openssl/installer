@@ -1,4 +1,4 @@
-#envarionment settable variables
+#environment settable variables
 if (-not $opensslInstallVersion) {
 	$version = "4.0.0"
 } else {
@@ -29,19 +29,20 @@ $targetDir = "C:\openssl"
 $fipsTargetDir = "C:\openssl-fips"
 $gitUrl = "https://github.com/openssl/openssl.git"
 $installerDir = "C:\build-target\Installer64\DefaultBuild"
-$patch =
+
+$patch1 =
 @'
-From bbeca7f85e9b54f73c36ca47edf57b68ab4bfb21 Mon Sep 17 00:00:00 2001
+From 7af1798ad07ded2e39b0ce60544c382c9919e35d Mon Sep 17 00:00:00 2001
 From: Norbert Pocs <norbertp@openssl.org>
-Date: Wed, 11 Feb 2026 06:47:29 -0800
-Subject: [PATCH] Fix build on windows
+Date: Tue, 17 Feb 2026 02:34:12 -0800
+Subject: [PATCH] win: Fix warning build issue
 
 ---
  test/build_wincrypt_test.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/test/build_wincrypt_test.c b/test/build_wincrypt_test.c
-index 5bd75e6a43..25fd9d9346 100644
+index 5bd75e6a..25fd9d93 100644
 --- a/test/build_wincrypt_test.c
 +++ b/test/build_wincrypt_test.c
 @@ -22,7 +22,11 @@
@@ -60,6 +61,48 @@ index 5bd75e6a43..25fd9d9346 100644
 -- 
 2.53.0.windows.1
 '@
+$patch2 =
+@'
+From d130c5f74873b3aad74f58bd7d0fdea0fb16397c Mon Sep 17 00:00:00 2001
+From: Norbert Pocs <norbertp@openssl.org>
+Date: Thu, 8 Jan 2026 16:11:10 +0100
+Subject: [PATCH] windows-makefile: Don't prefix libdir when it is absolute
+ path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When --libdir was passed to configuration as an absolute path then
+the makefile MODULESDIR_dir became concat(prefix, libdir) creating
+an invalid path.
+
+Fixes: https://github.com/openssl/project/issues/1797
+
+Signed-off-by: Norbert Pocs <norbertp@openssl.org>
+
+Reviewed-by: Saša Nedvědický <sashan@openssl.org>
+Reviewed-by: Richard Levitte <levitte@openssl.org>
+(Merged from https://github.com/openssl/openssl/pull/29579)
+---
+ Configurations/windows-makefile.tmpl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Configurations/windows-makefile.tmpl b/Configurations/windows-makefile.tmpl
+index 408b571d66..e9f985f855 100644
+--- a/Configurations/windows-makefile.tmpl
++++ b/Configurations/windows-makefile.tmpl
+@@ -208,7 +208,7 @@ OPENSSLDIR_dir={- canonpath($openssldir_dir) -}
+ LIBDIR={- our $libdir = $config{libdir} || "lib";
+           file_name_is_absolute($libdir) ? "" : $libdir -}
+ MODULESDIR_dev={- use File::Spec::Functions qw(:DEFAULT splitpath catpath);
+-                  our $modulesprefix = catdir($prefix,$libdir);
++                  our $modulesprefix = file_name_is_absolute($libdir) ? $libdir : catdir($prefix,$libdir);
+                   our ($modulesprefix_dev, $modulesprefix_dir,
+                        $modulesprefix_file) =
+                       splitpath($modulesprefix, 1);
+-- 
+2.52.0
+'@
 
 function Install-Prerequisites {
 	$prereq = @("Strawberry Perl", "Visual Studio BuildTools 2022", "NASM.NASM", "Git.Git")
@@ -76,16 +119,18 @@ function Build-Openssl {
 		[string]$winctx
 	)
 	git clone --depth 1 -b $branch $gitUrl $dir
-	# 3.1.2 does not build on windows without this patch
-	if ($branch -eq "openssl-3.1.2") {
-		if (-not (Test-Path "fix.patch")) {
-			New-Item -Path "fix.patch" -ItemType File
-		}
-		Set-Content -Path "fix.patch" -Value $patch
-	}
 	pushd $dir
-	perl .\Configure --banner="Configured" enable-fips -DOSSL_WINCTX=$winctx VC-WIN64A
+	# 3.1.2 does not build on windows without this patch
+	# TODO patches do not apply
+	if ($branch -eq "openssl-3.1.2") {
+		$patch1 | git apply
+		$patch2 | git apply
+	}
+	perl .\Configure enable-fips --libdir="C:\Program Files\OpenSSL Project\$branch" VC-WIN64A
 	cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && nmake'
+	cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && nmake build_docs'
+	# fipsmodule.cnf has to be generated
+	apps\openssl fipsinstall -module providers\fips.dll -out fipsmodule.cnf
 	popd
 }
 
@@ -110,7 +155,7 @@ function Install-Openssl {
 		[string]$params
 	)
 	echo "Installing openssl"
-	msiexec /i "$installerDir\OpenSSL-x64-$version" /qn $params
+	msiexec /i "$installerDir\OpenSSL-x64-$version" $params /qn
 }
 
 function Uninstall-Openssl {

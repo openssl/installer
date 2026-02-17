@@ -107,15 +107,15 @@
     <ROW Component="version.dat" Value="{F311415A-A562-456A-87CE-E9EC0C3DC9E6}"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="ADMISSIONS.html" ComponentId="{9133C295-DAD6-49CD-9E4C-9D7B6E133377}" Directory_="man3_Dir" Attributes="0" KeyPath="ADMISSIONS.html" Type="0"/>
+    <ROW Component="ADMISSIONS.html" ComponentId="{C5E39F6D-E63A-4892-8A97-9476E755FF66}" Directory_="man3_Dir" Attributes="0" KeyPath="ADMISSIONS.html" Type="0"/>
     <ROW Component="AI_ExePath" ComponentId="{66C609BD-B2CF-4670-AEFA-21B7976D3C08}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
     <ROW Component="APPDIR" ComponentId="{7E5D7034-1B13-4160-B674-591B4D96D031}" Directory_="APPDIR" Attributes="256"/>
-    <ROW Component="CA.pl.html" ComponentId="{2B1B61EC-6AD3-4E92-A558-7BDEBA7CDFB3}" Directory_="man1_Dir" Attributes="0" KeyPath="CA.pl.html" Type="0"/>
+    <ROW Component="CA.pl.html" ComponentId="{8A4611CB-4BC8-40B3-9725-1696454EDAF8}" Directory_="man1_Dir" Attributes="0" KeyPath="CA.pl.html" Type="0"/>
     <ROW Component="FIPS_VALIDATED.pdb" ComponentId="{FEC969D8-813D-4831-BB93-88A82DFA6B4C}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.pdb" Type="4"/>
     <ROW Component="LICENSE.txt" ComponentId="{6A1F00EB-DFE7-47B7-B559-0623EA47904F}" Directory_="APPDIR" Attributes="0" KeyPath="LICENSE.txt"/>
     <ROW Component="asn1.h" ComponentId="{9740D9D5-C0BA-4A26-AE24-ED199486956D}" Directory_="openssl_Dir" Attributes="0" KeyPath="asn1.h" Type="0"/>
-    <ROW Component="bio.html" ComponentId="{7C6BBEF4-56E6-4D7A-B6AB-8139265CFB0D}" Directory_="man7_Dir" Attributes="0" KeyPath="bio.html" Type="0"/>
-    <ROW Component="config.html" ComponentId="{16C57C91-7225-4B23-858E-537881125946}" Directory_="man5_Dir" Attributes="0" KeyPath="config.html" Type="0"/>
+    <ROW Component="bio.html" ComponentId="{FE076261-AE3C-4FFE-89F4-5CF6463E7762}" Directory_="man7_Dir" Attributes="0" KeyPath="bio.html" Type="0"/>
+    <ROW Component="config.html" ComponentId="{8332F2A4-9A1C-43EE-A3B0-BC4CD4C70D5B}" Directory_="man5_Dir" Attributes="0" KeyPath="config.html" Type="0"/>
     <ROW Component="ct_log_list.cnf.dist" ComponentId="{3D7D4512-D5E1-4379-83A6-E405AE4BB763}" Directory_="SSL_Dir" Attributes="256" KeyPath="ct_log_list.cnf.dist"/>
     <ROW Component="ct_log_list.cnf_1" ComponentId="{7711235F-B0B4-4376-90E3-3AC201DC1162}" Directory_="SSL_Dir" Attributes="16" KeyPath="ct_log_list.cnf"/>
     <ROW Component="fips.dll" ComponentId="{6F78D564-844E-408E-BFA1-5C1A2F3BA2AB}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.dll"/>
@@ -138,7 +138,7 @@
     <ROW Component="libssl4x64.dll_1" ComponentId="{030E8B15-2114-4B64-B4ED-7B98016A4EA5}" Directory_="bin_Dir" Attributes="256" KeyPath="libssl4x64.dll_2"/>
     <ROW Component="libssl4x64.pdb" ComponentId="{5DFB0054-BD9B-4CEC-8A28-AF23B4872D59}" Directory_="lib_Dir" Attributes="0" KeyPath="libssl4x64.pdb" Type="4"/>
     <ROW Component="openssl.cnf.dist" ComponentId="{1003322D-1805-490E-8912-DE85CCE79E03}" Directory_="SSL_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot;" KeyPath="openssl.cnf.dist"/>
-    <ROW Component="openssl.cnf_2" ComponentId="{E5296DCD-94FA-483B-8F5F-C3260272D221}" Directory_="SSL_Dir" Attributes="144" Condition="NOT INSTALL_FIPS = &quot;1&quot;" KeyPath="openssl.cnf"/>
+    <ROW Component="openssl.cnf_2" ComponentId="{E5296DCD-94FA-483B-8F5F-C3260272D221}" Directory_="SSL_Dir" Attributes="144" KeyPath="openssl.cnf"/>
     <ROW Component="openssl.exe" ComponentId="{9F3E76EE-03E3-4C93-A36A-AD78A16DAD0E}" Directory_="bin_Dir" Attributes="256" KeyPath="openssl.exe"/>
     <ROW Component="version.dat" ComponentId="{19EDED59-5672-45DD-8B53-F53EE433583C}" Directory_="APPDIR" Attributes="0" KeyPath="version.txt"/>
   </COMPONENT>
@@ -282,7 +282,7 @@
     <ROW File="version.txt" Component_="version.dat" FileName="version.dat" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;VERSION.dat" SelfReg="false"/>
     <ROW File="posix_time.h" Component_="include" FileName="POSIX_~1.H|posix_time.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\posix_time.h" SelfReg="false"/>
     <ROW File="core_object.h" Component_="include" FileName="CORE_O~1.H|core_object.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\core_object.h" SelfReg="false"/>
-    <ROW File="fipsmodule.cnf" Component_="fipsmodule.cnf" FileName="FIPSMO~2.CNF|[|FIPS_VALIDATED]module.cnf" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\openssl-fips\fipsmodule.cnf" SelfReg="false"/>
+    <ROW File="fipsmodule.cnf" Component_="fipsmodule.cnf" FileName="FIPSMO~2.CNF|[|FIPS_VALIDATED]module.cnf" Attributes="0" SourcePath="..\..\openssl-fips\fipsmodule.cnf" SelfReg="false"/>
     <ROW File="legacy.lib" Component_="legacy.lib" FileName="legacy.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.lib" SelfReg="false"/>
     <ROW File="fips.dll" Component_="fips.dll" FileName="[|FIPS_VALIDATED].dll" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.dll" SelfReg="false"/>
     <ROW File="fips.lib" Component_="fips.lib" FileName="[|FIPS_VALIDATED].lib" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.lib" SelfReg="false"/>
@@ -319,6 +319,8 @@
     <ROW File="x509v3.h" Component_="asn1.h" FileName="x509v3.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\x509v3.h" SelfReg="false"/>
     <ROW File="x509_acert.h" Component_="asn1.h" FileName="X509_A~1.H|x509_acert.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\x509_acert.h" SelfReg="false"/>
     <ROW File="x509_vfy.h" Component_="asn1.h" FileName="x509_vfy.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\x509_vfy.h" SelfReg="false"/>
+    <ROW File="libcrypto4x64.dll_2" Component_="libcrypto4x64.dll_2" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4-x64.dll" SelfReg="false"/>
+    <ROW File="libssl4x64.dll_2" Component_="libssl4x64.dll_1" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4-x64.dll" SelfReg="false"/>
     <ROW File="CA.pl.html" Component_="CA.pl.html" FileName="CAPL~1.HTM|CA.pl.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man1\CA.pl.html" SelfReg="false"/>
     <ROW File="opensslasn1parse.html" Component_="CA.pl.html" FileName="OPENSS~1.HTM|openssl-asn1parse.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man1\openssl-asn1parse.html" SelfReg="false"/>
     <ROW File="opensslca.html" Component_="CA.pl.html" FileName="OPENSS~2.HTM|openssl-ca.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man1\openssl-ca.html" SelfReg="false"/>
@@ -1218,8 +1220,6 @@
     <ROW File="RSAPSS.html" Component_="bio.html" FileName="RSA-PS~1.HTM|RSA-PSS.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\RSA-PSS.html" SelfReg="false"/>
     <ROW File="X25519.html" Component_="bio.html" FileName="X25519~1.HTM|X25519.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\X25519.html" SelfReg="false"/>
     <ROW File="x509.html" Component_="bio.html" FileName="X509~1.HTM|x509.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\x509.html" SelfReg="false"/>
-    <ROW File="libcrypto4x64.dll_2" Component_="libcrypto4x64.dll_2" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4-x64.dll" SelfReg="false"/>
-    <ROW File="libssl4x64.dll_2" Component_="libssl4x64.dll_1" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4-x64.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentDataComponent">
     <ROW PersistentRow="ct_log_list.cnf" Type="0" Condition="1"/>
@@ -1458,9 +1458,9 @@
     <ROW Dialog="SpawnDialog" HCentering="50" VCentering="50" Width="260" Height="85" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Yes" Control_Cancel="Yes"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiEnvComponent">
-    <ROW Environment="Include" Name="=-*Include" Value="[include_Dir];[~]" Component_="ADMISSIONS.html"/>
-    <ROW Environment="Lib" Name="=-*Lib" Value="[lib_Dir];[~]" Component_="ADMISSIONS.html"/>
-    <ROW Environment="Path" Name="=-*Path" Value="[bin_Dir];[~]" Component_="ADMISSIONS.html"/>
+    <ROW Environment="Include" Name="=-*Include" Value="[include_Dir];[~]" Component_="openssl.cnf.dist"/>
+    <ROW Environment="Lib" Name="=-*Lib" Value="[lib_Dir];[~]" Component_="openssl.cnf.dist"/>
+    <ROW Environment="Path" Name="=-*Path" Value="[bin_Dir];[~]" Component_="openssl.cnf.dist"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
     <ROW Feature_="MainFeature" Component_="openssl.exe"/>
@@ -1491,12 +1491,12 @@
     <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf_1"/>
     <ROW Feature_="Development" Component_="include"/>
     <ROW Feature_="Development" Component_="asn1.h"/>
-    <ROW Feature_="Development" Component_="CA.pl.html"/>
+    <ROW Feature_="MainFeature" Component_="libcrypto4x64.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="libssl4x64.dll_1"/>
     <ROW Feature_="Development" Component_="ADMISSIONS.html"/>
     <ROW Feature_="Development" Component_="config.html"/>
     <ROW Feature_="Development" Component_="bio.html"/>
-    <ROW Feature_="MainFeature" Component_="libcrypto4x64.dll_2"/>
-    <ROW Feature_="MainFeature" Component_="libssl4x64.dll_1"/>
+    <ROW Feature_="Development" Component_="CA.pl.html"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1503"/>

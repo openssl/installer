@@ -128,9 +128,9 @@ function Build-Openssl {
 	}
 	cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && perl .\Configure enable-fips --libdir="C:\Program Files\OpenSSL Project\$branch\lib" VC-WIN64A'
 	cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && nmake'
-	cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && nmake build_docs'
-	# fipsmodule.cnf has to be generated
-	apps\openssl fipsinstall -module providers\fips.dll -out fipsmodule.cnf
+	if ($branch -ne "openssl-3.1.2") {
+		cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && nmake build_docs'
+	}
 	popd
 }
 

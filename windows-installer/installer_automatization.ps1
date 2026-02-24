@@ -126,7 +126,7 @@ function Build-Openssl {
 		$patch1 | git apply
 		$patch2 | git apply
 	}
-	cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && perl .\Configure enable-fips --libdir="C:\Program Files\OpenSSL Project\$branch\lib" VC-WIN64A'
+	cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && perl .\Configure enable-fips --libdir="C:\Program Files\OpenSSL Project\$branch\lib" --openssldir="C:\Program Files\Common Files\SSL\$branch" VC-WIN64A'
 	cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && nmake'
 	if ($branch -ne "openssl-3.1.2") {
 		cmd /c '"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" && nmake build_docs'

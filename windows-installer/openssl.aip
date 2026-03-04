@@ -20,13 +20,13 @@
     <ROW Property="ARPURLUPDATEINFO" Value="https://openssl-library.org"/>
     <ROW Property="FIPS_CONF" Value="openssl"/>
     <ROW Property="FIPS_VALIDATED" Value="fips"/>
-    <ROW Property="INSTALL_APPS" Value="1" Type="4"/>
+    <ROW Property="INSTALL_APP" Value="1" Type="4"/>
     <ROW Property="INSTALL_FIPS_TYPE" Value="validated" Type="4"/>
     <ROW Property="INSTALL_SDK" Value="1" Type="4"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
     <ROW Property="Manufacturer" Value="OpenSSL Corporation"/>
     <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp"/>
-    <ROW Property="ProductCode" Value="1033:{2EBD772C-04FF-4462-8773-7DF11A1CF28A} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{DF69CA39-8B77-4D13-9809-E6A3F976A4E7} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="OpenSSL Project"/>
     <ROW Property="ProductVersion" Value="4.0.0" Options="32"/>
@@ -66,35 +66,35 @@
     <ROW Directory="osslmodules_Dir" Directory_Parent="lib_Dir" DefaultDir="OSSL-M~1|ossl-modules"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.SideBySideGuidComponent">
-    <ROW Component="APPDIR" Value="{A6C31179-2883-4B36-805E-DC9A05271BA6}"/>
-    <ROW Component="FIPS_VALIDATED.pdb" Value="{4B7BF88C-919F-49B4-9B07-F4A5BF4488AB}"/>
-    <ROW Component="LICENSE.txt" Value="{E12AA750-04EB-4346-B3BB-D686739074F8}"/>
-    <ROW Component="RegistryKeys" Value="{0BCE7520-35CD-4E92-9CAC-19626C1CB454}"/>
-    <ROW Component="config_files" Value="{EE8659DC-135A-4BC1-BD7F-CC54A2CEDD82}"/>
-    <ROW Component="fips.dll" Value="{91EF9C72-5691-4F39-A25D-207F5BD1859C}"/>
-    <ROW Component="fips.dll_1" Value="{67DD95CD-C72E-4EFB-BD0C-2807D668AD88}"/>
-    <ROW Component="fips.lib" Value="{713BF4FF-A7A2-4BF8-A261-BA96F8B60539}"/>
-    <ROW Component="fips.lib_1" Value="{461CBCBD-742D-4F04-BBD5-53507F8F7564}"/>
-    <ROW Component="fips.pdb" Value="{59DE1350-9C58-409C-8A3F-E2A2E7F0BA95}"/>
-    <ROW Component="header_files" Value="{DC44D339-DB78-4FA7-8AE3-4B8C611A7928}"/>
-    <ROW Component="include" Value="{7B87A646-5EE1-40E0-91CC-8D1B96897F7F}"/>
-    <ROW Component="legacy.dll" Value="{E1F80D56-5CC6-4D7C-AB23-2743DEC5F6D1}"/>
-    <ROW Component="legacy.lib" Value="{EAAA16F1-194D-41FA-A826-7A17247F6C7F}"/>
-    <ROW Component="legacy.pdb" Value="{AE902487-5AD9-4A47-9432-7C8014BA2ECA}"/>
-    <ROW Component="libcrypto.lib" Value="{51BB372F-3E16-43F0-B2DB-CC8FFD5CDE18}"/>
-    <ROW Component="libcrypto4x64.dll" Value="{C647D1A3-169C-47DA-B55B-0BB5463C8CF0}"/>
-    <ROW Component="libcrypto4x64.dll_1" Value="{14A9587B-5CBF-4B5F-BE96-FEE1F7609AB5}"/>
-    <ROW Component="libcrypto_static.lib" Value="{565156FB-601B-4049-921E-B099BC9DFABC}"/>
-    <ROW Component="libssl.lib" Value="{14AC7F7D-CD71-401A-A450-CFE9B0235FDD}"/>
-    <ROW Component="libssl4x64.dll" Value="{83FB82C2-5A38-4910-83B3-F576B6EDF025}"/>
-    <ROW Component="libssl4x64.dll_1" Value="{9492A723-75CF-4452-86F5-826ABC77B6EC}"/>
-    <ROW Component="libssl_static.lib" Value="{2638B5F2-1E20-4725-8A75-9A15000A8108}"/>
-    <ROW Component="man1" Value="{C9ACD1B5-4766-4C2A-9F3D-4C7B90AC8621}"/>
-    <ROW Component="man3" Value="{0B714CC2-7FCE-499A-8491-833B8D5D3976}"/>
-    <ROW Component="man5" Value="{B8CA8727-73EC-43D7-B6EF-1640C09DBEFE}"/>
-    <ROW Component="man7" Value="{2142B160-1085-4813-BEF1-966E8A3F67DA}"/>
-    <ROW Component="openssl.exe" Value="{1E72C9BA-84C4-42EA-BAB7-D075E595794A}"/>
-    <ROW Component="version.dat" Value="{1B7A56DE-61C3-4C73-B8F9-BCDED02EA34D}"/>
+    <ROW Component="APPDIR" Value="{AA65DE23-93F6-4C72-95CF-2B18B68BD6C1}"/>
+    <ROW Component="FIPS_VALIDATED.pdb" Value="{5E5DDCDB-8BA7-4C8C-A5E0-126BD5EC81CD}"/>
+    <ROW Component="LICENSE.txt" Value="{0ED15AA5-24CA-4150-9F72-CFD919E73E78}"/>
+    <ROW Component="RegistryKeys" Value="{CF911E56-198C-439D-BEF9-17347BC725CB}"/>
+    <ROW Component="config_files" Value="{9FB8D450-DC0B-468A-BCE4-3ADBB0795CD7}"/>
+    <ROW Component="fips.dll" Value="{74238794-2C7D-41FB-84BE-7D77D4821258}"/>
+    <ROW Component="fips.dll_1" Value="{060B11DE-A233-4054-AF4F-6937B2CA4113}"/>
+    <ROW Component="fips.lib" Value="{6B240DF0-B439-407E-80D0-838006599EF3}"/>
+    <ROW Component="fips.lib_1" Value="{CB850141-00A1-46D8-BEE8-4EF8016FA38D}"/>
+    <ROW Component="fips.pdb" Value="{F1ABD118-B6E1-4320-8BE6-7A2CDF7ABA3E}"/>
+    <ROW Component="header_files" Value="{0BC9CAEC-5529-494B-8C5C-165C15190533}"/>
+    <ROW Component="include" Value="{5A17945D-A941-4E03-83C4-30078B3BD7DD}"/>
+    <ROW Component="legacy.dll" Value="{B87AC24D-0771-4CDC-8032-13D7E624A090}"/>
+    <ROW Component="legacy.lib" Value="{4C9596AC-B498-4578-BE2F-39C9F2B5FD9F}"/>
+    <ROW Component="legacy.pdb" Value="{BEE58FD3-8E7D-4610-9CC4-02CE66F162F1}"/>
+    <ROW Component="libcrypto.lib" Value="{0FA6920F-A58A-49ED-B463-17E8EB21342E}"/>
+    <ROW Component="libcrypto4x64.dll" Value="{CF4F8CB8-E12B-4178-B7A5-D8A0979791A4}"/>
+    <ROW Component="libcrypto4x64.dll_1" Value="{457AC400-CFF3-4218-9C46-A04D3565F52C}"/>
+    <ROW Component="libcrypto_static.lib" Value="{071CA060-79D3-4C5F-A71F-AEFE6D05593D}"/>
+    <ROW Component="libssl.lib" Value="{9B2D4FAA-360B-4C37-B36A-97A70B725C66}"/>
+    <ROW Component="libssl4x64.dll" Value="{BE82AF05-D5DA-440A-9DE0-88A8FEFEE86B}"/>
+    <ROW Component="libssl4x64.dll_1" Value="{52A365A6-C203-4ED8-945B-0EC19D160D4F}"/>
+    <ROW Component="libssl_static.lib" Value="{A79C9369-0F76-43A9-A743-107DF6CBB5F9}"/>
+    <ROW Component="man1" Value="{E43E8812-CD28-4D8B-BD06-550961199CBE}"/>
+    <ROW Component="man3" Value="{D04BE8E8-6398-464E-9776-1207D2F36265}"/>
+    <ROW Component="man5" Value="{D3482367-B928-469E-BCAF-4D2AA2537B83}"/>
+    <ROW Component="man7" Value="{711D7F66-8401-4F5E-89A4-7346A0F76E55}"/>
+    <ROW Component="openssl.exe" Value="{B3752B27-B876-4109-8B35-78EABFB6D762}"/>
+    <ROW Component="version.dat" Value="{272B3C4F-409B-4F40-80DB-00B49D63EAA1}"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{7E5D7034-1B13-4160-B674-591B4D96D031}" Directory_="APPDIR" Attributes="256"/>
@@ -113,14 +113,14 @@
     <ROW Component="legacy.lib" ComponentId="{3C6CD8EF-D532-45F2-BD82-A25CEBACDB37}" Directory_="osslmodules_Dir" Attributes="8" KeyPath="legacy.lib"/>
     <ROW Component="legacy.pdb" ComponentId="{ABDAFA2A-6C63-4C9D-90F9-E035EA181884}" Directory_="osslmodules_Dir" Attributes="256" KeyPath="legacy.pdb" Type="4"/>
     <ROW Component="libcrypto.lib" ComponentId="{C135CF2B-C40C-484A-89BB-A6100635270F}" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto.lib"/>
-    <ROW Component="libcrypto4x64.dll" ComponentId="{57DE18AC-02DA-4700-809A-26BBDCCD7A04}" Directory_="bin_Dir" Attributes="256" KeyPath="libcrypto4x64.dll"/>
-    <ROW Component="libcrypto4x64.dll_1" ComponentId="{177037DB-9DEF-444F-A7C8-9D595395B3DB}" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto4x64.dll_1"/>
-    <ROW Component="libcrypto4x64.pdb" ComponentId="{E7574CEB-CE27-44AE-9D99-986517D82482}" Directory_="lib_Dir" Attributes="0" KeyPath="libcrypto4x64.pdb" Type="4"/>
+    <ROW Component="libcrypto4x64.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libcrypto4x64.dll"/>
+    <ROW Component="libcrypto4x64.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto4x64.dll_1"/>
+    <ROW Component="libcrypto4x64.pdb" ComponentId="{FFB902FC-C6F2-453F-8AFE-8EA7065862AA}" Directory_="lib_Dir" Attributes="0" KeyPath="libcrypto4x64.pdb" Type="4"/>
     <ROW Component="libcrypto_static.lib" ComponentId="{C09D5D8F-0437-42CD-82C6-1F8B06D20CC9}" Directory_="lib_Dir" Attributes="0" KeyPath="libcrypto_static.lib"/>
     <ROW Component="libssl.lib" ComponentId="{C367994A-D027-411D-B12E-1B594EADD943}" Directory_="lib_Dir" Attributes="256" KeyPath="libssl.lib"/>
-    <ROW Component="libssl4x64.dll" ComponentId="{27047943-F69A-4946-BEAA-41DD6A52CFD0}" Directory_="bin_Dir" Attributes="256" KeyPath="libssl4x64.dll"/>
-    <ROW Component="libssl4x64.dll_1" ComponentId="{060A7151-26E7-4C76-8E8A-83637E08F7BA}" Directory_="lib_Dir" Attributes="256" KeyPath="libssl4x64.dll_1"/>
-    <ROW Component="libssl4x64.pdb" ComponentId="{7FA34497-9F3E-4F7E-83E6-C8A7766771B4}" Directory_="lib_Dir" Attributes="0" KeyPath="libssl4x64.pdb" Type="4"/>
+    <ROW Component="libssl4x64.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libssl4x64.dll"/>
+    <ROW Component="libssl4x64.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libssl4x64.dll_1"/>
+    <ROW Component="libssl4x64.pdb" ComponentId="{6C39D261-1648-4703-ADEC-DB735C71963A}" Directory_="lib_Dir" Attributes="0" KeyPath="libssl4x64.pdb" Type="4"/>
     <ROW Component="libssl_static.lib" ComponentId="{9CD57B73-FFD4-40E5-A81B-635E647E0B86}" Directory_="lib_Dir" Attributes="0" KeyPath="libssl_static.lib"/>
     <ROW Component="man1" ComponentId="{8A4611CB-4BC8-40B3-9725-1696454EDAF8}" Directory_="man1_Dir" Attributes="0" KeyPath="opensslasn1parse.html" Type="0"/>
     <ROW Component="man3" ComponentId="{C5E39F6D-E63A-4892-8A97-9476E755FF66}" Directory_="man3_Dir" Attributes="0" KeyPath="ADMISSIONS.html" Type="0"/>
@@ -131,9 +131,9 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="AlwaysInstalled" Title="AlwaysInstalled" Description="Always installed" Display="11" Level="1" Directory_="APPDIR" Attributes="0"/>
-    <ROW Feature="DebugFiles" Title="Debug Files" Description="Debug Files" Display="7" Level="1" Directory_="APPDIR" Attributes="0"/>
-    <ROW Feature="Development" Title="Development" Description="Development" Display="9" Level="1" Directory_="APPDIR" Attributes="0"/>
-    <ROW Feature="MainFeature" Title="Application" Display="1" Level="1" Directory_="APPDIR" Attributes="24"/>
+    <ROW Feature="DebugFiles" Title="Debug Files" Description="Debug Files" Display="7" Level="4" Directory_="APPDIR" Attributes="0"/>
+    <ROW Feature="Development" Title="Development" Description="Development" Display="9" Level="4" Directory_="APPDIR" Attributes="0"/>
+    <ROW Feature="MainFeature" Title="Application" Display="1" Level="4" Directory_="APPDIR" Attributes="24"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
@@ -1209,6 +1209,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentDataComponent">
     <ROW PersistentRow="ct_log_list.cnf" Type="0" Condition="1"/>
+    <ROW PersistentRow="openssl.cnf" Type="0" Condition="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiRemoveFileComponent">
     <ROW RemoveFile="fipsmodule.cnf" Condition="(AI_CLEAN_RESOURCES_UNINSTALL = &quot;1&quot;) AND (NOT UPGRADINGPRODUCTCODE)" Options="1"/>
@@ -1278,13 +1279,13 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCheckBoxComponent">
     <ROW Property="ADJUSTSYSTEMPATHENV" Value="1"/>
     <ROW Property="INSTALL_FIPS" Value="1"/>
-    <ROW Property="INSTALL_APPS" Value="1"/>
+    <ROW Property="INSTALL_APP" Value="1"/>
     <ROW Property="INSTALL_SDK" Value="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiConditionComponent">
-    <ROW Feature_="DebugFiles" Level="4" Condition="NOT INSTALL_SDK"/>
-    <ROW Feature_="Development" Level="4" Condition="NOT INSTALL_SDK"/>
-    <ROW Feature_="MainFeature" Level="4" Condition="NOT INSTALL_APPS"/>
+    <ROW Feature_="MainFeature" Level="1" Condition="INSTALL_APP = &quot;1&quot;"/>
+    <ROW Feature_="DebugFiles" Level="1" Condition="INSTALL_SDK = &quot;1&quot;"/>
+    <ROW Feature_="Development" Level="1" Condition="INSTALL_SDK = &quot;1&quot;"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
     <ROW Dialog_="AdditionalOptions" Control="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Next]" Order="100" Options="1"/>
@@ -1433,7 +1434,7 @@
     <ROW Dialog_="SDKDlg" Control="BottomLine" Type="Line" X="5" Y="234" Width="368" Height="0" Attributes="1" Order="600"/>
     <ROW Dialog_="SDKDlg" Control="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Attributes="196611" Text="Choose wether to install the applications only or include the SDK" Order="700"/>
     <ROW Dialog_="SDKDlg" Control="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Attributes="196611" Text="Components to install" TextStyle="[DlgTitleFont]" Order="800"/>
-    <ROW Dialog_="SDKDlg" Control="InstApps" Type="CheckBox" X="47" Y="89" Width="98" Height="13" Attributes="3" Property="INSTALL_APPS" Text="Install applications" Order="900"/>
+    <ROW Dialog_="SDKDlg" Control="InstApps" Type="CheckBox" X="47" Y="89" Width="98" Height="13" Attributes="3" Property="INSTALL_APP" Text="Install application" Order="900"/>
     <ROW Dialog_="SDKDlg" Control="InstSdk" Type="CheckBox" X="47" Y="119" Width="141" Height="13" Attributes="3" Property="INSTALL_SDK" Text="Install development kit (SDK)" Order="1000"/>
     <ROW Dialog_="SDKDlg" Control="Text_1" Type="Text" X="59" Y="131" Width="177" Height="11" Attributes="65539" Property="TEXT_1_PROP_1" Text="(Header, .pdb, .lib files and documentation)" Order="1100"/>
     <ROW Dialog_="SpawnDialog" Control="Yes" Type="PushButton" X="102" Y="57" Width="56" Height="17" Attributes="3" Text="[ButtonText_OK]" Order="100"/>
@@ -1494,11 +1495,11 @@
     <ROW Dialog_="UpgradeDlg" Control_="Next" Event="NewDialog" Argument="SDKDlg" Condition="AI_INSTALL AND OLDPRODUCTS" Ordering="1"/>
     <ROW Dialog_="UpgradeDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL AND OLDPRODUCTS" Ordering="1"/>
     <ROW Dialog_="SDKDlg" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
-    <ROW Dialog_="SDKDlg" Control_="Next" Event="NewDialog" Argument="AdditionalOptions" Condition="AI_INSTALL AND ( INSTALL_APPS OR INSTALL_SDK )" Ordering="2"/>
+    <ROW Dialog_="SDKDlg" Control_="Next" Event="NewDialog" Argument="AdditionalOptions" Condition="AI_INSTALL AND ( INSTALL_APP OR INSTALL_SDK )" Ordering="2"/>
     <ROW Dialog_="SDKDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
     <ROW Dialog_="SDKDlg" Control_="Back" Event="NewDialog" Argument="UpgradeDlg" Condition="AI_INSTALL AND OLDPRODUCTS" Ordering="2"/>
     <ROW Dialog_="NewDialog_3" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
-    <ROW Dialog_="SDKDlg" Control_="Next" Event="SpawnDialog" Argument="SpawnDialog" Condition="AI_INSTALL AND ( NOT (INSTALL_APPS OR INSTALL_SDK) )" Ordering="1"/>
+    <ROW Dialog_="SDKDlg" Control_="Next" Event="SpawnDialog" Argument="SpawnDialog" Condition="AI_INSTALL AND ( NOT (INSTALL_APP OR INSTALL_SDK) )" Ordering="1"/>
     <ROW Dialog_="SpawnDialog" Control_="Yes" Event="EndDialog" Argument="Return" Condition="1" Ordering="100"/>
     <ROW Dialog_="FatalError" Control_="Finish" Event="DoAction" Argument="AI_AiBackupCleanup" Condition="1" Ordering="102"/>
     <ROW Dialog_="UserExit" Control_="Finish" Event="DoAction" Argument="AI_AiBackupCleanup" Condition="1" Ordering="101"/>
@@ -1575,18 +1576,18 @@
     <ROW Feature_="Development" Component_="libssl_static.lib"/>
     <ROW Feature_="AlwaysInstalled" Component_="config_files"/>
     <ROW Feature_="AlwaysInstalled" Component_="RegistryKeys"/>
-    <ROW Feature_="MainFeature" Component_="libcrypto4x64.dll"/>
-    <ROW Feature_="MainFeature" Component_="libssl4x64.dll"/>
-    <ROW Feature_="MainFeature" Component_="libcrypto4x64.dll_1"/>
-    <ROW Feature_="MainFeature" Component_="libssl4x64.dll_1"/>
-    <ROW Feature_="DebugFiles" Component_="libcrypto4x64.pdb"/>
-    <ROW Feature_="DebugFiles" Component_="libssl4x64.pdb"/>
     <ROW Feature_="AlwaysInstalled" Component_="fips.dll_1"/>
     <ROW Feature_="AlwaysInstalled" Component_="fips.dll"/>
     <ROW Feature_="DebugFiles" Component_="FIPS_VALIDATED.pdb"/>
     <ROW Feature_="DebugFiles" Component_="fips.pdb"/>
     <ROW Feature_="Development" Component_="fips.lib"/>
     <ROW Feature_="Development" Component_="fips.lib_1"/>
+    <ROW Feature_="MainFeature" Component_="libcrypto4x64.dll"/>
+    <ROW Feature_="MainFeature" Component_="libssl4x64.dll"/>
+    <ROW Feature_="DebugFiles" Component_="libssl4x64.pdb"/>
+    <ROW Feature_="DebugFiles" Component_="libcrypto4x64.pdb"/>
+    <ROW Feature_="Development" Component_="libcrypto4x64.dll_1"/>
+    <ROW Feature_="Development" Component_="libssl4x64.dll_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="openssllibrary.exe" SourcePath="..\..\..\openssl-installer-resources\openssl-library.ico" Index="0"/>
@@ -1596,7 +1597,7 @@
     <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1397"/>
     <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
-    <ROW Action="openssl.exe" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_APPS )" Sequence="6401"/>
+    <ROW Action="openssl.exe" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_APP )" Sequence="6401"/>
     <ROW Action="AI_AiBackupImmediate" Sequence="1401"/>
     <ROW Action="AI_AiBackupRollback" Sequence="1502"/>
     <ROW Action="AI_AiBackupRollbackImpersonate" Sequence="1501"/>

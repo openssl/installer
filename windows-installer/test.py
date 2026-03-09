@@ -18,6 +18,9 @@ if installer == 'None':
     exit(1)
 version = str(installer).split('-')[-1].replace('.msi', '')
 major_v = version.split('.')[0]
+minor_v = version.split('.')[1]
+config_v = f'{major_v}.{minor_v}'
+print(config_v)
 registry_version = version.rsplit(".", 1)[0]
 debug_msg(f"found installer file at: {installer}")
 debug_msg(f"found installer version: {version}")
@@ -26,7 +29,7 @@ debug_msg(f"found installer version: {version}")
 fips_version_validated = '3.1.2'
 
 program_files = f'C:\\Program Files\\OpenSSL Project\\openssl-{version}\\'
-common_files = f'C:\\Program Files\\Common Files\\SSL\\openssl-{version}\\'
+common_files = f'C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}\\'
 installed_files = {program_files:[{'name':'LICENSE.txt', 'flags':'all'},
                                   {'name':'version.dat', 'flags':'all'}],
                    f'{program_files}bin\\':[{'name':'openssl.exe', 'flags':'app'},
@@ -54,8 +57,8 @@ installed_files = {program_files:[{'name':'LICENSE.txt', 'flags':'all'},
                                  {'name':'openssl.cnf', 'flags':'all'},
                                  {'name':'openssl.cnf.dist', 'flags':'all'},
                                  {'name':'fipsmodule.cnf', 'flags':'fips'}]}
-should_stay_files = {f'C:\\Program Files\\Common Files\\SSL\\openssl-{version}\\':[{'name':'ct_log_list.cnf', 'flags':'all'},
-                                                                                   {'name':'openssl.cnf', 'flags':'all'}]}
+should_stay_files = {f'{common_files}':[{'name':'ct_log_list.cnf', 'flags':'all'},
+                                        {'name':'openssl.cnf', 'flags':'all'}]}
 
 
 # helper functions
@@ -95,16 +98,18 @@ def check_fips_loadability(fips_type):
     config = Path(cnf)
     shutil.copy2(config, cnf_old)
 
-    fipsmodule_path = rf'.include C:\\Program Files\\Common Files\\SSL\\openssl-{version}\\fipsmodule.cnf'
+    fipsmodule_path = rf'.include C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}\\fipsmodule.cnf'
     content = config.read_text(encoding="utf-8")
     content = content.replace("# .include fipsmodule.cnf", fipsmodule_path)
     content = content.replace("# fips = fips_sect", "fips = fips_sect")
     content = content.replace("# activate = 1", "activate = 1")
     config.write_text(content, encoding="utf-8")
 
-    res = run([f'{program_files}bin\\openssl.exe', 'list', '-providers', '-provider=fips'], check=True, capture_output=True, text=True,)
+    res = run([f'{program_files}bin\\openssl.exe', 'list', '-providers', '-provider=fips'], capture_output=True, text=True)
     #cleanup
     shutil.move(cnf_old, cnf)
+    if (res.returncode != 0):
+       raise Error()
 
     #check the version number
     version_res = res.stdout.split('fips')[-1].split('version: ')[1].split('\n')[0]
@@ -124,7 +129,7 @@ def check_registry_entries():
             if value != f"C:\\Program Files\\OpenSSL Project\\openssl-{version}\\lib\\ossl-modules":
                 raise Error('incorrect MODULESDIR: {}'.format(value))
             value, _ = winreg.QueryValueEx(key, "OPENSSLDIR")
-            if value != f"C:\\Program Files\\Common Files\\SSL\\openssl-{version}":
+            if value != f"C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}":
                 raise Error('incorrect OPENSSLDIR: {}'.format(value))
             value, _ = winreg.QueryValueEx(key, "EnvPath")
             if value != f"C:\\Program Files\\OpenSSL Project\\openssl-{version}\\bin\\":

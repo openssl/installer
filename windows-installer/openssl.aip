@@ -103,10 +103,10 @@
     <ROW Component="RegistryKeys" ComponentId="{BBCB0F4B-DF23-43FB-BB0F-13BFFDFCB010}" Directory_="APPDIR" Attributes="260" KeyPath="EnvPath"/>
     <ROW Component="config_files" ComponentId="{0DF0E716-368F-4AEC-974D-54B5E2FA6838}" Directory_="ConfDir" Attributes="0" KeyPath="ct_log_list.cnf"/>
     <ROW Component="fips.dll" ComponentId="{6F78D564-844E-408E-BFA1-5C1A2F3BA2AB}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.dll"/>
-    <ROW Component="fips.dll_1" ComponentId="{1DEACB24-039A-4293-9C53-69B820827B9B}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;experimental&quot;" KeyPath="fips.dll_1"/>
+    <ROW Component="fips.dll_1" ComponentId="{1DEACB24-039A-4293-9C53-69B820827B9B}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.dll_1"/>
     <ROW Component="fips.lib" ComponentId="{71D3038C-A84D-4F24-96BA-F0D8D55509D3}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.lib"/>
-    <ROW Component="fips.lib_1" ComponentId="{30FC288B-DA15-437E-8454-F044B4207CE5}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;experimental&quot;" KeyPath="fips.lib_1"/>
-    <ROW Component="fips.pdb" ComponentId="{74B0C48D-CE5A-45A3-80AA-80655A9C125F}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;experimental&quot;" KeyPath="fips.pdb_1" Type="4"/>
+    <ROW Component="fips.lib_1" ComponentId="{30FC288B-DA15-437E-8454-F044B4207CE5}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.lib_1"/>
+    <ROW Component="fips.pdb" ComponentId="{74B0C48D-CE5A-45A3-80AA-80655A9C125F}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.pdb_1" Type="4"/>
     <ROW Component="header_files" ComponentId="{9740D9D5-C0BA-4A26-AE24-ED199486956D}" Directory_="openssl_Dir" Attributes="0" KeyPath="asn1.h" Type="0"/>
     <ROW Component="include" ComponentId="{0B6BABEB-B9BE-41AD-A4A6-BA48E9835629}" Directory_="openssl_Dir" Attributes="256" KeyPath="aes.h"/>
     <ROW Component="legacy.dll" ComponentId="{87885DBB-B06C-494F-8554-75CEA941BF72}" Directory_="osslmodules_Dir" Attributes="256" KeyPath="legacy.dll"/>
@@ -1233,7 +1233,7 @@
     <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DigCertStoreComponent">
-    <ROW TimeStampUrl="http://timestamp.sectigo.com?td=sha256" SignerDescription="[|ProductName]" SignOptions="7" SignTool="0" UseSha256="1" Store="User\MY" KVTenantId="8046b243-a7d6-45eb-b70e-370ca5555870" KVAppId="7ed2e203-dc20-436a-981b-3319b446f6c2" KVName="FD-KV01" KVCertName="FireDaemon-Sectigo-2021" KVCertVersion="9e9cb504937e46a3a4598383a2728843"/>
+    <ROW TimeStampUrl="http://timestamp.sectigo.com?td=sha256" SignerDescription="[|ProductName]" SignOptions="0" SignTool="0" UseSha256="1" Store="User\MY" KVTenantId="8046b243-a7d6-45eb-b70e-370ca5555870" KVAppId="7ed2e203-dc20-436a-981b-3319b446f6c2" KVName="FD-KV01" KVCertName="FireDaemon-Sectigo-2021" KVCertVersion="9e9cb504937e46a3a4598383a2728843"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
@@ -1625,7 +1625,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRadioButtonComponent">
     <ROW Property="INSTALL_FIPS_TYPE" Order="1" Value="validated" X="2" Y="0" Width="210" Height="23" Text="Validated module (3.1.2)"/>
-    <ROW Property="INSTALL_FIPS_TYPE" Order="2" Value="experimental" X="2" Y="17" Width="210" Height="23" Text="Experimental (current version)"/>
+    <ROW Property="INSTALL_FIPS_TYPE" Order="2" Value="current" X="2" Y="17" Width="210" Height="23" Text="Current version ([ProductVersion])"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
     <ROW Registry="EnvPath" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="EnvPath" Value="[bin_Dir]" Component_="RegistryKeys"/>

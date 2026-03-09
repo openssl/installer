@@ -156,8 +156,8 @@ def test_fips_validated():
     check_installed_files(('fips', 'fips_sdk', 'app', 'sdk'))
     check_fips_loadability('validated')
 
-def test_fips_experimental():
-    install_openssl(['INSTALL_FIPS=1', 'INSTALL_FIPS_TYPE=experimental'])
+def test_fips_current():
+    install_openssl(['INSTALL_FIPS=1', 'INSTALL_FIPS_TYPE=current'])
     check_fips_loadability('current')
 
 def test_fips_without_app():
@@ -174,7 +174,7 @@ tests = [test_default,
          test_sdk, 
          test_app_sdk,
          test_fips_validated,
-         test_fips_experimental,
+         test_fips_current,
          test_fips_without_app]
 
 

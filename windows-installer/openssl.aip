@@ -1446,7 +1446,7 @@
     <ROW Dialog_="SpawnDialog_1" Control="Yes" Type="PushButton" X="102" Y="57" Width="56" Height="17" Attributes="3" Text="[ButtonText_OK]" Order="100"/>
     <ROW Dialog_="SpawnDialog_1" Control="Icon" Type="Icon" X="15" Y="15" Width="24" Height="24" Attributes="5242881" Text="[InfoIcon]" Order="200"/>
     <ROW Dialog_="SpawnDialog_1" Control="Text" Type="Text" X="48" Y="15" Width="194" Height="30" Attributes="3" Text="This is a pre-release version.  Don&apos;t use in production." Order="300"/>
-    <ROW Dialog_="SpawnDialog_2" Control="Yes" Type="PushButton" X="102" Y="57" Width="56" Height="17" Attributes="3" Text="[ButtonText_Yes]" Order="100" TextLocId="-"/>
+    <ROW Dialog_="SpawnDialog_2" Control="Yes" Type="PushButton" X="102" Y="57" Width="56" Height="17" Attributes="3" Text="[ButtonText_OK]" Order="100"/>
     <ROW Dialog_="SpawnDialog_2" Control="Icon" Type="Icon" X="15" Y="15" Width="24" Height="24" Attributes="5242881" Text="[ExclamationIcon]" Order="200"/>
     <ROW Dialog_="SpawnDialog_2" Control="Text" Type="Text" X="48" Y="15" Width="194" Height="30" Attributes="3" Text="FIPS can&apos;t be installed without the openssl app." Order="300"/>
     <ROW Dialog_="VerifyReadyDlg" Control="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Back]" Order="500" TextLocId="-" MsiKey="VerifyReadyDlg#Back" Options="1"/>

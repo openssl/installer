@@ -40,7 +40,7 @@ class InstallerTest(unittest.TestCase):
     def setUpClass(self):
         Popen(["msiexec.exe", "/i", installer])
         sleep(1)
-        self.app = Application(backend='uia').connect(title_re='OpenSSL Project Setup')
+        self.app = Application(backend='uia').connect(title_re='OpenSSL Library Setup')
         self.dlg = self.app.top_window()
 
     @classmethod
@@ -79,7 +79,7 @@ class InstallerTest(unittest.TestCase):
         # install path dialog
         if (self.dlg.Static2.window_text() != 'Select Installation Folder'):
             self.fail("Wrong dialog")
-        install_path = f'C:\\Program Files\\OpenSSL Project\\openssl-{version}\\'
+        install_path = f'C:\\Program Files\\OpenSSL Library\\openssl-{version}\\'
         t = self.dlg.ComboBox.selected_text()
         if (t != install_path):
             self.fail(f"Awaited install path: {install_path}, got {t}")

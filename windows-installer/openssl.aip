@@ -29,7 +29,7 @@
     <ROW Property="PRE_RELEASE" Value="0"/>
     <ROW Property="ProductCode" Value="1033:{DF69CA39-8B77-4D13-9809-E6A3F976A4E7} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
-    <ROW Property="ProductName" Value="OpenSSL Project"/>
+    <ROW Property="ProductName" Value="OpenSSL Library"/>
     <ROW Property="ProductVersion" Value="4.0.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{CB59C1C5-679D-40E3-A155-31588BA99C1C}"/>

@@ -40,7 +40,7 @@ debug_msg(f"found installer version: {version}")
 # needs to be changed manually
 fips_version_validated = '3.1.2'
 
-program_files = f'C:\\Program Files\\OpenSSL Project\\openssl-{version}\\'
+program_files = f'C:\\Program Files\\OpenSSL Library\\openssl-{version}\\'
 common_files = f'C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}\\'
 installed_files = {program_files:[{'name':'LICENSE.txt', 'flags':'all'},
                                   {'name':'version.dat', 'flags':'all'}],
@@ -138,13 +138,13 @@ def check_registry_entries():
     for path in paths:
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path) as key:
             value, _ = winreg.QueryValueEx(key, "MODULESDIR")
-            if value != f"C:\\Program Files\\OpenSSL Project\\openssl-{version}\\lib\\ossl-modules":
+            if value != f"C:\\Program Files\\OpenSSL Library\\openssl-{version}\\lib\\ossl-modules":
                 raise Error('incorrect MODULESDIR: {}'.format(value))
             value, _ = winreg.QueryValueEx(key, "OPENSSLDIR")
             if value != f"C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}":
                 raise Error('incorrect OPENSSLDIR: {}'.format(value))
             value, _ = winreg.QueryValueEx(key, "EnvPath")
-            if value != f"C:\\Program Files\\OpenSSL Project\\openssl-{version}\\bin\\":
+            if value != f"C:\\Program Files\\OpenSSL Library\\openssl-{version}\\bin\\":
                 raise Error('incorrect EnvPath: {}'.format(value))
 
 

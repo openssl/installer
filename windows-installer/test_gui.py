@@ -1,16 +1,44 @@
+from pathlib import Path
 import unittest
 from subprocess import Popen
 from time import sleep
+import argparse
 
 from pywinauto import Application
 
+debug = 1
+def debug_msg(msg):
+    if debug:
+        print(msg)
+
 version = '4.0.0'
+
+# load arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--path', help='path to the installer .msi')
+args = parser.parse_args()
+
+if args.path:
+    installer_path = args.path
+else:
+    installer_path = f"C:\\Users\\build-target\\Installer64\\DefaultBuild\\OpenSSL-x64-{version}.msi"
+installer = str(next(Path(installer_path).glob("*.msi"), None))
+if installer == 'None':
+    print("Installer was not found")
+    exit(1)
+version = str(installer).split('-')[-1].replace('.msi', '')
+major_v = version.split('.')[0]
+minor_v = version.split('.')[1]
+config_v = f'{major_v}.{minor_v}'
+print(config_v)
+registry_version = version.rsplit(".", 1)[0]
+debug_msg(f"found installer file at: {installer}")
+debug_msg(f"found installer version: {version}")
 
 class InstallerTest(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        installer_path = f"C:\\Users\\build-target\\Installer64\\DefaultBuild\\OpenSSL-x64-{version}.msi"
-        Popen(["msiexec.exe", "/i", installer_path])
+        Popen(["msiexec.exe", "/i", installer])
         sleep(1)
         self.app = Application(backend='uia').connect(title_re='OpenSSL Project Setup')
         self.dlg = self.app.top_window()

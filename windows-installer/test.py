@@ -2,6 +2,8 @@ from pathlib import Path
 from subprocess import run, DEVNULL
 import winreg
 import shutil
+import argparse
+from time import sleep
 
 class Error(Exception):
     pass
@@ -11,7 +13,17 @@ def debug_msg(msg):
     if debug:
         print(msg)
 
-installer_path = r"C:\Users\build-target\Installer64\DefaultBuild"
+# load arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--path', help='path to the installer .msi')
+args = parser.parse_args()
+
+debug_msg(args.path)
+
+if args.path:
+    installer_path = args.path
+else:
+    installer_path = r"C:\Users\build-target\Installer64\DefaultBuild"
 installer = str(next(Path(installer_path).glob("*.msi"), None))
 if installer == 'None':
     print("Installer was not found")
@@ -140,6 +152,9 @@ def check_registry_entries():
 def test_default():
     install_openssl()
     check_installed_files(('app', 'sdk'))
+    # as this is the first test case, let's wait until Visual Studio redistributable
+    # is installed
+    sleep(5)
     check_openssl_version()
     check_registry_entries()
     check_legacy_loadability()

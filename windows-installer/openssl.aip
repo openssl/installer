@@ -1298,6 +1298,7 @@
     <ROW Name="aipackagechainer.exe" SourcePath="&lt;AI_CUSTACTS&gt;aipackagechainer.exe" DigSign="true"/>
     <ROW Name="file_deleter.ps1" SourcePath="&lt;AI_SCRIPTS&gt;file_deleter.ps1"/>
     <ROW Name="tempFiles.dll" SourcePath="&lt;AI_CUSTACTS&gt;tempFiles.dll"/>
+    <ROW Name="viewer.exe" SourcePath="&lt;AI_CUSTACTS&gt;viewer.exe" DigSign="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCheckBoxComponent">
     <ROW Property="ADJUSTSYSTEMPATHENV" Value="1"/>
@@ -1601,10 +1602,11 @@
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
     <ROW Action="AI_VerifyPrePrereq" Type="1" Source="Prereq.dll" Target="VerifyPrePrereq"/>
     <ROW Action="AI_VerifyPrereq" Type="1" Source="Prereq.dll" Target="VerifyPrereq"/>
+    <ROW Action="LaunchFile" Type="3074" Source="viewer.exe" Target="/RunAsAdmin /HideWindow &quot;[APPDIR]\bin\openssl.exe&quot; fipsinstall -module &quot;[osslmodules_Dir]fips.dll&quot; -out &quot;[ConfDir]fipsmodule.cnf&quot;" Options="1"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[ProductVersion]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]" MultiBuildTarget="DefaultBuild:[ProgramMenuFolder][ProductName]\openssl-[ProductVersion]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
-    <ROW Action="openssl.exe" Type="3154" Source="openssl.exe" Target="fipsinstall -module &quot;[osslmodules_Dir]fips.dll&quot; -out &quot;[ConfDir]fipsmodule.cnf&quot;"/>
+    <ROW Action="openssl.exe" Type="3090" Source="openssl.exe" Target="fipsinstall -module &quot;[osslmodules_Dir]fips.dll&quot; -out &quot;[ConfDir]fipsmodule.cnf&quot;"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDialogComponent">
     <ROW Dialog="AdditionalOptions" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Next" Control_Cancel="Cancel"/>
@@ -1664,7 +1666,7 @@
     <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1397"/>
     <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
-    <ROW Action="openssl.exe" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_APP )" Sequence="6401"/>
+    <ROW Action="openssl.exe" Condition="( Installed AND REMOVE &lt;&gt; &quot;ALL&quot; AND AI_INSTALL_MODE &lt;&gt; &quot;Remove&quot; ) AND ( INSTALL_FIPS AND INSTALL_APP )" Sequence="6402"/>
     <ROW Action="AI_AiBackupImmediate" Sequence="1401"/>
     <ROW Action="AI_AiBackupRollback" Sequence="1504"/>
     <ROW Action="AI_AiBackupRollbackImpersonate" Sequence="1503"/>
@@ -1680,6 +1682,7 @@
     <ROW Action="AI_RemoveTempFiles" Sequence="6601"/>
     <ROW Action="AI_RemoveAllTempFiles" Sequence="1502"/>
     <ROW Action="AI_DATA_SETTER" Sequence="1501"/>
+    <ROW Action="LaunchFile" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_APP )" Sequence="6401"/>
     <ROW Action="AI_AiRemoveFilesImmediate" Sequence="3499"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">

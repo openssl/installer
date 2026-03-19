@@ -135,6 +135,13 @@ def check_fips_loadability(fips_type):
 def check_legacy_loadability():
     run([f'{program_files}bin\\openssl.exe', 'list', '-providers', '-provider=legacy'], check=True, stdout=DEVNULL, stderr=DEVNULL)
 
+def do_path_match(p1, p2):
+    p1s = p1.split(':\\')
+    p2s = p2.split(':\\')
+    if p1s[0].lower() != p2s[0].lower() or p1s[1] != p2s[1]:
+        return 0
+    return 1
+
 def check_registry_entries():
     paths = [f"SOFTWARE\\OpenSSL Corporation\\OpenSSL-{registry_version}-OpenSSLProject",
              f"SOFTWARE\\Wow6432Node\\OpenSSL-{registry_version}-OpenSSLProject"]
@@ -142,13 +149,13 @@ def check_registry_entries():
     for path in paths:
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path) as key:
             value, _ = winreg.QueryValueEx(key, "MODULESDIR")
-            if value != f"C:\\Program Files\\OpenSSL Library\\openssl-{version}\\lib\\ossl-modules":
+            if not do_path_match(value, f"C:\\Program Files\\OpenSSL Library\\openssl-{version}\\lib\\ossl-modules"):
                 raise Error('incorrect MODULESDIR: {}'.format(value))
             value, _ = winreg.QueryValueEx(key, "OPENSSLDIR")
-            if value != f"C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}":
+            if not do_path_match(value, f"C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}"):
                 raise Error('incorrect OPENSSLDIR: {}'.format(value))
             value, _ = winreg.QueryValueEx(key, "EnvPath")
-            if value != f"C:\\Program Files\\OpenSSL Library\\openssl-{version}\\bin\\":
+            if not do_path_match(value, f"C:\\Program Files\\OpenSSL Library\\openssl-{version}\\bin\\"):
                 raise Error('incorrect EnvPath: {}'.format(value))
 
 

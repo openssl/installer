@@ -15,19 +15,23 @@ def debug_msg(msg):
 
 # load arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--path', help='path to the installer .msi')
+# should be something like: "C:\OpenSSL-x64-4.0.0.msi"
+parser.add_argument('--installer', help='filepath to the installer .msi')
 args = parser.parse_args()
 
-debug_msg(args.path)
+debug_msg(args.installer)
 
-if args.path:
-    installer_path = args.path
+if args.installer:
+    installer = args.installer
+    if not Path(installer).exists():
+        print(f"Installer '{installer}' was not found")
+        exit(1)
 else:
-    installer_path = r"C:\Users\build-target\Installer64\DefaultBuild"
-installer = str(next(Path(installer_path).glob("*.msi"), None))
-if installer == 'None':
-    print("Installer was not found")
-    exit(1)
+    installer_path = fr"C:\Users\build-target\Installer64\DefaultBuild"
+    installer = str(next(Path(installer_path).glob("*.msi"), None))
+    if installer == 'None':
+        print(f"No installer was found at {installer_path}")
+        exit(1)
 version = str(installer).split('-')[-1].replace('.msi', '')
 major_v = version.split('.')[0]
 minor_v = version.split('.')[1]

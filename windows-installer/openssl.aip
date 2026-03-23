@@ -53,11 +53,9 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
-    <ROW Directory="CommonFiles64Folder" Directory_Parent="TARGETDIR" DefaultDir="COMMON~3|CommonFiles64Folder" IsPseudoRoot="1"/>
-    <ROW Directory="ConfDir" Directory_Parent="SSL_Dir" DefaultDir="OPENSS~2.0|openssl-[|VERSION_MAJOR].[|VERSION_MINOR]"/>
-    <ROW Directory="SSL_Dir" Directory_Parent="CommonFiles64Folder" DefaultDir="SSL"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="bin_Dir" Directory_Parent="APPDIR" DefaultDir="bin"/>
+    <ROW Directory="config_Dir" Directory_Parent="APPDIR" DefaultDir="config"/>
     <ROW Directory="html_Dir" Directory_Parent="APPDIR" DefaultDir="html"/>
     <ROW Directory="include_Dir" Directory_Parent="APPDIR" DefaultDir="include"/>
     <ROW Directory="lib_Dir" Directory_Parent="APPDIR" DefaultDir="lib"/>
@@ -105,7 +103,9 @@
     <ROW Component="FIPS_VALIDATED.pdb" ComponentId="{FEC969D8-813D-4831-BB93-88A82DFA6B4C}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.pdb" Type="4"/>
     <ROW Component="LICENSE.txt" ComponentId="{6A1F00EB-DFE7-47B7-B559-0623EA47904F}" Directory_="APPDIR" Attributes="0" KeyPath="LICENSE.txt"/>
     <ROW Component="RegistryKeys" ComponentId="{BBCB0F4B-DF23-43FB-BB0F-13BFFDFCB010}" Directory_="APPDIR" Attributes="260" KeyPath="EnvPath"/>
-    <ROW Component="config_files" ComponentId="{0DF0E716-368F-4AEC-974D-54B5E2FA6838}" Directory_="ConfDir" Attributes="0" KeyPath="ct_log_list.cnf"/>
+    <ROW Component="config_files" ComponentId="{0DF0E716-368F-4AEC-974D-54B5E2FA6838}" Directory_="config_Dir" Attributes="0" KeyPath="openssl.cnf.dist"/>
+    <ROW Component="ct_log_list.cnf" ComponentId="{7DBDF570-8985-4B3A-BF0C-FBBBA87E46F1}" Directory_="config_Dir" Attributes="0" KeyPath="ct_log_list.cnf"/>
+    <ROW Component="ct_log_list.cnf.dist" ComponentId="{89228605-D376-4DC9-BCA2-29333EAA1EAD}" Directory_="config_Dir" Attributes="0" KeyPath="ct_log_list.cnf.dist"/>
     <ROW Component="fips.dll" ComponentId="{6F78D564-844E-408E-BFA1-5C1A2F3BA2AB}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.dll"/>
     <ROW Component="fips.dll_1" ComponentId="{1DEACB24-039A-4293-9C53-69B820827B9B}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.dll_1"/>
     <ROW Component="fips.lib" ComponentId="{71D3038C-A84D-4F24-96BA-F0D8D55509D3}" Directory_="osslmodules_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.lib"/>
@@ -130,6 +130,7 @@
     <ROW Component="man3" ComponentId="{C5E39F6D-E63A-4892-8A97-9476E755FF66}" Directory_="man3_Dir" Attributes="0" KeyPath="ADMISSIONS.html" Type="0"/>
     <ROW Component="man5" ComponentId="{8332F2A4-9A1C-43EE-A3B0-BC4CD4C70D5B}" Directory_="man5_Dir" Attributes="0" KeyPath="config.html" Type="0"/>
     <ROW Component="man7" ComponentId="{FE076261-AE3C-4FFE-89F4-5CF6463E7762}" Directory_="man7_Dir" Attributes="0" KeyPath="bio.html" Type="0"/>
+    <ROW Component="openssl.cnf" ComponentId="{E87B8CA6-31C2-43A2-A7B0-69B2E521C791}" Directory_="config_Dir" Attributes="0" KeyPath="openssl.cnf"/>
     <ROW Component="openssl.exe" ComponentId="{9F3E76EE-03E3-4C93-A36A-AD78A16DAD0E}" Directory_="bin_Dir" Attributes="256" KeyPath="openssl.exe"/>
     <ROW Component="version.dat" ComponentId="{19EDED59-5672-45DD-8B53-F53EE433583C}" Directory_="APPDIR" Attributes="0" KeyPath="version.txt"/>
   </COMPONENT>
@@ -1191,9 +1192,9 @@
     <ROW File="X25519.html" Component_="man7" FileName="X25519~1.HTM|X25519.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\X25519.html" SelfReg="false"/>
     <ROW File="x509.html" Component_="man7" FileName="X509~1.HTM|x509.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\x509.html" SelfReg="false"/>
     <ROW File="ERR_remove_state.html" Component_="man3" FileName="ERR_RE~1.HTM|ERR_remove_state.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man3\ERR_remove_state.html" SelfReg="false"/>
-    <ROW File="ct_log_list.cnf" Component_="config_files" FileName="CT_LOG~1.CNF|ct_log_list.cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\ct_log_list.cnf" SelfReg="false"/>
-    <ROW File="ct_log_list.cnf.dist" Component_="config_files" FileName="CT_LOG~1.DIS|ct_log_list.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\ct_log_list.cnf" SelfReg="false"/>
-    <ROW File="openssl.cnf" Component_="config_files" FileName="openssl.cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
+    <ROW File="ct_log_list.cnf" Component_="ct_log_list.cnf" FileName="CT_LOG~1.CNF|ct_log_list.cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\ct_log_list.cnf" SelfReg="false"/>
+    <ROW File="ct_log_list.cnf.dist" Component_="ct_log_list.cnf.dist" FileName="CT_LOG~1.DIS|ct_log_list.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\ct_log_list.cnf" SelfReg="false"/>
+    <ROW File="openssl.cnf" Component_="openssl.cnf" FileName="openssl.cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
     <ROW File="openssl.cnf.dist" Component_="config_files" FileName="OPENSS~1.DIS|openssl.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
     <ROW File="libcrypto_static.lib" Component_="libcrypto_static.lib" FileName="LIBCRY~2.LIB|libcrypto_static.lib" Attributes="0" SourcePath="..\..\..\openssl\libcrypto_static.lib" SelfReg="false"/>
     <ROW File="libssl_static.lib" Component_="libssl_static.lib" FileName="LIBSSL~1.LIB|libssl_static.lib" Attributes="0" SourcePath="..\..\..\openssl\libssl_static.lib" SelfReg="false"/>
@@ -1607,11 +1608,10 @@
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
     <ROW Action="AI_VerifyPrePrereq" Type="1" Source="Prereq.dll" Target="VerifyPrePrereq"/>
     <ROW Action="AI_VerifyPrereq" Type="1" Source="Prereq.dll" Target="VerifyPrereq"/>
-    <ROW Action="LaunchFile" Type="3074" Source="viewer.exe" Target="/RunAsAdmin /HideWindow &quot;[APPDIR]\bin\openssl.exe&quot; fipsinstall -module &quot;[osslmodules_Dir]fips.dll&quot; -out &quot;[ConfDir]fipsmodule.cnf&quot;" Options="1"/>
+    <ROW Action="LaunchFile" Type="3074" Source="viewer.exe" Target="/RunAsAdmin /HideWindow &quot;[APPDIR]\bin\openssl.exe&quot; fipsinstall -module &quot;[osslmodules_Dir]fips.dll&quot; -out &quot;[APPDIR]config\fipsmodule.cnf&quot;" Options="1"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[ProductVersion]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]" MultiBuildTarget="DefaultBuild:[ProgramMenuFolder][ProductName]\openssl-[ProductVersion]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
-    <ROW Action="openssl.exe" Type="3090" Source="openssl.exe" Target="fipsinstall -module &quot;[osslmodules_Dir]fips.dll&quot; -out &quot;[ConfDir]fipsmodule.cnf&quot;"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDialogComponent">
     <ROW Dialog="AdditionalOptions" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="3" Title="[ProductName] [Setup]" Control_Default="Next" Control_Cancel="Cancel"/>
@@ -1662,6 +1662,9 @@
     <ROW Feature_="Development" Component_="libcrypto4x64.dll_1"/>
     <ROW Feature_="Development" Component_="libssl4x64.dll_1"/>
     <ROW Feature_="C4FE6FD5B7C4D07B3A313E754A9A6A8" Component_="C4FE6FD5B7C4D07B3A313E754A9A6A8"/>
+    <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf"/>
+    <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf.dist"/>
+    <ROW Feature_="AlwaysInstalled" Component_="openssl.cnf"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="openssllibrary.exe" SourcePath="..\..\..\openssl-installer-resources\openssl-library.ico" Index="0"/>
@@ -1671,7 +1674,6 @@
     <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1397"/>
     <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
-    <ROW Action="openssl.exe" Condition="( Installed AND REMOVE &lt;&gt; &quot;ALL&quot; AND AI_INSTALL_MODE &lt;&gt; &quot;Remove&quot; ) AND ( INSTALL_FIPS AND INSTALL_APP )" Sequence="6402"/>
     <ROW Action="AI_AiBackupImmediate" Sequence="1401"/>
     <ROW Action="AI_AiBackupRollback" Sequence="1504"/>
     <ROW Action="AI_AiBackupRollbackImpersonate" Sequence="1503"/>
@@ -1731,8 +1733,8 @@
     <ROW Registry="MODULESDIR" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="MODULESDIR" Value="[lib_Dir]ossl-modules" Component_="RegistryKeys"/>
     <ROW Registry="MODULESDIR_1" Root="-1" Key="Software\Wow6432Node\OpenSSL-[VERSION_REGISTRY]" Name="MODULESDIR" Value="[lib_Dir]ossl-modules" Component_="RegistryKeys"/>
     <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
-    <ROW Registry="OPENSSLDIR" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="OPENSSLDIR" Value="[SSL_Dir]openssl-[VERSION_MAJOR].[VERSION_MINOR]" Component_="RegistryKeys"/>
-    <ROW Registry="OPENSSLDIR_2" Root="-1" Key="Software\Wow6432Node\OpenSSL-[VERSION_REGISTRY]" Name="OPENSSLDIR" Value="[SSL_Dir]openssl-[VERSION_MAJOR].[VERSION_MINOR]" Component_="RegistryKeys"/>
+    <ROW Registry="OPENSSLDIR" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="OPENSSLDIR" Value="[APPDIR]config" Component_="RegistryKeys"/>
+    <ROW Registry="OPENSSLDIR1" Root="-1" Key="Software\Wow6432Node\OpenSSL-[VERSION_REGISTRY]" Name="OPENSSLDIR" Value="[APPDIR]config" Component_="RegistryKeys"/>
     <ROW Registry="OpenSSLVERSION_REGISTRY1" Root="-1" Key="Software\Wow6432Node\OpenSSL-[VERSION_REGISTRY]" Name="\"/>
     <ROW Registry="OpenSSLVERSION_REGISTRY_1" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="\"/>
     <ROW Registry="Prereqs" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs" Name="\"/>
@@ -1742,7 +1744,8 @@
     <ROW Registry="Wow6432Node" Root="-1" Key="Software\Wow6432Node" Name="+" Component_="RegistryKeys"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRemoveFileComponent">
-    <ROW FileKey="fipsmodule.cnf" Component_="APPDIR" FileName="fipsmodule.cnf" DirProperty="ConfDir" InstallMode="2"/>
+    <ROW FileKey="_" Component_="openssl.exe" DirProperty="bin_Dir" InstallMode="2"/>
+    <ROW FileKey="fipsmodule.cnf" Component_="APPDIR" FileName="fipsmodule.cnf" DirProperty="config_Dir" InstallMode="2"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>

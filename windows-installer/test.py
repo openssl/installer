@@ -45,7 +45,6 @@ debug_msg(f"found installer version: {version}")
 fips_version_validated = '3.1.2'
 
 program_files = f'C:\\Program Files\\OpenSSL Library\\openssl-{version}\\'
-common_files = f'C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}\\'
 installed_files = {program_files:[{'name':'LICENSE.txt', 'flags':'all'},
                                   {'name':'version.dat', 'flags':'all'}],
                    f'{program_files}bin\\':[{'name':'openssl.exe', 'flags':'app'},
@@ -68,13 +67,13 @@ installed_files = {program_files:[{'name':'LICENSE.txt', 'flags':'all'},
                    f'{program_files}html\\man5\\':[{'name':'config.html', 'flags':'sdk'}],
                    f'{program_files}html\\man7\\':[{'name':'EVP_RAND.html', 'flags':'sdk'}],
                    f'{program_files}include\\openssl\\':[{'name':'evp.h', 'flags':'sdk'}],
-                   common_files:[{'name':'ct_log_list.cnf', 'flags':'all'},
-                                 {'name':'ct_log_list.cnf.dist', 'flags':'all'},
-                                 {'name':'openssl.cnf', 'flags':'all'},
-                                 {'name':'openssl.cnf.dist', 'flags':'all'},
-                                 {'name':'fipsmodule.cnf', 'flags':'fips'}]}
-should_stay_files = {f'{common_files}':[{'name':'ct_log_list.cnf', 'flags':'all'},
-                                        {'name':'openssl.cnf', 'flags':'all'}]}
+                   f'{program_files}config\\':[{'name':'ct_log_list.cnf', 'flags':'all'},
+                                               {'name':'ct_log_list.cnf.dist', 'flags':'all'},
+                                               {'name':'openssl.cnf', 'flags':'all'},
+                                               {'name':'openssl.cnf.dist', 'flags':'all'},
+                                               {'name':'fipsmodule.cnf', 'flags':'fips'}]}
+should_stay_files = {f'{program_files}\\config\\':[{'name':'ct_log_list.cnf', 'flags':'all'},
+                                                   {'name':'openssl.cnf', 'flags':'all'}]}
 
 
 # helper functions
@@ -109,12 +108,12 @@ def check_openssl_version():
         raise Error('Version does not match: {} -> {}'.format(version, version_res))
 
 def check_fips_loadability(fips_type):
-    cnf = f"{common_files}openssl.cnf"
-    cnf_old = f"{common_files}openssl_old.cnf"
+    cnf = f"{program_files}config\\openssl.cnf"
+    cnf_old = f"{program_files}config\\openssl_old.cnf"
     config = Path(cnf)
     shutil.copy2(config, cnf_old)
 
-    fipsmodule_path = rf'.include C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}\\fipsmodule.cnf'
+    fipsmodule_path = rf'.include C:\\Program Files\\OpenSSL Library\\openssl-{version}\\config\\fipsmodule.cnf'
     content = config.read_text(encoding="utf-8")
     content = content.replace("# .include fipsmodule.cnf", fipsmodule_path)
     content = content.replace("# fips = fips_sect", "fips = fips_sect")
@@ -149,13 +148,13 @@ def check_registry_entries():
     for path in paths:
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path) as key:
             value, _ = winreg.QueryValueEx(key, "MODULESDIR")
-            if not do_path_match(value, f"C:\\Program Files\\OpenSSL Library\\openssl-{version}\\lib\\ossl-modules"):
+            if not do_path_match(value, f"{program_files}lib\\ossl-modules"):
                 raise Error('incorrect MODULESDIR: {}'.format(value))
             value, _ = winreg.QueryValueEx(key, "OPENSSLDIR")
-            if not do_path_match(value, f"C:\\Program Files\\Common Files\\SSL\\openssl-{config_v}"):
+            if not do_path_match(value, f"{program_files}config"):
                 raise Error('incorrect OPENSSLDIR: {}'.format(value))
             value, _ = winreg.QueryValueEx(key, "EnvPath")
-            if not do_path_match(value, f"C:\\Program Files\\OpenSSL Library\\openssl-{version}\\bin\\"):
+            if not do_path_match(value, f"{program_files}bin\\"):
                 raise Error('incorrect EnvPath: {}'.format(value))
 
 

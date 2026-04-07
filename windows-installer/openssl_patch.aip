@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="23.5.1" version="23.5.1" Modules="patch" RootPath="." Language="en" Id="{16749B75-AED5-4631-AE8A-C05A789E5CE2}">
+  <COMPONENT cid="caphyon.advinst.msicomp.DigCertStoreComponent">
+    <ROW TimeStampUrl="http://timestamp.sectigo.com?td=sha256" SignerDescription="[|ProductName]" SignOptions="7" SignTool="0" UseSha256="1" Store="User\MY"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="MspValidation.aip" Path="&lt;AI_FRAGS&gt;MspValidation.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MspImageFamiliesComponent">
+    <ROW Family="Family" MediaDiskId="2" FileSequenceStart="1071"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MspPropertiesComponent">
+    <ROW Name="AllowProductCodeMismatches" Value="1"/>
+    <ROW Name="AllowProductVersionMajorMismatches" Value="1"/>
+    <ROW Name="ListOfTargetProductCodes" Value="*"/>
+    <ROW Name="PatchOutputFileName" Value="OpenSSL_x64_v4.0.1"/>
+    <ROW Name="PatchOutputFolder" Value="..\..\..\build-target\Installer64\DefaultBuild"/>
+    <ROW Name="PatchSourceList" Value="PatchSourceList"/>
+    <ROW Name="SEQUENCE_DATA_GENERATION_DISABLED" Value="1"/>
+    <ATTRIBUTE name="Author" value="OpenSSL Corporation"/>
+    <ATTRIBUTE name="Comments" value="This patch contains the logic and data required to modify OpenSSL Library."/>
+    <ATTRIBUTE name="KeepPCPFile" value="false"/>
+    <ATTRIBUTE name="Subject" value="OpenSSL Library"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MspTargetImagesComponent">
+    <ROW Target="OpenSSL_x6_1" MsiPath="..\..\..\build-target\Installer64\DefaultBuild\OpenSSL-x64-4.0.0.msi" Upgraded="OpenSSL_x6" Order="1" ProductValidateFlags="0x00000922" IgnoreMissingSrcFiles="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MspUpgradedImagesComponent">
+    <ROW Upgraded="OpenSSL_x6" MsiPath="..\..\..\build-target\Installer64\DefaultBuild\OpenSSL-x64-4.0.1.msi" Family="Family"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.PatchMetadataComponent">
+    <ROW Property="AllowRemoval" Value="0"/>
+    <ROW Property="DisplayName" Value="4.0.1"/>
+    <ROW Property="Classification" Value="Update"/>
+    <ROW Property="Description" Value="4.0.1"/>
+    <ROW Property="TargetProductName" Value="OpenSSL Library"/>
+    <ROW Property="MoreInfoURL" Value="https://openssl-corporation.org/"/>
+    <ROW Property="OptimizedInstallMode" Value="0"/>
+  </COMPONENT>
+</DOCUMENT>

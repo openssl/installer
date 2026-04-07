@@ -13,7 +13,7 @@ def debug_msg(msg):
 
 # load arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--installer', help='filepath to the installer .msi')
+parser.add_argument('--installer', help='.msi installer file')
 args = parser.parse_args()
 
 debug_msg(args.installer)
@@ -43,7 +43,7 @@ class InstallerTest(unittest.TestCase):
     def setUpClass(self):
         Popen(["msiexec.exe", "/i", installer])
         sleep(1)
-        self.app = Application(backend='uia').connect(title_re='OpenSSL Library Setup')
+        self.app = Application(backend='uia').connect(title_re=f'OpenSSL Library {version} Setup')
         self.dlg = self.app.top_window()
 
     @classmethod
@@ -82,7 +82,7 @@ class InstallerTest(unittest.TestCase):
         # install path dialog
         if (self.dlg.Static2.window_text() != 'Select Installation Folder'):
             self.fail("Wrong dialog")
-        install_path = f'C:\\Program Files\\OpenSSL Library\\openssl-{version}\\'
+        install_path = f'C:\\Program Files\\OpenSSL Library\\openssl-{major_v}.{minor_v}\\'
         t = self.dlg.ComboBox.selected_text()
         if (t != install_path):
             self.fail(f"Awaited install path: {install_path}, got {t}")
@@ -98,7 +98,7 @@ class InstallerTest(unittest.TestCase):
         self.dlg.CheckBox2.click()
         self.dlg.Next.click()
         #wait to appear
-        sleep(1)
+        sleep(3)
         if (self.dlg.static.window_text() != 'Please choose at least one option.'):
             self.fail("Not installing 0 options is not enabled")
         self.dlg.OK.click()
@@ -120,11 +120,11 @@ class InstallerTest(unittest.TestCase):
         self.click_next()
         self.dlg.CheckBox2.click()
         self.dlg.Next.click()
-        sleep(1)
+        sleep(3)
         if (self.dlg.static.window_text() != "FIPS can't be installed without the openssl app."):
             self.fail("Can't install FIPS without the app")
         self.dlg.OK.click()
-        sleep(1)
+        sleep(3)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(InstallerTest)

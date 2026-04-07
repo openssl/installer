@@ -16,7 +16,7 @@ def debug_msg(msg):
 # load arguments
 parser = argparse.ArgumentParser()
 # should be something like: "C:\OpenSSL-x64-4.0.0.msi"
-parser.add_argument('--installer', help='filepath to the installer .msi')
+parser.add_argument('--installer', help='.msi installer file')
 args = parser.parse_args()
 
 debug_msg(args.installer)
@@ -44,7 +44,7 @@ debug_msg(f"found installer version: {version}")
 # needs to be changed manually
 fips_version_validated = '3.1.2'
 
-program_files = f'C:\\Program Files\\OpenSSL Library\\openssl-{version}\\'
+program_files = f'C:\\Program Files\\OpenSSL Library\\openssl-{major_v}.{minor_v}\\'
 installed_files = {program_files:[{'name':'LICENSE.txt', 'flags':'all'},
                                   {'name':'version.dat', 'flags':'all'}],
                    f'{program_files}bin\\':[{'name':'openssl.exe', 'flags':'app'},

@@ -1215,7 +1215,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentDataComponent">
     <ROW PersistentRow="ct_log_list.cnf" Type="0" Condition="1"/>
-    <ROW PersistentRow="openssl.cnf" Type="0" Condition="1"/>
+    <ROW PersistentRow="openssl.cnf" Type="0" Condition="Installed"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiRemoveFileComponent">
     <ROW RemoveFile="fipsmodule.cnf" Condition="(AI_CLEAN_RESOURCES_UNINSTALL = &quot;1&quot;) AND (NOT UPGRADINGPRODUCTCODE)" Options="1"/>
@@ -1289,6 +1289,10 @@
     <ROW Action="AI_InstallPostPrerequisite" Description="Configuring prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="[1]" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
     <ROW Action="AI_InstallPrePrerequisite" Description="Configuring prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="[1]" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
     <ROW Action="AI_InstallPrerequisite" Description="Configuring prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="[1]" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
+    <ROW Action="AI_TxtUpdaterCommit" Description="Commit text file changes. " DescriptionLocId="ActionText.Description.AI_TxtUpdaterCommit" Template="Commit text file changes." TemplateLocId="ActionText.Template.AI_TxtUpdaterCommit"/>
+    <ROW Action="AI_TxtUpdaterConfig" Description="Executing text file updates" DescriptionLocId="ActionText.Description.AI_TxtUpdaterConfig" Template="Updating text file: &quot;[1]&quot;" TemplateLocId="ActionText.Template.AI_TxtUpdaterConfig"/>
+    <ROW Action="AI_TxtUpdaterInstall" Description="Generating actions to configure text files updates" DescriptionLocId="ActionText.Description.AI_TxtUpdaterInstall"/>
+    <ROW Action="AI_TxtUpdaterRollback" Description="Rolling back text file changes. " DescriptionLocId="ActionText.Description.AI_TxtUpdaterRollback" Template="Rolling back text file changes." TemplateLocId="ActionText.Template.AI_TxtUpdaterRollback"/>
     <ROW Action="AI_VerifyPrePrereq" Description="Verifying prerequisites" DescriptionLocId="ActionText.Description.AI_VerifyPrereq" Template="[1] was not installed correctly." TemplateLocId="ActionText.Template.AI_VerifyPrereq"/>
     <ROW Action="AI_VerifyPrereq" Description="Verifying prerequisites" DescriptionLocId="ActionText.Description.AI_VerifyPrereq" Template="[1] was not installed correctly." TemplateLocId="ActionText.Template.AI_VerifyPrereq"/>
   </COMPONENT>
@@ -1298,6 +1302,7 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
     <ROW Name="Prereq.dll" SourcePath="&lt;AI_CUSTACTS&gt;Prereq.dll"/>
     <ROW Name="ResourceCleaner.dll" SourcePath="&lt;AI_CUSTACTS&gt;ResourceCleaner.dll"/>
+    <ROW Name="TxtUpdater.dll" SourcePath="&lt;AI_CUSTACTS&gt;TxtUpdater.dll"/>
     <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
     <ROW Name="aipackagechainer.exe" SourcePath="&lt;AI_CUSTACTS&gt;aipackagechainer.exe" DigSign="true"/>
     <ROW Name="file_deleter.ps1" SourcePath="&lt;AI_SCRIPTS&gt;file_deleter.ps1"/>
@@ -1589,6 +1594,8 @@
     <ROW Action="AI_CleanPrereq" Type="65" Source="Prereq.dll" Target="CleanPrereq" WithoutSeq="true"/>
     <ROW Action="AI_ConfigureChainer" Type="1" Source="Prereq.dll" Target="ConfigurePrereqLauncher"/>
     <ROW Action="AI_DATA_SETTER" Type="51" Source="AI_RemoveAllTempFiles" Target="[AI_TEMP_FILE_ROLLBACK_INFO]"/>
+    <ROW Action="AI_DATA_SETTER_1" Type="51" Source="CopyFileFolder" Target="CopyFileFolderDestination&#127;[config_Dir]&#1;CopyFileFolderOverWrite&#127;1&#1;CopyFileFolderSource&#127;[APPDIR]openssl.cnf&#1;CopyFileFolderUser64Bit&#127;1&#1;FileFolderOperation&#127;1"/>
+    <ROW Action="AI_DATA_SETTER_2" Type="51" Source="CopyFileFolder_1" Target="CopyFileFolderDestination&#127;[config_Dir]&#1;CopyFileFolderOverWrite&#127;1&#1;CopyFileFolderSource&#127;[osslmodules_Dir]openssl.cnf&#1;CopyFileFolderUser64Bit&#127;1&#1;FileFolderOperation&#127;1"/>
     <ROW Action="AI_DownloadPrereq" Type="1" Source="Prereq.dll" Target="DownloadPrereq"/>
     <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
     <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
@@ -1612,8 +1619,14 @@
     <ROW Action="AI_RollbackPrereq" Type="65" Source="Prereq.dll" Target="RollbackPrereq" WithoutSeq="true"/>
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="AI_TxtUpdaterCommit" Type="11777" Source="TxtUpdater.dll" Target="OnTxtUpdaterCommit" WithoutSeq="true"/>
+    <ROW Action="AI_TxtUpdaterConfig" Type="11265" Source="TxtUpdater.dll" Target="OnTxtUpdaterConfig" WithoutSeq="true"/>
+    <ROW Action="AI_TxtUpdaterInstall" Type="1" Source="TxtUpdater.dll" Target="OnTxtUpdaterInstall"/>
+    <ROW Action="AI_TxtUpdaterRollback" Type="11521" Source="TxtUpdater.dll" Target="OnTxtUpdaterRollback" WithoutSeq="true"/>
     <ROW Action="AI_VerifyPrePrereq" Type="1" Source="Prereq.dll" Target="VerifyPrePrereq"/>
     <ROW Action="AI_VerifyPrereq" Type="1" Source="Prereq.dll" Target="VerifyPrereq"/>
+    <ROW Action="CopyFileFolder" Type="3073" Source="aicustact.dll" Target="CopyFileFolder" Options="1" AdditionalSeq="AI_DATA_SETTER_1"/>
+    <ROW Action="CopyFileFolder_1" Type="3073" Source="aicustact.dll" Target="CopyFileFolder" Options="1" AdditionalSeq="AI_DATA_SETTER_2"/>
     <ROW Action="LaunchFile" Type="3074" Source="viewer.exe" Target="/RunAsAdmin /HideWindow &quot;[APPDIR]\bin\openssl.exe&quot; fipsinstall -module &quot;[osslmodules_Dir]fips.dll&quot; -out &quot;[APPDIR]config\fipsmodule.cnf&quot;" Options="1"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]"/>
@@ -1653,6 +1666,10 @@
     <ROW Dialog="VerifyRepairDlg" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="35" Title="[ProductName] [ProductVersion] [Setup]" Control_Default="Repair" Control_Cancel="Cancel" MsiKey="VerifyRepairDlg"/>
     <ROW Dialog="WaitForCostingDlg" HCentering="50" VCentering="50" Width="260" Height="85" Attributes="3" Title="[ProductName] [ProductVersion] [Setup]" Control_Default="Return" Control_Cancel="Return" MsiKey="WaitForCostingDlg"/>
     <ROW Dialog="WelcomeDlg" HCentering="50" VCentering="50" Width="370" Height="270" Attributes="3" Title="[ProductName] [ProductVersion] [Setup]" Control_Default="Next" Control_Cancel="Cancel" MsiKey="WelcomeDlg"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDuplicateFileComponent">
+    <ROW FileKey="openssl.cnf" Component_="fips.dll" File_="openssl.cnf" DestName="openssl.cnf" DestFolder="APPDIR"/>
+    <ROW FileKey="openssl.cnf_1" Component_="fips.dll_1" File_="openssl.cnf" DestName="openssl.cnf" DestFolder="osslmodules_Dir"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiEnvComponent">
     <ROW Environment="Include" Name="=-*Include" Value="[include_Dir];[~]" Component_="man5"/>
@@ -1720,7 +1737,12 @@
     <ROW Action="AI_RemoveAllTempFiles" Sequence="1502"/>
     <ROW Action="AI_DATA_SETTER" Sequence="1501"/>
     <ROW Action="LaunchFile" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_APP )" Sequence="6401"/>
+    <ROW Action="AI_TxtUpdaterInstall" Sequence="5101"/>
     <ROW Action="AI_AiRemoveFilesImmediate" Sequence="3499"/>
+    <ROW Action="CopyFileFolder" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;validated&quot; )" Sequence="6403"/>
+    <ROW Action="AI_DATA_SETTER_1" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;validated&quot; )" Sequence="6402"/>
+    <ROW Action="CopyFileFolder_1" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;current&quot; )" Sequence="6405"/>
+    <ROW Action="AI_DATA_SETTER_2" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;current&quot; )" Sequence="6404"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
@@ -1805,5 +1827,19 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.TempFileComponent">
     <ROW FileId="vcruntime140.dll" Name="VCRUNT~1.DLL|vcruntime140.dll" Directory_="bin_Dir" Property="AI_VCRUNTIME140.DLL" Condition="INSTALL_FIPS = &quot;1&quot; AND UILevel = 2" Options="0" Data="resources\vcruntime140.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.TxtUpdateComponent">
+    <ROW Name="Replace_include" TxtUpdateSet="openssl.cnf" FindPattern="# .include fipsmodule.cnf" ReplacePattern=".include [config_Dir]fipsmodule.cnf" Options="2" Order="0" FileEncoding="-1"/>
+    <ROW Name="Replace_fips_sect" TxtUpdateSet="openssl.cnf" FindPattern="# fips = fips_sect" ReplacePattern="fips = fips_sect" Options="2" Order="2" FileEncoding="-1"/>
+    <ROW Name="Replace_activate_default" TxtUpdateSet="openssl.cnf" FindPattern="# activate = 1" ReplacePattern="activate = 1" Options="2" Order="3" FileEncoding="-1"/>
+    <ROW Name="Replace_slash" TxtUpdateSet="openssl.cnf" FindPattern="\" ReplacePattern="\\" Options="2" Order="1" FileEncoding="-1"/>
+    <ROW Name="Replace_include" TxtUpdateSet="openssl.cnf_1" FindPattern="# .include fipsmodule.cnf" ReplacePattern=".include [config_Dir]fipsmodule.cnf" Options="2" Order="0" FileEncoding="-1"/>
+    <ROW Name="Replace_fips_sect" TxtUpdateSet="openssl.cnf_1" FindPattern="# fips = fips_sect" ReplacePattern="fips = fips_sect" Options="2" Order="2" FileEncoding="-1"/>
+    <ROW Name="Replace_activate_default" TxtUpdateSet="openssl.cnf_1" FindPattern="# activate = 1" ReplacePattern="activate = 1" Options="2" Order="3" FileEncoding="-1"/>
+    <ROW Name="Replace_slash" TxtUpdateSet="openssl.cnf_1" FindPattern="\" ReplacePattern="\\" Options="2" Order="1" FileEncoding="-1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.TxtUpdateSetComponent">
+    <ROW Key="openssl.cnf" Component="fips.dll" FileName="openssl.cnf" Directory="APPDIR" Options="1"/>
+    <ROW Key="openssl.cnf_1" Component="fips.dll_1" FileName="openssl.cnf" Directory="osslmodules_Dir" Options="1"/>
   </COMPONENT>
 </DOCUMENT>

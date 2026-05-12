@@ -1,0 +1,28 @@
+From 7af1798ad07ded2e39b0ce60544c382c9919e35d Mon Sep 17 00:00:00 2001
+From: Norbert Pocs <norbertp@openssl.org>
+Date: Tue, 17 Feb 2026 02:34:12 -0800
+Subject: [PATCH] win: Fix warning build issue
+
+---
+ test/build_wincrypt_test.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/test/build_wincrypt_test.c b/test/build_wincrypt_test.c
+index 5bd75e6a..25fd9d93 100644
+--- a/test/build_wincrypt_test.c
++++ b/test/build_wincrypt_test.c
+@@ -22,7 +22,11 @@
+ # include <wincrypt.h>
+ # ifndef X509_NAME
+ #  ifndef PEDANTIC
+-#   warning "wincrypt.h no longer defining X509_NAME before OpenSSL headers"
++#    ifdef _MSC_VER
++#       pragma message("wincrypt.h no longer defining X509_NAME before OpenSSL headers")
++#    else
++#       warning "wincrypt.h no longer defining X509_NAME before OpenSSL headers"
++#    endif
+ #  endif
+ # endif
+ #endif
+-- 
+2.53.0.windows.1

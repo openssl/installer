@@ -144,8 +144,8 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="openssl.exe" Component_="openssl.exe" FileName="openssl.exe" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="libcrypto.lib" Component_="libcrypto.lib" FileName="LIBCRY~1.LIB|libcrypto.lib" Attributes="0" SourcePath="..\..\..\openssl\libcrypto.lib" SelfReg="false"/>
-    <ROW File="libssl.lib" Component_="libssl.lib" FileName="libssl.lib" Attributes="0" SourcePath="..\..\..\openssl\libssl.lib" SelfReg="false"/>
+    <ROW File="libcrypto.lib" Component_="libcrypto.lib" FileName="LIBCRY~1.LIB|libcrypto.lib" Attributes="0" SourcePath="..\openssl\libcrypto.lib" SelfReg="false"/>
+    <ROW File="libssl.lib" Component_="libssl.lib" FileName="libssl.lib" Attributes="0" SourcePath="..\openssl\libssl.lib" SelfReg="false"/>
     <ROW File="legacy.dll" Component_="legacy.dll" FileName="legacy.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.dll" SelfReg="false" DigSign="true"/>
     <ROW File="legacy.pdb" Component_="legacy.pdb" FileName="legacy.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.pdb" SelfReg="false"/>
     <ROW File="aes.h" Component_="include" FileName="aes.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\aes.h" SelfReg="false"/>
@@ -1196,8 +1196,8 @@
     <ROW File="ct_log_list.cnf.dist" Component_="ct_log_list.cnf.dist" FileName="CT_LOG~1.DIS|ct_log_list.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\ct_log_list.cnf" SelfReg="false"/>
     <ROW File="openssl.cnf" Component_="openssl.cnf" FileName="openssl.cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
     <ROW File="openssl.cnf.dist" Component_="config_files" FileName="OPENSS~1.DIS|openssl.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
-    <ROW File="libcrypto_static.lib" Component_="libcrypto_static.lib" FileName="LIBCRY~2.LIB|libcrypto_static.lib" Attributes="0" SourcePath="..\..\..\openssl\libcrypto_static.lib" SelfReg="false"/>
-    <ROW File="libssl_static.lib" Component_="libssl_static.lib" FileName="LIBSSL~1.LIB|libssl_static.lib" Attributes="0" SourcePath="..\..\..\openssl\libssl_static.lib" SelfReg="false"/>
+    <ROW File="libcrypto_static.lib" Component_="libcrypto_static.lib" FileName="LIBCRY~2.LIB|libcrypto_static.lib" Attributes="0" SourcePath="..\openssl\libcrypto_static.lib" SelfReg="false"/>
+    <ROW File="libssl_static.lib" Component_="libssl_static.lib" FileName="LIBSSL~1.LIB|libssl_static.lib" Attributes="0" SourcePath="..\openssl\libssl_static.lib" SelfReg="false"/>
     <ROW File="posix_time.h" Component_="header_files" FileName="POSIX_~1.H|posix_time.h" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl\posix_time.h" SelfReg="false"/>
     <ROW File="ASN1_BIT_STRING_get_length.html" Component_="man3" FileName="ASN1_B~1.HTM|ASN1_BIT_STRING_get_length.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man3\ASN1_BIT_STRING_get_length.html" SelfReg="false"/>
     <ROW File="SSL_get_peer_addr.html" Component_="man3" FileName="SSL_G~18.HTM|SSL_get_peer_addr.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man3\SSL_get_peer_addr.html" SelfReg="false"/>
@@ -1206,12 +1206,12 @@
     <ROW File="EVP_KDFSRTPKDF.html" Component_="man7" FileName="EVP_K~12.HTM|EVP_KDF-SRTPKDF.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\EVP_KDF-SRTPKDF.html" SelfReg="false"/>
     <ROW File="EVP_MDMLDSAMU.html" Component_="man7" FileName="EVP_MD~9.HTM|EVP_MD-ML-DSA-MU.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\EVP_MD-ML-DSA-MU.html" SelfReg="false"/>
     <ROW File="osslremovedapi.html" Component_="man7" FileName="OSSL-R~1.HTM|ossl-removed-api.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\ossl-removed-api.html" SelfReg="false"/>
-    <ROW File="libcrypto4x64.dll" Component_="libcrypto4x64.dll" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\..\..\openssl\libcrypto-4-x64.dll" SelfReg="false"/>
-    <ROW File="libssl4x64.dll" Component_="libssl4x64.dll" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\..\..\openssl\libssl-4-x64.dll" SelfReg="false"/>
-    <ROW File="libcrypto4x64.dll_1" Component_="libcrypto4x64.dll_1" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\..\..\openssl\libcrypto-4-x64.dll" SelfReg="false"/>
-    <ROW File="libcrypto4x64.pdb" Component_="libcrypto4x64.pdb" FileName="LIBCRY~1.PDB|libcrypto-4-x64.pdb" Attributes="0" SourcePath="..\..\..\openssl\libcrypto-4-x64.pdb" SelfReg="false"/>
-    <ROW File="libssl4x64.dll_1" Component_="libssl4x64.dll_1" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\..\..\openssl\libssl-4-x64.dll" SelfReg="false"/>
-    <ROW File="libssl4x64.pdb" Component_="libssl4x64.pdb" FileName="LIBSSL~1.PDB|libssl-4-x64.pdb" Attributes="0" SourcePath="..\..\..\openssl\libssl-4-x64.pdb" SelfReg="false"/>
+    <ROW File="libcrypto4x64.dll" Component_="libcrypto4x64.dll" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.dll" SelfReg="false"/>
+    <ROW File="libssl4x64.dll" Component_="libssl4x64.dll" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\openssl\libssl-4-x64.dll" SelfReg="false"/>
+    <ROW File="libcrypto4x64.dll_1" Component_="libcrypto4x64.dll_1" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.dll" SelfReg="false"/>
+    <ROW File="libcrypto4x64.pdb" Component_="libcrypto4x64.pdb" FileName="LIBCRY~1.PDB|libcrypto-4-x64.pdb" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.pdb" SelfReg="false"/>
+    <ROW File="libssl4x64.dll_1" Component_="libssl4x64.dll_1" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\openssl\libssl-4-x64.dll" SelfReg="false"/>
+    <ROW File="libssl4x64.pdb" Component_="libssl4x64.pdb" FileName="LIBSSL~1.PDB|libssl-4-x64.pdb" Attributes="0" SourcePath="..\openssl\libssl-4-x64.pdb" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentDataComponent">
     <ROW PersistentRow="ct_log_list.cnf" Type="0" Condition="1"/>
@@ -1221,8 +1221,8 @@
     <ROW RemoveFile="fipsmodule.cnf" Condition="(AI_CLEAN_RESOURCES_UNINSTALL = &quot;1&quot;) AND (NOT UPGRADINGPRODUCTCODE)" Options="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AppPathsComponent">
-    <ROW Name="OPENSSL_FIPS_SOURCE_DIR" Path="..\..\..\openssl-fips\providers" Type="2" Content="0"/>
-    <ROW Name="OPENSSL_SOURCE_DIR" Path="..\..\..\openssl" Type="2" Content="0"/>
+    <ROW Name="OPENSSL_FIPS_SOURCE_DIR" Path="..\openssl-fips\providers" Type="2" Content="0"/>
+    <ROW Name="OPENSSL_SOURCE_DIR" Path="..\openssl" Type="2" Content="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -1397,7 +1397,7 @@
     <ROW Dialog_="FolderDlg" Control="Text" Type="Text" X="25" Y="70" Width="320" Height="40" Attributes="3" Text="To install in this folder, click &quot;[Text_Next]&quot;. To install to a different folder, enter it below or click &quot;Browse&quot;." Order="1000" TextLocId="Control.Text.FolderDlg#Text" MsiKey="FolderDlg#Text"/>
     <ROW Dialog_="FolderDlg" Control="Description" Type="Text" X="25" Y="23" Width="280" Height="20" Attributes="196611" Text="This is the folder where [ProductName] will be installed." Order="1100" TextLocId="Control.Text.FolderDlg#Description" MsiKey="FolderDlg#Description"/>
     <ROW Dialog_="FolderDlg" Control="BannerLine" Type="Line" X="0" Y="44" Width="372" Height="0" Attributes="1" Order="1200" MsiKey="FolderDlg#BannerLine"/>
-    <ROW Dialog_="LicenseAgreementDlg" Control="AgreementText" Type="ScrollableText" X="20" Y="60" Width="330" Height="120" Attributes="7" Text="..\..\..\openssl-installer-resources\LICENSE.rtf" Order="400" TextLocId="Control.Text.LicenseAgreementDlg#AgreementText" MsiKey="LicenseAgreementDlg#AgreementText"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control="AgreementText" Type="ScrollableText" X="20" Y="60" Width="330" Height="120" Attributes="7" Text="..\openssl-installer-resources\LICENSE.rtf" Order="400" TextLocId="Control.Text.LicenseAgreementDlg#AgreementText" MsiKey="LicenseAgreementDlg#AgreementText"/>
     <ROW Dialog_="LicenseAgreementDlg" Control="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Attributes="3" Text="[ButtonText_Back]" Order="700" TextLocId="-" MsiKey="LicenseAgreementDlg#Back" Options="1"/>
     <ROW Dialog_="LicenseAgreementDlg" Control="Description" Type="Text" X="25" Y="23" Width="304" Height="15" Attributes="196611" Text="Please read the following license agreement carefully" Order="800" TextLocId="Control.Text.LicenseAgreementDlg#Description" MsiKey="LicenseAgreementDlg#Description"/>
     <ROW Dialog_="LicenseAgreementDlg" Control="Title" Type="Text" X="15" Y="6" Width="304" Height="15" Attributes="196611" Text="End-User License Agreement" TextStyle="[DlgTitleFont]" Order="900" TextLocId="Control.Text.LicenseAgreementDlg#Title" MsiKey="LicenseAgreementDlg#Title"/>
@@ -1714,7 +1714,7 @@
     <ROW Feature_="AlwaysInstalled" Component_="openssl.cnf"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
-    <ROW Name="openssllibrary.exe" SourcePath="..\..\..\openssl-installer-resources\openssl-library.ico" Index="0"/>
+    <ROW Name="openssllibrary.exe" SourcePath="..\openssl-installer-resources\openssl-library.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1505"/>
@@ -1822,8 +1822,8 @@
     <ROW Directory_="man3_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man3" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
     <ROW Directory_="man5_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man5" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
     <ROW Directory_="man7_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
-    <ROW Directory_="bin_Dir" SourcePath="..\..\..\openssl" Feature="MainFeature" IncludePattern="libcrypto*.dll|libssl*.dll" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="4"/>
-    <ROW Directory_="lib_Dir" SourcePath="..\..\..\openssl" Feature="MainFeature" IncludePattern="libcrypto*.dll|libcrypto*.lib|libcrypto*.pdb|libssl*.dll|libssl*.lib|libssl*.pdb" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="4"/>
+    <ROW Directory_="bin_Dir" SourcePath="..\openssl" Feature="MainFeature" IncludePattern="libcrypto*.dll|libssl*.dll" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="4"/>
+    <ROW Directory_="lib_Dir" SourcePath="..\openssl" Feature="MainFeature" IncludePattern="libcrypto*.dll|libcrypto*.lib|libcrypto*.pdb|libssl*.dll|libssl*.lib|libssl*.pdb" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="4"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.TempFileComponent">
     <ROW FileId="vcruntime140.dll" Name="VCRUNT~1.DLL|vcruntime140.dll" Directory_="bin_Dir" Property="AI_VCRUNTIME140.DLL" Condition="INSTALL_FIPS = &quot;1&quot; AND UILevel = 2" Options="0" Data="resources\vcruntime140.dll"/>

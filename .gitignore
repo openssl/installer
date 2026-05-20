@@ -12,7 +12,8 @@ __pycache__/
 # Test artefacts
 tests/_screenshots/
 
-# Local build outputs (build_msi.py stages OpenSSL trees + writes the MSI here)
+# Local build outputs (Advanced Installer writes here; sibling OpenSSL
+# checkouts when building locally)
 build-target/
 /openssl/
 /openssl-fips/

@@ -2,36 +2,27 @@
 # Consumed by tests/conftest.py and .github/scripts/build-matrix.py.
 
 openssl:
-  # Supported OpenSSL branches the test suite exercises.
-  # `branch` is the git ref to check out from https://github.com/openssl/openssl.
+  # OpenSSL git refs the suite exercises. Each entry is checked out as-is
+  # from https://github.com/openssl/openssl.
   refs:
-    - { name: openssl-3.0, branch: openssl-3.0, lts: true }
-    - { name: openssl-3.2, branch: openssl-3.2 }
-    - { name: openssl-3.3, branch: openssl-3.3 }
-    - { name: openssl-3.5, branch: openssl-3.5, lts: true }
-    - { name: master,      branch: master }
+    - openssl-3.5
+    - master
   # Subset built/tested on every PR and push. The full matrix runs nightly.
   pr_subset:
     - openssl-3.5
-    - openssl-3.0
 
 fips:
   # FIPS validated module version shipped alongside each OpenSSL major.minor.
+  # Used in two places:
+  #   - tests assert that `openssl list -provider=fips` reports this version
+  #     when INSTALL_FIPS_TYPE=validated. Major.minor versions absent from
+  #     this map skip the FIPS-validated check.
+  #   - the build matrix derives the FIPS-source git ref as openssl-<version>;
+  #     for refs not listed here (e.g., master), the newest configured version
+  #     is used.
   # The "current" FIPS module always matches the OpenSSL version under test.
   validated_versions:
-    "3.0": "3.0.9"
-    "3.2": "3.0.9"
-    "3.3": "3.0.9"
     "3.5": "3.1.2"
-    "4.0": "3.1.2"
-  # Git branch of openssl/openssl to build for the validated FIPS module.
-  # Indexed by OpenSSL major.minor under test.
-  validated_branches:
-    "3.0": openssl-3.0.9
-    "3.2": openssl-3.0.9
-    "3.3": openssl-3.0.9
-    "3.5": openssl-3.1.2
-    "4.0": openssl-3.1.2
 
 paths:
   install_root: 'C:\Program Files\OpenSSL Library'

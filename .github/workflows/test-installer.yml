@@ -42,11 +42,11 @@ jobs:
       - name: Checkout installer
         uses: actions/checkout@v4
 
-      - name: Checkout OpenSSL (${{ matrix.openssl-branch }})
+      - name: Checkout OpenSSL (${{ matrix.openssl-ref }})
         uses: actions/checkout@v4
         with:
           repository: openssl/openssl
-          ref: ${{ matrix.openssl-branch }}
+          ref: ${{ matrix.openssl-ref }}
           path: openssl
 
       - name: Checkout OpenSSL for FIPS (${{ matrix.fips-ref }})

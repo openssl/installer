@@ -1,0 +1,72 @@
+name: Test Signed Installer
+
+# Manual-only. The signed MSI is produced on a dedicated signing machine
+# (HSM-backed EV Code Signing certificate) and uploaded to a GitHub release.
+# This workflow downloads it from a release and runs the `signed` marker tests.
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-tag:
+        description: 'Release tag to download the signed MSI from (default: latest)'
+        required: false
+        default: latest
+      asset-pattern:
+        description: 'Glob for the MSI asset to download'
+        required: false
+        default: '*.msi'
+
+jobs:
+  test:
+    name: Signed tests on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, windows-2025]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve release tag
+        id: tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_TAG: ${{ inputs.release-tag }}
+        shell: pwsh
+        run: |
+          if ($env:INPUT_TAG -eq 'latest' -or [string]::IsNullOrWhiteSpace($env:INPUT_TAG)) {
+            $tag = gh release view --json tagName -q '.tagName'
+          } else {
+            $tag = $env:INPUT_TAG
+          }
+          if (-not $tag) { throw "Could not resolve release tag" }
+          "tag=$tag" >> $env:GITHUB_OUTPUT
+
+      - name: Download signed MSI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path build | Out-Null
+          gh release download '${{ steps.tag.outputs.tag }}' `
+            --pattern '${{ inputs.asset-pattern }}' `
+            --dir build
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install Python deps
+        run: uv sync --frozen || uv sync
+
+      - name: Locate MSI
+        id: msi
+        shell: pwsh
+        run: |
+          $msi = Get-ChildItem build -Recurse -Filter '*.msi' | Select-Object -First 1
+          if (-not $msi) { throw "No MSI found in build/" }
+          "path=$($msi.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: Run signed tests
+        run: uv run pytest tests -m signed --installer "${{ steps.msi.outputs.path }}" -v

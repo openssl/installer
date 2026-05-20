@@ -1,0 +1,54 @@
+# Legacy scripts (windows-installer/test.py, test_gui.py) and binary-ish
+# patches are excluded — the new suite under tests/ supersedes them and they
+# will be removed in a follow-up.
+exclude: |
+  (?x)^(
+      windows-installer/test\.py
+    | windows-installer/test_gui\.py
+    | windows-installer/.*\.patch
+  )$
+
+repos:
+  - repo: https://github.com/asottile/reorder-python-imports
+    rev: v3.16.0
+    hooks:
+      - id: reorder-python-imports
+        language_version: python3
+  - repo: https://github.com/psf/black
+    rev: 25.11.0
+    hooks:
+      - id: black
+        language_version: python3
+        args: [--safe, --quiet, --line-length, "130"]
+        require_serial: true
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: debug-statements
+        language_version: python3
+      - id: check-json
+      - id: check-yaml
+      - id: check-toml
+  - repo: https://github.com/PyCQA/flake8
+    rev: "7.3.0"
+    hooks:
+      - id: flake8
+        language_version: python3
+        args:
+          - --max-line-length=130
+          - --ignore=W503,E203,E501
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.21.2
+    hooks:
+      - id: pyupgrade
+        language_version: python3
+        args: [--py311-plus]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-PyYAML
+          - types-requests

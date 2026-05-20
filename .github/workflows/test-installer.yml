@@ -1,0 +1,139 @@
+name: Test Installer
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 4 * * *'   # nightly full matrix
+  workflow_dispatch:
+    inputs:
+      refs:
+        description: 'Comma-separated OpenSSL refs to test (default: full matrix)'
+        required: false
+        type: string
+
+jobs:
+  setup:
+    name: Plan matrix
+    runs-on: ubuntu-latest
+    outputs:
+      refs: ${{ steps.matrix.outputs.refs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pyyaml
+      - id: matrix
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          REFS_INPUT: ${{ inputs.refs }}
+        run: python .github/scripts/build-matrix.py
+
+  build:
+    name: Build MSI (${{ matrix.openssl-ref }})
+    needs: setup
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.setup.outputs.refs) }}
+    steps:
+      - name: Checkout installer
+        uses: actions/checkout@v4
+
+      - name: Checkout OpenSSL (${{ matrix.openssl-branch }})
+        uses: actions/checkout@v4
+        with:
+          repository: openssl/openssl
+          ref: ${{ matrix.openssl-branch }}
+          path: openssl
+
+      - name: Checkout OpenSSL for FIPS (${{ matrix.fips-ref }})
+        uses: actions/checkout@v4
+        with:
+          repository: openssl/openssl
+          ref: ${{ matrix.fips-ref }}
+          path: openssl-fips
+
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Setup Perl (Strawberry)
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.38'
+          distribution: strawberry
+
+      - name: Setup NASM
+        uses: ilammy/setup-nasm@v1
+
+      - name: Build OpenSSL
+        shell: cmd
+        working-directory: openssl
+        run: |
+          perl Configure VC-WIN64A enable-fips -DOSSL_WINCTX=OpenSSLProject
+          nmake
+          nmake build_docs
+
+      - name: Build OpenSSL (FIPS source)
+        shell: cmd
+        working-directory: openssl-fips
+        run: |
+          perl Configure VC-WIN64A enable-fips
+          nmake
+
+      - name: Build MSI
+        uses: caphyon/advinst-github-action@main
+        with:
+          advinst-version: '23.5.1'
+          advinst-license: ${{ secrets.ADVINST_LICENSE_KEY }}
+          advinst-enable-automation: 'true'
+          aip-path: ${{ github.workspace }}\windows-installer\openssl.aip
+          aip-build-name: DefaultBuild
+
+      - name: Upload MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: msi-${{ matrix.openssl-ref }}
+          path: build-target/Installer64/DefaultBuild/*.msi
+          if-no-files-found: error
+
+  test:
+    name: Test on ${{ matrix.os }} (${{ matrix.openssl-ref }})
+    needs: [setup, build]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, windows-2025]
+        include: ${{ fromJSON(needs.setup.outputs.refs).include }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download MSI
+        uses: actions/download-artifact@v4
+        with:
+          name: msi-${{ matrix.openssl-ref }}
+          path: build
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install Python deps
+        run: uv sync --frozen || uv sync
+
+      - name: Locate MSI
+        id: msi
+        shell: pwsh
+        run: |
+          $msi = Get-ChildItem build -Recurse -Filter '*.msi' | Select-Object -First 1
+          if (-not $msi) { throw "No MSI found in build/" }
+          "path=$($msi.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: Run pytest
+        run: uv run pytest tests --installer "${{ steps.msi.outputs.path }}" -v

@@ -1,0 +1,31 @@
+[project]
+name = "openssl-installer-tests"
+version = "0.1.0"
+description = "Test suite for the OpenSSL Windows installer"
+requires-python = ">=3.11"
+dependencies = [
+    "pytest>=8",
+    "pyyaml>=6",
+    "requests>=2.31",
+    "pywinauto>=0.6",
+    "pillow>=10",
+]
+
+[tool.mypy]
+python_version = "3.11"
+# Platform=win32 so mypy can resolve `import winreg` when run on Linux dev boxes.
+platform = "win32"
+
+[[tool.mypy.overrides]]
+module = ["pywinauto", "pywinauto.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "signed: requires a signed MSI artifact",
+    "fips: exercises FIPS provider behavior",
+    "gui: requires an interactive desktop session",
+    "upgrade: requires multiple MSI versions (TODO)",
+]
+addopts = "-m 'not signed'"

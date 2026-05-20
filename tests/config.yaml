@@ -1,0 +1,110 @@
+# Single source of truth for the test suite and the CI workflow.
+# Consumed by tests/conftest.py and .github/scripts/build-matrix.py.
+
+openssl:
+  # Supported OpenSSL branches the test suite exercises.
+  # `branch` is the git ref to check out from https://github.com/openssl/openssl.
+  refs:
+    - { name: openssl-3.0, branch: openssl-3.0, lts: true }
+    - { name: openssl-3.2, branch: openssl-3.2 }
+    - { name: openssl-3.3, branch: openssl-3.3 }
+    - { name: openssl-3.5, branch: openssl-3.5, lts: true }
+    - { name: master,      branch: master }
+  # Subset built/tested on every PR and push. The full matrix runs nightly.
+  pr_subset:
+    - openssl-3.5
+    - openssl-3.0
+
+fips:
+  # FIPS validated module version shipped alongside each OpenSSL major.minor.
+  # The "current" FIPS module always matches the OpenSSL version under test.
+  validated_versions:
+    "3.0": "3.0.9"
+    "3.2": "3.0.9"
+    "3.3": "3.0.9"
+    "3.5": "3.1.2"
+    "4.0": "3.1.2"
+  # Git branch of openssl/openssl to build for the validated FIPS module.
+  # Indexed by OpenSSL major.minor under test.
+  validated_branches:
+    "3.0": openssl-3.0.9
+    "3.2": openssl-3.0.9
+    "3.3": openssl-3.0.9
+    "3.5": openssl-3.1.2
+    "4.0": openssl-3.1.2
+
+paths:
+  install_root: 'C:\Program Files\OpenSSL Library'
+
+registry:
+  # Two key paths the installer writes; the second uses Wow6432Node directly
+  # (without an "OpenSSL Corporation" subkey) — matches the existing layout.
+  # Placeholders: {registry_version} = "<major>.<minor>" (e.g. "4.0").
+  paths:
+    - 'SOFTWARE\OpenSSL Corporation\OpenSSL-{registry_version}-OpenSSLProject'
+    - 'SOFTWARE\Wow6432Node\OpenSSL-{registry_version}-OpenSSLProject'
+  values:
+    # Expected REG_SZ values under each path. Paths are compared
+    # case-insensitively on the drive letter and exactly on the rest.
+    MODULESDIR: '{install_dir}\lib\ossl-modules'
+    OPENSSLDIR: '{install_dir}\config'
+    EnvPath:    '{install_dir}\bin\'
+
+# Expected files. Keys are directories relative to {install_dir}; "" is the root.
+# Each entry's `flags` indicates which install configurations include it:
+#   all, app, sdk, fips, fips_sdk
+# Placeholders in `name`: {major}, {minor}, {patch}
+files:
+  "":
+    - { name: LICENSE.txt, flags: all }
+    - { name: version.dat, flags: all }
+  "bin":
+    - { name: openssl.exe,                 flags: app }
+    - { name: "libcrypto-{major}-x64.dll", flags: app }
+    - { name: "libssl-{major}-x64.dll",    flags: app }
+  "lib":
+    - { name: "libcrypto-{major}-x64.dll", flags: sdk }
+    - { name: "libssl-{major}-x64.dll",    flags: sdk }
+    - { name: "libcrypto-{major}-x64.pdb", flags: sdk }
+    - { name: "libssl-{major}-x64.pdb",    flags: sdk }
+    - { name: libcrypto.lib,               flags: sdk }
+    - { name: libssl.lib,                  flags: sdk }
+  "lib/ossl-modules":
+    - { name: fips.dll,   flags: fips }
+    - { name: fips.lib,   flags: fips_sdk }
+    - { name: fips.pdb,   flags: fips_sdk }
+    - { name: legacy.dll, flags: all }
+    - { name: legacy.lib, flags: sdk }
+    - { name: legacy.pdb, flags: sdk }
+  "html/man1":
+    - { name: openssl.html, flags: sdk }
+  "html/man3":
+    - { name: EVP_PKEY_new.html, flags: sdk }
+  "html/man5":
+    - { name: config.html, flags: sdk }
+  "html/man7":
+    - { name: EVP_RAND.html, flags: sdk }
+  "include/openssl":
+    - { name: evp.h, flags: sdk }
+  "config":
+    - { name: ct_log_list.cnf,      flags: all }
+    - { name: ct_log_list.cnf.dist, flags: all }
+    - { name: openssl.cnf,          flags: all }
+    - { name: openssl.cnf.dist,     flags: all }
+    - { name: fipsmodule.cnf,       flags: fips }
+
+# Files that must remain after uninstall (user-preserved config).
+post_uninstall_keep:
+  "config":
+    - openssl.cnf
+    - ct_log_list.cnf
+
+# Signed-MSI expectations. Used by tests marked `signed`.
+signing:
+  # Substring expected in the SignerCertificate.Subject (case-insensitive).
+  # Matches the CN of the EV Code Signing certificate provisioned on the
+  # Jenkins signing agent (see SIGN_CERT_SUBJECT in
+  # jenkins/make-openssl-windows-installer.Jenkinsfile).
+  publisher_subject_cn: "OpenSSL Software Services Czech, s.r.o."
+  # If true, the signature must include an RFC 3161 timestamp.
+  timestamp_required: true

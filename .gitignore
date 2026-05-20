@@ -1,2 +1,18 @@
-# Ignore editor artefacts
+# Editor artefacts
 *~
+
+# Python
+__pycache__/
+*.py[oc]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+
+# Test artefacts
+tests/_screenshots/
+
+# Local build outputs (build_msi.py stages OpenSSL trees + writes the MSI here)
+build-target/
+/openssl/
+/openssl-fips/

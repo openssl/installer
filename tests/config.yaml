@@ -1,25 +1,12 @@
-# Single source of truth for the test suite and the CI workflow.
-# Consumed by tests/conftest.py and .github/scripts/build-matrix.py.
-
-openssl:
-  # OpenSSL git refs the suite exercises. Each entry is checked out as-is
-  # from https://github.com/openssl/openssl.
-  refs:
-    - openssl-3.5
-    - master
-  # Subset built/tested on every PR and push. The full matrix runs nightly.
-  pr_subset:
-    - openssl-3.5
+# Test-suite configuration. Consumed by tests/conftest.py and the test files
+# under tests/. The CI matrix (which OpenSSL refs to build/test) lives directly
+# in .github/workflows/test-installer.yml.
 
 fips:
-  # FIPS validated module version shipped alongside each OpenSSL major.minor.
-  # Used in two places:
-  #   - tests assert that `openssl list -provider=fips` reports this version
-  #     when INSTALL_FIPS_TYPE=validated. Major.minor versions absent from
-  #     this map skip the FIPS-validated check.
-  #   - the build matrix derives the FIPS-source git ref as openssl-<version>;
-  #     for refs not listed here (e.g., master), the newest configured version
-  #     is used.
+  # Expected FIPS provider version per OpenSSL major.minor. test_fips_validated
+  # asserts `openssl list -provider=fips` reports this string when
+  # INSTALL_FIPS_TYPE=validated. Major.minor releases absent from this map
+  # skip the validated-FIPS check (e.g., master / pre-release branches).
   # The "current" FIPS module always matches the OpenSSL version under test.
   validated_versions:
     "3.5": "3.1.2"

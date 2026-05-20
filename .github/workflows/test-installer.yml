@@ -5,85 +5,63 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '0 4 * * *'   # nightly full matrix
+    - cron: '0 4 * * *'
   workflow_dispatch:
-    inputs:
-      refs:
-        description: 'Comma-separated OpenSSL refs to test (default: full matrix)'
-        required: false
-        type: string
 
 jobs:
-  setup:
-    name: Plan matrix
-    runs-on: ubuntu-latest
-    outputs:
-      refs: ${{ steps.matrix.outputs.refs }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install pyyaml
-      - id: matrix
-        env:
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
-          REFS_INPUT: ${{ inputs.refs }}
-        run: python .github/scripts/build-matrix.py
-
   build:
     name: Build MSI (${{ matrix.openssl-ref }})
-    needs: setup
-    runs-on: windows-2022
+    runs-on: windows-2025
+    env:
+      # VS 2022 Enterprise and Strawberry Perl are preinstalled on windows-2025.
+      VCVARS: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat'
+      # All currently-tested OpenSSL refs pair with the same NIST-validated
+      # FIPS module (3.1.2). Pulled in as a sibling 'openssl-fips' checkout.
+      FIPS_REF: openssl-3.1.2
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.setup.outputs.refs) }}
+      matrix:
+        openssl-ref: [openssl-3.5, master]
     steps:
       - name: Checkout installer
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout OpenSSL (${{ matrix.openssl-ref }})
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: openssl/openssl
           ref: ${{ matrix.openssl-ref }}
           path: openssl
 
-      - name: Checkout OpenSSL for FIPS (${{ matrix.fips-ref }})
-        uses: actions/checkout@v4
+      - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
+        uses: actions/checkout@v6
         with:
           repository: openssl/openssl
-          ref: ${{ matrix.fips-ref }}
+          ref: ${{ env.FIPS_REF }}
           path: openssl-fips
 
-      - name: Setup MSVC environment
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x64
-
-      - name: Setup Perl (Strawberry)
-        uses: shogo82148/actions-setup-perl@v1
-        with:
-          perl-version: '5.38'
-          distribution: strawberry
-
-      - name: Setup NASM
-        uses: ilammy/setup-nasm@v1
+      - name: Install NASM
+        shell: pwsh
+        run: |
+          choco install nasm -y --no-progress
+          "C:\Program Files\NASM" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 
       - name: Build OpenSSL
         shell: cmd
         working-directory: openssl
         run: |
-          perl Configure VC-WIN64A enable-fips -DOSSL_WINCTX=OpenSSLProject
-          nmake
+          call "%VCVARS%"
+          perl Configure VC-WIN64A enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
+          nmake /S
           nmake build_docs
 
       - name: Build OpenSSL (FIPS source)
         shell: cmd
         working-directory: openssl-fips
         run: |
-          perl Configure VC-WIN64A enable-fips
-          nmake
+          call "%VCVARS%"
+          perl Configure VC-WIN64A enable-fips no-makedepend
+          nmake /S
 
       - name: Build MSI
         uses: caphyon/advinst-github-action@main
@@ -103,15 +81,15 @@ jobs:
 
   test:
     name: Test on ${{ matrix.os }} (${{ matrix.openssl-ref }})
-    needs: [setup, build]
+    needs: build
     strategy:
       fail-fast: false
       matrix:
         os: [windows-2022, windows-2025]
-        include: ${{ fromJSON(needs.setup.outputs.refs).include }}
+        openssl-ref: [openssl-3.5, master]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Download MSI
         uses: actions/download-artifact@v4

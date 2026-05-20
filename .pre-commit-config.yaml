@@ -1,12 +1,6 @@
-# Legacy scripts (windows-installer/test.py, test_gui.py) and binary-ish
-# patches are excluded — the new suite under tests/ supersedes them and they
-# will be removed in a follow-up.
-exclude: |
-  (?x)^(
-      windows-installer/test\.py
-    | windows-installer/test_gui\.py
-    | windows-installer/.*\.patch
-  )$
+# Patch files must remain byte-identical for `git apply`, so skip whitespace
+# and EOF-fixing hooks against them.
+exclude: '^windows-installer/.*\.patch$'
 
 repos:
   - repo: https://github.com/asottile/reorder-python-imports

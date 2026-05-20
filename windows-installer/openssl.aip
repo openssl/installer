@@ -1206,11 +1206,11 @@
     <ROW File="EVP_KDFSRTPKDF.html" Component_="man7" FileName="EVP_K~12.HTM|EVP_KDF-SRTPKDF.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\EVP_KDF-SRTPKDF.html" SelfReg="false"/>
     <ROW File="EVP_MDMLDSAMU.html" Component_="man7" FileName="EVP_MD~9.HTM|EVP_MD-ML-DSA-MU.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\EVP_MD-ML-DSA-MU.html" SelfReg="false"/>
     <ROW File="osslremovedapi.html" Component_="man7" FileName="OSSL-R~1.HTM|ossl-removed-api.html" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7\ossl-removed-api.html" SelfReg="false"/>
-    <ROW File="libcrypto4x64.dll" Component_="libcrypto4x64.dll" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.dll" SelfReg="false"/>
-    <ROW File="libssl4x64.dll" Component_="libssl4x64.dll" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\openssl\libssl-4-x64.dll" SelfReg="false"/>
-    <ROW File="libcrypto4x64.dll_1" Component_="libcrypto4x64.dll_1" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.dll" SelfReg="false"/>
+    <ROW File="libcrypto4x64.dll" Component_="libcrypto4x64.dll" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libssl4x64.dll" Component_="libssl4x64.dll" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\openssl\libssl-4-x64.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libcrypto4x64.dll_1" Component_="libcrypto4x64.dll_1" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.dll" SelfReg="false" DigSign="true"/>
     <ROW File="libcrypto4x64.pdb" Component_="libcrypto4x64.pdb" FileName="LIBCRY~1.PDB|libcrypto-4-x64.pdb" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.pdb" SelfReg="false"/>
-    <ROW File="libssl4x64.dll_1" Component_="libssl4x64.dll_1" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\openssl\libssl-4-x64.dll" SelfReg="false"/>
+    <ROW File="libssl4x64.dll_1" Component_="libssl4x64.dll_1" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\openssl\libssl-4-x64.dll" SelfReg="false" DigSign="true"/>
     <ROW File="libssl4x64.pdb" Component_="libssl4x64.pdb" FileName="LIBSSL~1.PDB|libssl-4-x64.pdb" Attributes="0" SourcePath="..\openssl\libssl-4-x64.pdb" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentDataComponent">

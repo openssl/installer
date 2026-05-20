@@ -27,8 +27,9 @@ markers = [
     "fips: exercises FIPS provider behavior",
     "gui: requires an interactive desktop session",
     "upgrade: requires multiple MSI versions (TODO)",
+    "destructive: temporarily removes system dependencies (e.g., VC++ runtime)",
 ]
-addopts = "-m 'not signed'"
+addopts = "-m 'not signed and not destructive'"
 filterwarnings = [
     # pywinauto echoes our intentional sys.coinit_flags=0 (MTA apartment).
     "ignore:Apply externally defined coinit_flags.*:UserWarning",

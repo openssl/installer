@@ -40,9 +40,10 @@ def pytest_addoption(parser):
         action="store",
         default=None,
         help=(
-            "Filesystem path OR http(s) URL of the OpenSSL MSI under test. "
-            "URLs are downloaded to a session-scoped temp dir. Basic-auth "
-            "credentials may be embedded as https://user:token@host/..."
+            "Filesystem path OR http(s) URL of the OpenSSL installer "
+            "(.exe bootstrapper, or .msi for legacy artifacts). "
+            "URLs are downloaded to a cross-session ETag-cached temp dir. "
+            "Basic-auth credentials may be embedded as https://user:token@host/..."
         ),
     )
 
@@ -117,16 +118,17 @@ def _cache_dir() -> Path:
     return base / "openssl-installer-tests"
 
 
-def _download_msi(url: str) -> Path:
-    """Fetch an MSI from `url`, using an ETag/Last-Modified cache.
+def _download_installer(url: str) -> Path:
+    """Fetch an installer (.exe or .msi) from `url`, using an ETag /
+    Last-Modified cache.
 
-    Cache layout: <cache_dir>/<sha256(url)[:16]>/{filename.msi, meta.json}.
+    Cache layout: <cache_dir>/<sha256(url)[:16]>/{filename, meta.json}.
     Sends If-None-Match / If-Modified-Since on subsequent fetches; a 304
     response reuses the cached file.
     """
     filename = url.rstrip("/").rsplit("/", 1)[-1].split("?", 1)[0]
-    if not filename.lower().endswith(".msi"):
-        pytest.exit(f"URL does not end in an .msi filename: {url}", returncode=2)
+    if not filename.lower().endswith((".exe", ".msi")):
+        pytest.exit(f"URL does not end in an .exe or .msi filename: {url}", returncode=2)
 
     bucket = _cache_dir() / hashlib.sha256(url.encode()).hexdigest()[:16]
     bucket.mkdir(parents=True, exist_ok=True)
@@ -147,7 +149,7 @@ def _download_msi(url: str) -> Path:
         pytest.exit(f"Failed to fetch {url}: {e}", returncode=2)
 
     if resp.status_code == 304 and cached.exists():
-        print(f"Using cached MSI (304 Not Modified): {cached}", flush=True)
+        print(f"Using cached installer (304 Not Modified): {cached}", flush=True)
         return cached
 
     if not resp.ok:
@@ -179,18 +181,20 @@ def _download_msi(url: str) -> Path:
 def installer(request) -> InstallerInfo:
     arg = request.config.getoption("--installer")
     if not arg:
-        pytest.exit("--installer <path-or-url-to-msi> is required", returncode=2)
+        pytest.exit("--installer <path-or-url-to-exe-or-msi> is required", returncode=2)
 
     if _is_url(arg):
-        path = _download_msi(arg)
+        path = _download_installer(arg)
     else:
         path = Path(arg).resolve()
         if not path.exists():
             pytest.exit(f"Installer not found: {path}", returncode=2)
 
-    m = re.search(r"(\d+\.\d+\.\d+)\.msi$", path.name, re.IGNORECASE)
+    if path.suffix.lower() not in (".exe", ".msi"):
+        pytest.exit(f"Installer must be .exe or .msi, got: {path.name}", returncode=2)
+    m = re.search(r"(\d+\.\d+\.\d+)\.(?:exe|msi)$", path.name, re.IGNORECASE)
     if not m:
-        pytest.exit(f"Cannot parse version from MSI filename: {path.name}", returncode=2)
+        pytest.exit(f"Cannot parse version from installer filename: {path.name}", returncode=2)
     assert m is not None  # pytest.exit above raises; this narrows for mypy
     version = m.group(1)
     major, minor, patch = version.split(".")
@@ -213,9 +217,9 @@ def install_dir(installer, config) -> Path:
 def clean_machine() -> Iterator[None]:
     """Uninstall every OpenSSL Library product at session start and end.
 
-    Per-test `clean_install` only removes the *current* MSI by path, so a
-    different product code lingering from manual troubleshooting (or an
-    interrupted prior run) survives it. This fixture sweeps the machine.
+    Belt-and-suspenders sweep to handle leftovers from manual
+    troubleshooting or interrupted prior runs. Per-test `clean_install`
+    relies on the same product-code enumeration.
     """
     _uninstall_all_openssl_products()
     yield
@@ -269,7 +273,19 @@ def clean_install(installer):
     uninstall(installer)
 
 
-# --- msiexec ------------------------------------------------------------
+# --- install / uninstall / repair --------------------------------------
+#
+# Install: invoke the installer artifact directly. For .exe (the AI
+# bootstrapper) we use /exenoui /qn; MSI properties (e.g. INSTALL_FIPS=1)
+# are passed through to the inner MSI. For .msi we fall back to
+# msiexec /i — only relevant when testing pre-bootstrapper builds.
+#
+# Uninstall / repair: route through msiexec by product code, NOT by
+# installer path. After install the inner MSI is cached in Windows
+# Installer's database (C:\Windows\Installer\*.msi) and addressable by
+# product code, which works whether the original installer was .exe or
+# .msi. Using the path with /x would refuse for the .exe-bootstrapper
+# artifact (the inner MSI's LaunchCondition rejects standalone msiexec).
 
 
 def _msiexec(args: list[str], check: bool) -> subprocess.CompletedProcess:
@@ -282,17 +298,29 @@ def _msiexec(args: list[str], check: bool) -> subprocess.CompletedProcess:
 
 
 def install(info: InstallerInfo, properties: list[str] | None = None, check: bool = True):
-    return _msiexec(["/i", str(info.path), "/qn", *(properties or [])], check=check)
+    props = properties or []
+    if info.path.suffix.lower() == ".exe":
+        return subprocess.run(
+            [str(info.path), "/exenoui", "/qn", *props],
+            check=check,
+            capture_output=True,
+            text=True,
+        )
+    return _msiexec(["/i", str(info.path), "/qn", *props], check=check)
 
 
-def uninstall(info: InstallerInfo):
-    """Best-effort uninstall — OK if nothing was installed."""
-    _msiexec(["/x", str(info.path), "/qn"], check=False)
+def uninstall(info: InstallerInfo) -> None:
+    """Best-effort uninstall via product-code lookup. OK if nothing is installed."""
+    _uninstall_all_openssl_products()
 
 
-def repair(info: InstallerInfo):
-    """msiexec /fa — force reinstall of all files."""
-    _msiexec(["/fa", str(info.path), "/qn"], check=True)
+def repair(info: InstallerInfo) -> None:
+    """msiexec /fa by product code — Windows Installer reinstalls from its cache."""
+    products = _find_installed_openssl_products()
+    if not products:
+        raise RuntimeError("no OpenSSL Library product installed to repair")
+    for product_code, _ in products:
+        _msiexec(["/fa", product_code, "/qn"], check=True)
 
 
 # --- expected-file checks ----------------------------------------------

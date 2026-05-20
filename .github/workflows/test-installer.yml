@@ -63,7 +63,7 @@ jobs:
           perl Configure VC-WIN64A enable-fips no-makedepend
           nmake /S
 
-      - name: Build MSI
+      - name: Build installer
         uses: caphyon/advinst-github-action@main
         with:
           advinst-version: '23.5.1'
@@ -72,11 +72,11 @@ jobs:
           aip-path: ${{ github.workspace }}\windows-installer\openssl.aip
           aip-build-name: DefaultBuild
 
-      - name: Upload MSI
+      - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: msi-${{ matrix.openssl-ref }}
-          path: build-target/Installer64/DefaultBuild/*.msi
+          name: installer-${{ matrix.openssl-ref }}
+          path: build-target/Installer64/DefaultBuild/*.exe
           if-no-files-found: error
 
   test:
@@ -91,10 +91,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Download MSI
+      - name: Download installer
         uses: actions/download-artifact@v4
         with:
-          name: msi-${{ matrix.openssl-ref }}
+          name: installer-${{ matrix.openssl-ref }}
           path: build
 
       - name: Install uv
@@ -105,13 +105,13 @@ jobs:
       - name: Install Python deps
         run: uv sync --frozen || uv sync
 
-      - name: Locate MSI
-        id: msi
+      - name: Locate installer
+        id: installer
         shell: pwsh
         run: |
-          $msi = Get-ChildItem build -Recurse -Filter '*.msi' | Select-Object -First 1
-          if (-not $msi) { throw "No MSI found in build/" }
-          "path=$($msi.FullName)" >> $env:GITHUB_OUTPUT
+          $exe = Get-ChildItem build -Recurse -Filter '*.exe' | Select-Object -First 1
+          if (-not $exe) { throw "No installer .exe found in build/" }
+          "path=$($exe.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: Run pytest
-        run: uv run pytest tests --installer "${{ steps.msi.outputs.path }}" -v
+        run: uv run pytest tests --installer "${{ steps.installer.outputs.path }}" -v

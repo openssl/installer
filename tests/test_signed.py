@@ -83,12 +83,17 @@ def test_signature_has_timestamp(signature: dict, config: dict) -> None:
     assert ts is not None, "expected an RFC 3161 timestamp on the signature"
 
 
-def test_msi_file_is_msi(installer: InstallerInfo) -> None:
-    """Sanity check: the file is actually an MSI (cabinet header)."""
+def test_installer_file_magic(installer: InstallerInfo) -> None:
+    """Sanity check: the installer file matches its claimed format —
+    PE "MZ" for .exe (the AI bootstrapper), OLE Compound Document for .msi."""
     with open(installer.path, "rb") as f:
         header = f.read(8)
-    # MSI files are OLE Compound Documents — magic D0 CF 11 E0 A1 B1 1A E1.
-    assert header == b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1", f"file does not look like an MSI: {header!r}"
+    suffix = installer.path.suffix.lower()
+    if suffix == ".exe":
+        assert header[:2] == b"MZ", f"file does not look like a PE/EXE: {header!r}"
+    else:
+        # MSI files are OLE Compound Documents — magic D0 CF 11 E0 A1 B1 1A E1.
+        assert header == b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1", f"file does not look like an MSI: {header!r}"
 
 
 @pytest.fixture(scope="session")

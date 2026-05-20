@@ -1,6 +1,6 @@
 name: Test Signed Installer
 
-# Manual-only. The signed MSI is produced on a dedicated signing machine
+# Manual-only. The signed installer is produced on a dedicated signing machine
 # (HSM-backed EV Code Signing certificate) and uploaded to a GitHub release.
 # This workflow downloads it from a release and runs the `signed` marker tests.
 
@@ -8,13 +8,13 @@ on:
   workflow_dispatch:
     inputs:
       release-tag:
-        description: 'Release tag to download the signed MSI from (default: latest)'
+        description: 'Release tag to download the signed installer from (default: latest)'
         required: false
         default: latest
       asset-pattern:
-        description: 'Glob for the MSI asset to download'
+        description: 'Glob for the installer asset to download'
         required: false
-        default: '*.msi'
+        default: '*.exe'
 
 jobs:
   test:
@@ -42,7 +42,7 @@ jobs:
           if (-not $tag) { throw "Could not resolve release tag" }
           "tag=$tag" >> $env:GITHUB_OUTPUT
 
-      - name: Download signed MSI
+      - name: Download signed installer
         env:
           GH_TOKEN: ${{ github.token }}
         shell: pwsh
@@ -60,13 +60,13 @@ jobs:
       - name: Install Python deps
         run: uv sync --frozen || uv sync
 
-      - name: Locate MSI
-        id: msi
+      - name: Locate installer
+        id: installer
         shell: pwsh
         run: |
-          $msi = Get-ChildItem build -Recurse -Filter '*.msi' | Select-Object -First 1
-          if (-not $msi) { throw "No MSI found in build/" }
-          "path=$($msi.FullName)" >> $env:GITHUB_OUTPUT
+          $exe = Get-ChildItem build -Recurse -Filter '*.exe' | Select-Object -First 1
+          if (-not $exe) { throw "No installer .exe found in build/" }
+          "path=$($exe.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: Run signed tests
-        run: uv run pytest tests -m signed --installer "${{ steps.msi.outputs.path }}" -v
+        run: uv run pytest tests -m signed --installer "${{ steps.installer.outputs.path }}" -v

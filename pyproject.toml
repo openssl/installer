@@ -29,3 +29,7 @@ markers = [
     "upgrade: requires multiple MSI versions (TODO)",
 ]
 addopts = "-m 'not signed'"
+filterwarnings = [
+    # pywinauto echoes our intentional sys.coinit_flags=0 (MTA apartment).
+    "ignore:Apply externally defined coinit_flags.*:UserWarning",
+]

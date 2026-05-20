@@ -49,79 +49,42 @@ def pytest_addoption(parser):
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """On any failure of a `gui`-marked test, dump diagnostics.
+    """On any failure of a `gui`-marked test, save a full-screen screenshot.
 
     Covers setup, call, and teardown — the connect() ElementNotFound failure
-    happens in setup, so call-phase-only would miss it. The diagnostic dump
-    includes the pytest process's Windows session ID, every visible top-level
-    window (title + owning PID + owning session), and a best-effort screenshot
-    (skipped if the session has no desktop, which is itself the diagnosis).
+    happens in setup, so call-phase-only would miss it. When the screenshot
+    can't be taken (typical cause: Session 0 isolation, e.g. pytest invoked
+    over SSH/WinRM), the failure message points at running from RDP/console.
     """
     outcome = yield
     report = outcome.get_result()
     if report.failed and "gui" in item.keywords:
-        _capture_diagnostics(f"{item.name}_{report.when}")
+        _capture_screenshot(f"{item.name}_{report.when}")
 
 
-def _capture_diagnostics(label: str) -> None:
+def _capture_screenshot(label: str) -> None:
     SCREENSHOTS_DIR.mkdir(exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    base = SCREENSHOTS_DIR / f"{label}_{ts}"
-    _dump_windows(base.with_suffix(".windows.txt"))
-    _try_screenshot(base.with_suffix(".png"))
-
-
-def _try_screenshot(path: Path) -> None:
+    path = SCREENSHOTS_DIR / f"{label}_{ts}.png"
     try:
         from PIL import ImageGrab
 
         ImageGrab.grab(all_screens=True).save(path)
         print(f"[diag] screenshot: {path}", flush=True)
     except Exception as e:
-        print(f"[diag] screenshot skipped ({e}); see the .windows.txt dump", flush=True)
+        sess_id = _current_session_id()
+        print(f"[diag] screenshot failed ({e}); pytest session id={sess_id}", flush=True)
+        if sess_id == 0:
+            print("[diag] session 0 — no interactive desktop. Run via RDP/console, not SSH.", flush=True)
 
 
-def _dump_windows(path: Path) -> None:
-    """List every visible top-level window with its title, owning PID, and
-    owning Windows session ID. Catches Session-0-isolation cases where the
-    wizard runs in a session pywinauto can't reach."""
+def _current_session_id() -> int:
     import ctypes
-    from ctypes import wintypes
 
-    user32 = ctypes.windll.user32
+    sess = ctypes.c_uint()
     kernel32 = ctypes.windll.kernel32
-
-    pytest_sess = ctypes.c_uint()
-    kernel32.ProcessIdToSessionId(kernel32.GetCurrentProcessId(), ctypes.byref(pytest_sess))
-
-    rows: list[tuple[int, str, int, int]] = []
-
-    @ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
-    def callback(hwnd: int, _lparam: int) -> bool:
-        if not user32.IsWindowVisible(hwnd):
-            return True
-        length = user32.GetWindowTextLengthW(hwnd)
-        if not length:
-            return True
-        buf = ctypes.create_unicode_buffer(length + 1)
-        user32.GetWindowTextW(hwnd, buf, length + 1)
-        pid = wintypes.DWORD()
-        user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
-        sess = ctypes.c_uint()
-        kernel32.ProcessIdToSessionId(pid.value, ctypes.byref(sess))
-        rows.append((hwnd, buf.value, pid.value, sess.value))
-        return True
-
-    user32.EnumWindows(callback, 0)
-
-    with path.open("w", encoding="utf-8") as f:
-        f.write(f"pytest process session id: {pytest_sess.value}\n")
-        f.write(f"visible top-level windows ({len(rows)}):\n")
-        for hwnd, title, pid, sess in rows:
-            f.write(f"  hwnd=0x{hwnd:08x}  pid={pid}  session={sess}  title={title!r}\n")
-
-    print(f"[diag] {len(rows)} visible windows dumped: {path}", flush=True)
-    print(f"[diag] pytest session id: {pytest_sess.value}", flush=True)
+    kernel32.ProcessIdToSessionId(kernel32.GetCurrentProcessId(), ctypes.byref(sess))
+    return sess.value
 
 
 @dataclass(frozen=True)

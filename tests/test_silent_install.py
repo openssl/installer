@@ -93,3 +93,47 @@ def test_config_files_survive_uninstall(installer: InstallerInfo, install_dir: P
     install(installer)
     uninstall(installer)
     check_post_uninstall(config, install_dir)
+
+
+@pytest.mark.fips
+@pytest.mark.usefixtures("clean_install")
+def test_fipsinstall_runs_during_install(installer: InstallerInfo, install_dir: Path) -> None:
+    """During FIPS install, the MSI's LaunchFile custom action runs
+    `openssl fipsinstall` to generate config/fipsmodule.cnf — the file that
+    holds the integrity MAC of the FIPS provider and lets openssl load it
+    at runtime. Verify the file exists, has the expected sections, and that
+    `openssl fipsinstall -verify` succeeds: recomputing the MAC against the
+    shipped fips.dll and matching it to the cnf proves the in-install
+    command ran and produced a usable config (not just a stale leftover)."""
+    install(
+        installer,
+        [
+            "INSTALL_FIPS=1",
+            "INSTALL_FIPS_TYPE=validated",
+            "INSTALL_APP=1",
+            "INSTALL_SDK=1",
+        ],
+    )
+    cnf_path = install_dir / "config" / "fipsmodule.cnf"
+    assert cnf_path.exists(), f"{cnf_path} missing — `openssl fipsinstall` did not run during install"
+
+    content = cnf_path.read_text(encoding="utf-8")
+    assert "[fipsmodule_sect]" in content, f"missing [fipsmodule_sect] in fipsmodule.cnf:\n{content}"
+    assert "module-mac" in content, f"missing module-mac in fipsmodule.cnf:\n{content}"
+
+    exe = install_dir / "bin" / "openssl.exe"
+    fips_dll = install_dir / "lib" / "ossl-modules" / "fips.dll"
+    res = subprocess.run(
+        [str(exe), "fipsinstall", "-verify", "-module", str(fips_dll), "-in", str(cnf_path)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if res.returncode != 0:
+        raise AssertionError(
+            f"openssl fipsinstall -verify failed (exit {res.returncode}) — "
+            f"fipsmodule.cnf's MAC does not match the installed fips.dll, "
+            f"meaning the install-time fipsinstall command produced an inconsistent config.\n"
+            f"stdout:\n{res.stdout}\n"
+            f"stderr:\n{res.stderr}"
+        )

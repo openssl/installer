@@ -64,6 +64,14 @@ jobs:
           "minor=$($parts[1])"                                >> $env:GITHUB_OUTPUT
           "winctx=$($parts[0]).$($parts[1])-OpenSSLProject"   >> $env:GITHUB_OUTPUT
 
+      - name: Check out detected tag
+        # Without this, nmake builds the branch tip (e.g. 3.5.7-dev) rather
+        # than the tagged release (3.5.6) we just resolved + are about to
+        # cache. Detached HEAD is fine — we never push from here.
+        shell: cmd
+        working-directory: openssl
+        run: git -c advice.detachedHead=false checkout tags/openssl-${{ steps.openssl_version.outputs.version }}
+
       - name: Restore OpenSSL build cache
         id: openssl_cache
         uses: actions/cache@v4

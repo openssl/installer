@@ -27,23 +27,35 @@ def _bin_dir_entry(install_dir: Path) -> str:
     return f"{install_dir}\\bin\\"
 
 
+def _path_contains(path_value: str, entry: str) -> bool:
+    """Tokenize PATH on ';' and look for `entry` as a whole token,
+    case-insensitive and ignoring a trailing slash. Plain substring
+    matching would false-pass on e.g. `…\\bin` vs `…\\bin\\extra`."""
+    target = entry.strip().rstrip("\\/").lower()
+    return any(token.strip().rstrip("\\/").lower() == target for token in path_value.split(";"))
+
+
 def test_path_env_added_and_removed(installer: InstallerInfo, install_dir: Path) -> None:
     """The bin directory should be added to system PATH on install and
     removed on uninstall."""
     uninstall(installer)
     baseline = _read_system_path()
     bin_entry = _bin_dir_entry(install_dir)
-    assert bin_entry not in baseline, f"bin dir {bin_entry!r} already in PATH before install — clean machine assumption violated"
+    assert not _path_contains(
+        baseline, bin_entry
+    ), f"bin dir {bin_entry!r} already in PATH before install — clean machine assumption violated"
 
     install(installer)
     try:
         after_install = _read_system_path()
-        assert bin_entry in after_install, f"expected {bin_entry!r} in PATH after install:\n{after_install}"
+        assert _path_contains(after_install, bin_entry), f"expected {bin_entry!r} in PATH after install:\n{after_install}"
     finally:
         uninstall(installer)
 
     after_uninstall = _read_system_path()
-    assert bin_entry not in after_uninstall, f"{bin_entry!r} should be removed from PATH after uninstall:\n{after_uninstall}"
+    assert not _path_contains(
+        after_uninstall, bin_entry
+    ), f"{bin_entry!r} should be removed from PATH after uninstall:\n{after_uninstall}"
 
 
 @pytest.mark.usefixtures("clean_install")

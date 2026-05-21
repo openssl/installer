@@ -1,7 +1,8 @@
 # Silent-install (msiexec /qn) test cases, ported from test.py.
 from __future__ import annotations
 
-import subprocess  # used by pytest.raises(subprocess.CalledProcessError)
+import subprocess
+import uuid
 from pathlib import Path
 
 import pytest
@@ -89,10 +90,18 @@ def test_fips_requires_app(installer: InstallerInfo) -> None:
 
 @pytest.mark.usefixtures("clean_install")
 def test_config_files_survive_uninstall(installer: InstallerInfo, install_dir: Path, config: dict) -> None:
-    """User-edited config files must remain after uninstall."""
+    """User edits to openssl.cnf must survive uninstall — the whole point of
+    `post_uninstall_keep` is preserving user-customized configuration. Append
+    a unique sentinel line, uninstall, and verify the line is still there."""
     install(installer)
+    cnf = install_dir / "config" / "openssl.cnf"
+    sentinel = f"# test sentinel {uuid.uuid4().hex}"
+    with cnf.open("a", encoding="utf-8") as f:
+        f.write("\n" + sentinel + "\n")
     uninstall(installer)
     check_post_uninstall(config, install_dir)
+    after = cnf.read_text(encoding="utf-8")
+    assert sentinel in after, f"user edit lost after uninstall — sentinel {sentinel!r} not found in cnf"
 
 
 @pytest.mark.fips

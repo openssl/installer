@@ -13,6 +13,8 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlparse
+from urllib.parse import urlunparse
 
 import pytest
 import requests
@@ -166,7 +168,10 @@ def _download_installer(url: str) -> Path:
     meta_path.write_text(
         json.dumps(
             {
-                "url": url,
+                # Strip embedded basic-auth credentials before persisting.
+                # The cache key already hashed the full URL (userinfo included),
+                # so this stays self-consistent — meta.json is just for humans.
+                "url": _strip_url_credentials(url),
                 "etag": resp.headers.get("ETag"),
                 "last_modified": resp.headers.get("Last-Modified"),
                 "filename": filename,
@@ -175,6 +180,17 @@ def _download_installer(url: str) -> Path:
         )
     )
     return cached
+
+
+def _strip_url_credentials(url: str) -> str:
+    """Return `url` with any user:password@ removed from netloc."""
+    parsed = urlparse(url)
+    if not parsed.username and not parsed.password:
+        return url
+    netloc = parsed.hostname or ""
+    if parsed.port is not None:
+        netloc = f"{netloc}:{parsed.port}"
+    return urlunparse(parsed._replace(netloc=netloc))
 
 
 @pytest.fixture(scope="session")

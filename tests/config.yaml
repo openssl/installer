@@ -47,6 +47,8 @@ files:
     - { name: "libssl-{major}-x64.pdb",    flags: sdk }
     - { name: libcrypto.lib,               flags: sdk }
     - { name: libssl.lib,                  flags: sdk }
+    - { name: libcrypto_static.lib,        flags: sdk }
+    - { name: libssl_static.lib,           flags: sdk }
   "lib/ossl-modules":
     - { name: fips.dll,   flags: fips }
     - { name: fips.lib,   flags: fips_sdk }

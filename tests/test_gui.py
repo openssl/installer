@@ -31,14 +31,21 @@ WIZARD_TIMEOUT = 30  # seconds to wait for any dialog transition
 def wizard(installer: InstallerInfo):
     """Launch the installer GUI; tear down by cancelling cleanly.
 
-    Ensures no prior install exists first — otherwise msiexec /i opens
-    the Modify/Repair/Remove dialog instead of the Welcome wizard, and
+    Ensures no prior install exists first — otherwise the wizard opens
+    the Modify/Repair/Remove dialog instead of the Welcome screen, and
     the connect() call would never find the expected window.
+
+    Dispatches by installer type: `.exe` is the AI bootstrapper, launched
+    directly. `.msi` falls back to `msiexec /i` for legacy artifacts (the
+    inner MSI of the .exe-wrapped form is rejected by its LaunchCondition).
 
     Yields (app, dlg) — the pywinauto Application and current top window.
     """
     uninstall(installer)
-    proc = subprocess.Popen(["msiexec.exe", "/i", str(installer.path)])
+    if installer.path.suffix.lower() == ".exe":
+        proc = subprocess.Popen([str(installer.path)])
+    else:
+        proc = subprocess.Popen(["msiexec.exe", "/i", str(installer.path)])
     try:
         app = Application(backend="uia").connect(
             title_re=f"OpenSSL Library {installer.version} Setup",

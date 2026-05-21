@@ -1,10 +1,9 @@
 # GUI tests: walk the installer wizard via pywinauto (UIA backend).
 #
-# Hardened port of windows-installer/test_gui.py. The control names below
-# (CheckBox1, RadioButton1, Static2, ...) are pywinauto auto-IDs from the
-# Advanced Installer-generated wizard; they are stable as long as the .aip
-# dialog layout doesn't change. If the wizard is restructured, expect these
-# selectors to need updates.
+# The control names below (CheckBox1, RadioButton1, Static2, ...) are
+# pywinauto auto-IDs from the Advanced Installer-generated wizard; they
+# are stable as long as the .aip dialog layout doesn't change. If the
+# wizard is restructured, expect these selectors to need updates.
 from __future__ import annotations
 
 import subprocess

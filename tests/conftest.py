@@ -111,8 +111,8 @@ def _is_url(s: str) -> bool:
 
 
 def _cache_dir() -> Path:
-    """Cross-session cache for downloaded MSIs. Override with
-    OPENSSL_INSTALLER_CACHE_DIR; defaults to %LOCALAPPDATA%."""
+    """Cross-session cache for downloaded installer artifacts. Override
+    with OPENSSL_INSTALLER_CACHE_DIR; defaults to %LOCALAPPDATA%."""
     override = os.environ.get("OPENSSL_INSTALLER_CACHE_DIR")
     if override:
         return Path(override)

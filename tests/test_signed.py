@@ -1,9 +1,9 @@
-# Authenticode signature tests for the signed MSI artifact.
+# Authenticode signature tests for signed installer artifacts.
 #
 # All tests carry the `signed` marker and are skipped by default
 # (see addopts in pyproject.toml). Run with:
 #
-#     uv run pytest -m signed --installer path\to\signed.msi
+#     uv run pytest -m signed --installer path\to\signed.exe
 from __future__ import annotations
 
 import json

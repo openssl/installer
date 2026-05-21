@@ -23,7 +23,7 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [
-    "signed: requires a signed MSI artifact",
+    "signed: requires a signed installer artifact",
     "fips: exercises FIPS provider behavior",
     "gui: requires an interactive desktop session",
     "upgrade: requires multiple MSI versions (TODO)",

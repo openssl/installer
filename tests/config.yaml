@@ -79,12 +79,12 @@ post_uninstall_keep:
     - openssl.cnf
     - ct_log_list.cnf
 
-# Signed-MSI expectations. Used by tests marked `signed`.
+# Expectations for a signed installer artifact. Used by tests marked
+# `signed`, which are skipped by default and only run when explicitly
+# selected.
 signing:
-  # Substring expected in the SignerCertificate.Subject (case-insensitive).
-  # Matches the CN of the EV Code Signing certificate provisioned on the
-  # Jenkins signing agent (see SIGN_CERT_SUBJECT in
-  # jenkins/make-openssl-windows-installer.Jenkinsfile).
+  # Substring expected (case-insensitive) in the SignerCertificate.Subject
+  # of a signed build. Update this if the signing certificate changes.
   publisher_subject_cn: "OpenSSL Software Services Czech, s.r.o."
   # If true, the signature must include an RFC 3161 timestamp.
   timestamp_required: true

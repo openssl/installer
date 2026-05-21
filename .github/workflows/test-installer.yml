@@ -21,8 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Only refs with a corresponding windows-installer/<ref>.aip; master
-        # is built on Jenkins but skipped here until a master .aip exists.
+        # Only refs with a corresponding windows-installer/<ref>.aip.
         openssl-ref: [openssl-3.5]
     steps:
       - name: Checkout installer
@@ -139,9 +138,10 @@ jobs:
           advinst-enable-automation: 'true'
           aip-path: ${{ github.workspace }}\windows-installer\${{ matrix.openssl-ref }}.aip
           aip-build-name: DefaultBuild
-          # ResetSig is unconditional here: GHA runners can't reach the
-          # HSM-signed certificate, so we clear the .aip's signing config
-          # for this build. Signed installers are produced on Jenkins.
+          # ResetSig is unconditional: this workflow produces unsigned
+          # builds. The .aip's signing config references a certificate
+          # that isn't available to GitHub Actions runners; ResetSig
+          # clears it so the build doesn't fail on missing cert.
           aip-commands: |
             ResetSig
             SetVersion ${{ steps.openssl_version.outputs.version }}

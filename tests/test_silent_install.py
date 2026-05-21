@@ -1,4 +1,4 @@
-# Silent-install (msiexec /qn) test cases, ported from test.py.
+# Silent-install (no-UI) test cases.
 from __future__ import annotations
 
 import subprocess

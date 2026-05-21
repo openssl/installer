@@ -41,13 +41,19 @@ jobs:
         shell: pwsh
         working-directory: openssl
         run: |
-          # Pick the highest 'openssl-X.Y.Z' tag reachable from this branch's
-          # HEAD. version:refname sort uses numeric component ordering so e.g.
-          # openssl-3.5.10 ranks above openssl-3.5.9.
-          $tag = git tag --list 'openssl-*' --merged HEAD --sort=-version:refname |
-                 Select-Object -First 1
+          # Pick the highest patch-version tag in this branch's family. The
+          # branch name itself is the tag prefix: openssl-3.5 branch → tags
+          # named openssl-3.5.*. version:refname sort uses numeric component
+          # ordering so openssl-3.5.10 ranks above openssl-3.5.9.
+          #
+          # We deliberately don't use --merged HEAD: the checkout is shallow
+          # (fetch-depth: 1) so git can't compute reachability — the merged
+          # filter would return an empty list. Pattern matching on the
+          # branch's own tag prefix is the equivalent constraint.
+          $pattern = '${{ matrix.openssl-ref }}.*'
+          $tag = git tag --list $pattern --sort=-version:refname | Select-Object -First 1
           if (-not $tag) {
-              throw "no 'openssl-X.Y.Z' tag reachable from HEAD on ${{ matrix.openssl-ref }}"
+              throw "no tags matching '$pattern' found in the openssl checkout"
           }
           $version = $tag -replace '^openssl-', ''
           $parts = $version.Split('.')

@@ -93,6 +93,18 @@ jobs:
           ref: ${{ env.FIPS_REF }}
           path: openssl-fips
 
+      - name: Apply Windows build patches to FIPS source
+        # openssl-3.1.2 needs two backported fixes to build on modern MSVC.
+        # Skipped for other FIPS refs.
+        if: steps.openssl_cache.outputs.cache-hit != 'true' && env.FIPS_REF == 'openssl-3.1.2'
+        shell: pwsh
+        working-directory: openssl-fips
+        run: |
+          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-win-Fix-warning-build-issue.patch"
+          if ($LASTEXITCODE -ne 0) { throw "patch 0001 failed" }
+          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0002-windows-makefile-libdir-absolute.patch"
+          if ($LASTEXITCODE -ne 0) { throw "patch 0002 failed" }
+
       - name: Install NASM
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: pwsh

@@ -21,7 +21,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        openssl-ref: [openssl-3.5, master]
+        # Only refs with a corresponding windows-installer/<ref>.aip; master
+        # is built on Jenkins but skipped here until a master .aip exists.
+        openssl-ref: [openssl-3.5]
     steps:
       - name: Checkout installer
         uses: actions/checkout@v6
@@ -32,6 +34,7 @@ jobs:
           repository: openssl/openssl
           ref: ${{ matrix.openssl-ref }}
           path: openssl
+          fetch-tags: true
 
       - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
         uses: actions/checkout@v6
@@ -39,6 +42,28 @@ jobs:
           repository: openssl/openssl
           ref: ${{ env.FIPS_REF }}
           path: openssl-fips
+
+      - name: Detect OpenSSL version from latest tag
+        id: openssl_version
+        shell: pwsh
+        working-directory: openssl
+        run: |
+          # Pick the highest 'openssl-X.Y.Z' tag reachable from this branch's
+          # HEAD. version:refname sort uses numeric component ordering so e.g.
+          # openssl-3.5.10 ranks above openssl-3.5.9.
+          $tag = git tag --list 'openssl-*' --merged HEAD --sort=-version:refname |
+                 Select-Object -First 1
+          if (-not $tag) {
+              throw "no 'openssl-X.Y.Z' tag reachable from HEAD on ${{ matrix.openssl-ref }}"
+          }
+          $version = $tag -replace '^openssl-', ''
+          $parts = $version.Split('.')
+          if ($parts.Count -lt 3) { throw "unexpected tag format: $tag" }
+          Write-Host "detected version: $version (from tag $tag)"
+          "version=$version"                                  >> $env:GITHUB_OUTPUT
+          "major=$($parts[0])"                                >> $env:GITHUB_OUTPUT
+          "minor=$($parts[1])"                                >> $env:GITHUB_OUTPUT
+          "winctx=$($parts[0]).$($parts[1])-OpenSSLProject"   >> $env:GITHUB_OUTPUT
 
       - name: Install NASM
         shell: pwsh
@@ -64,13 +89,22 @@ jobs:
           nmake /S
 
       - name: Build installer
-        uses: caphyon/advinst-github-action@main
+        uses: caphyon/advinst-github-action@7edde34c6ff935e53e3de72a5699efcfceb5f6c6  # v2.0.3 (current main HEAD)
         with:
           advinst-version: '23.5.1'
           advinst-license: ${{ secrets.ADVINST_LICENSE_KEY }}
           advinst-enable-automation: 'true'
-          aip-path: ${{ github.workspace }}\windows-installer\openssl.aip
+          aip-path: ${{ github.workspace }}\windows-installer\${{ matrix.openssl-ref }}.aip
           aip-build-name: DefaultBuild
+          # ResetSig is unconditional here: GHA runners can't reach the
+          # HSM-signed certificate, so we clear the .aip's signing config
+          # for this build. Signed installers are produced on Jenkins.
+          aip-commands: |
+            ResetSig
+            SetVersion ${{ steps.openssl_version.outputs.version }}
+            SetProperty VERSION_MAJOR=${{ steps.openssl_version.outputs.major }}
+            SetProperty VERSION_MINOR=${{ steps.openssl_version.outputs.minor }}
+            SetProperty VERSION_REGISTRY=${{ steps.openssl_version.outputs.winctx }}
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
@@ -86,7 +120,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-2022, windows-2025]
-        openssl-ref: [openssl-3.5, master]
+        openssl-ref: [openssl-3.5]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
@@ -98,7 +132,7 @@ jobs:
           path: build
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39  # v3 (= release v3.2.4)
         with:
           enable-cache: true
 

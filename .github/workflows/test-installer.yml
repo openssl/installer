@@ -36,13 +36,6 @@ jobs:
           path: openssl
           fetch-tags: true
 
-      - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
-        uses: actions/checkout@v6
-        with:
-          repository: openssl/openssl
-          ref: ${{ env.FIPS_REF }}
-          path: openssl-fips
-
       - name: Detect OpenSSL version from latest tag
         id: openssl_version
         shell: pwsh
@@ -65,13 +58,36 @@ jobs:
           "minor=$($parts[1])"                                >> $env:GITHUB_OUTPUT
           "winctx=$($parts[0]).$($parts[1])-OpenSSLProject"   >> $env:GITHUB_OUTPUT
 
+      - name: Restore OpenSSL build cache
+        id: openssl_cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            openssl
+            openssl-fips
+          # Builds for a given tagged release are deterministic; cache is
+          # valid until a new tag appears (which bumps `version`) or
+          # FIPS_REF changes. Bump the suffix (-v1 → -v2 …) to manually
+          # invalidate if build flags change.
+          key: openssl-build-${{ runner.os }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-fips-${{ env.FIPS_REF }}-v1
+
+      - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
+        if: steps.openssl_cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v6
+        with:
+          repository: openssl/openssl
+          ref: ${{ env.FIPS_REF }}
+          path: openssl-fips
+
       - name: Install NASM
+        if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
           choco install nasm -y --no-progress
           "C:\Program Files\NASM" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 
       - name: Build OpenSSL
+        if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: cmd
         working-directory: openssl
         run: |
@@ -81,6 +97,7 @@ jobs:
           nmake build_docs
 
       - name: Build OpenSSL (FIPS source)
+        if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: cmd
         working-directory: openssl-fips
         run: |

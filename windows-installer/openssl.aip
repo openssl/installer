@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="18.9" version="23.5.1" Modules="enterprise" RootPath="." Language="en" Id="{AC2B6856-EDC2-4FAD-A624-ED761804420F}" Backup="false">
+<DOCUMENT Type="Advanced Installer" CreateVersion="18.9" version="23.7" Modules="enterprise" RootPath="." Language="en" Id="{AC2B6856-EDC2-4FAD-A624-ED761804420F}" Backup="false">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="ADJUSTSYSTEMPATHENV" Value="1" Type="4"/>
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>

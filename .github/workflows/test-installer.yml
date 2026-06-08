@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         # Only refs with a corresponding windows-installer/<ref>.aip.
-        openssl-ref: [openssl-3.5]
+        openssl-ref: [openssl-4.0]
     steps:
       - name: Checkout installer
         uses: actions/checkout@v6
@@ -41,9 +41,9 @@ jobs:
         working-directory: openssl
         run: |
           # Pick the highest patch-version tag in this branch's family. The
-          # branch name itself is the tag prefix: openssl-3.5 branch → tags
-          # named openssl-3.5.*. version:refname sort uses numeric component
-          # ordering so openssl-3.5.10 ranks above openssl-3.5.9.
+          # branch name itself is the tag prefix: openssl-4.0 branch → tags
+          # named openssl-4.0.*. version:refname sort uses numeric component
+          # ordering so openssl-4.0.10 ranks above openssl-4.0.9.
           #
           # We deliberately don't use --merged HEAD: the checkout is shallow
           # (fetch-depth: 1) so git can't compute reachability — the merged
@@ -163,7 +163,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-2022, windows-2025]
-        openssl-ref: [openssl-3.5]
+        openssl-ref: [openssl-4.0]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6

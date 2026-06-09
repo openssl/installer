@@ -108,11 +108,16 @@ jobs:
           git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-3.1-Windows-Use-Z7-compiler-flag-to-enable-parallel-.patch"
           if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
 
-      - name: Install NASM
+      - name: install nasm
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
-          choco install nasm -y --no-progress
+          $installer = "nasm-3.01-installer-x64.exe"
+          Invoke-WebRequest -Uri "https://openssl-library.org/ci-deps/$installer" -OutFile $installer
+          $expected = (Get-Content "$env:GITHUB_WORKSPACE\.github\ci-deps.json" -Raw | ConvertFrom-Json).$installer
+          $actual = (Get-FileHash $installer -Algorithm SHA256).Hash
+          if ($actual -ne $expected) { throw "SHA256 mismatch for $installer (expected $expected, got $actual)" }
+          Start-Process -FilePath ".\$installer" -ArgumentList '/S' -Wait
           "C:\Program Files\NASM" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 
       - name: install jom

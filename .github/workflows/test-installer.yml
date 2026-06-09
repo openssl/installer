@@ -55,6 +55,8 @@ jobs:
               throw "no tags matching '$pattern' found in the openssl checkout"
           }
           $version = $tag -replace '^openssl-', ''
+          # Remove "-beta1", "-dev" and such
+          $version = $version.Split('-')[0]
           $parts = $version.Split('.')
           if ($parts.Count -lt 3) { throw "unexpected tag format: $tag" }
           Write-Host "detected version: $version (from tag $tag)"

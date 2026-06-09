@@ -105,6 +105,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "patch 0001 failed" }
           git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0002-windows-makefile-libdir-absolute.patch"
           if ($LASTEXITCODE -ne 0) { throw "patch 0002 failed" }
+          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-3.1-Windows-Use-Z7-compiler-flag-to-enable-parallel-.patch"
+          if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
 
       - name: Install NASM
         if: steps.openssl_cache.outputs.cache-hit != 'true'
@@ -113,6 +115,25 @@ jobs:
           choco install nasm -y --no-progress
           "C:\Program Files\NASM" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 
+      - name: install jom
+        if: steps.openssl_cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          mkdir C:\jom
+          Invoke-WebRequest -Uri "https://openssl-library.org/ci-deps/jom-1.1.7.exe" -OutFile C:\jom\jom.exe
+          $expected = (Get-Content "$env:GITHUB_WORKSPACE\.github\ci-deps.json" -Raw | ConvertFrom-Json).'jom-1.1.7.exe'
+          $actual = (Get-FileHash C:\jom\jom.exe -Algorithm SHA256).Hash
+          if ($actual -ne $expected) { throw "SHA256 mismatch for jom.exe (expected $expected, got $actual)" }
+          "C:\jom" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+
+      - name: Apply jom build patches to older than 4.1
+        if: steps.openssl_cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        working-directory: openssl
+        run: |
+          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-Windows-Use-Z7-compiler-flag-to-enable-parallel-buil.patch"
+          if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
+
       - name: Build OpenSSL
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: cmd
@@ -120,8 +141,8 @@ jobs:
         run: |
           call "%VCVARS%"
           perl Configure VC-WIN64A enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
-          nmake /S
-          nmake build_docs
+          jom /j4 /S
+          jom build_docs
 
       - name: Build OpenSSL (FIPS source)
         if: steps.openssl_cache.outputs.cache-hit != 'true'
@@ -130,7 +151,7 @@ jobs:
         run: |
           call "%VCVARS%"
           perl Configure VC-WIN64A enable-fips no-makedepend
-          nmake /S
+          jom /j4 /S
 
       - name: Build installer
         uses: caphyon/advinst-github-action@7edde34c6ff935e53e3de72a5699efcfceb5f6c6  # v2.0.3 (current main HEAD)

@@ -165,7 +165,7 @@ jobs:
           advinst-license: ${{ secrets.ADVINST_LICENSE_KEY }}
           advinst-enable-automation: 'true'
           aip-path: ${{ github.workspace }}\windows-installer\${{ matrix.openssl-ref }}.aip
-          aip-build-name: DefaultBuild
+          aip-build-name: MsiBuild
           # ResetSig is unconditional: this workflow produces unsigned
           # builds. The .aip's signing config references a certificate
           # that isn't available to GitHub Actions runners; ResetSig
@@ -181,7 +181,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: installer-${{ matrix.openssl-ref }}
-          path: build-target/Installer64/DefaultBuild/*.exe
+          path: build-target/Installer64/MsiBuild/*.exe
           if-no-files-found: error
 
   test:

@@ -181,7 +181,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: installer-${{ matrix.openssl-ref }}
-          path: build-target/Installer64/MsiBuild/*.exe
+          path: build-target/Installer64/MsiBuild/*.msi
           if-no-files-found: error
 
   test:
@@ -214,9 +214,9 @@ jobs:
         id: installer
         shell: pwsh
         run: |
-          $exe = Get-ChildItem build -Recurse -Filter '*.exe' | Select-Object -First 1
-          if (-not $exe) { throw "No installer .exe found in build/" }
-          "path=$($exe.FullName)" >> $env:GITHUB_OUTPUT
+          $msi = Get-ChildItem build -Recurse -Filter '*.msi' | Select-Object -First 1
+          if (-not $msi) { throw "No installer .msi found in build/" }
+          "path=$($msi.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: Run pytest
         run: uv run pytest tests --installer "${{ steps.installer.outputs.path }}" -v

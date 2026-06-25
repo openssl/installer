@@ -75,6 +75,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.SideBySideGuidComponent">
     <ROW Component="APPDIR" Value="{AA65DE23-93F6-4C72-95CF-2B18B68BD6C1}"/>
+    <ROW Component="EnvPath" Value="{69B4391B-143B-4C67-AC45-5F02EAD4BB4C}"/>
     <ROW Component="FIPS_VALIDATED.pdb" Value="{5E5DDCDB-8BA7-4C8C-A5E0-126BD5EC81CD}"/>
     <ROW Component="LICENSE.txt" Value="{0ED15AA5-24CA-4150-9F72-CFD919E73E78}"/>
     <ROW Component="RegistryKeys" Value="{CF911E56-198C-439D-BEF9-17347BC725CB}"/>
@@ -109,6 +110,7 @@
     <ROW Component="AI_ExePath" ComponentId="{6F396ED5-F66D-4150-A035-B5C6F152123F}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
     <ROW Component="APPDIR" ComponentId="{7E5D7034-1B13-4160-B674-591B4D96D031}" Directory_="APPDIR" Attributes="256"/>
     <ROW Component="C4FE6FD5B7C4D07B3A313E754A9A6A8" ComponentId="{1961A149-0B14-467E-B7C1-B4ABB0DF134C}" Directory_="APPDIR" Attributes="260" KeyPath="C4FE6FD5B7C4D07B3A313E754A9A6A8" Options="2"/>
+    <ROW Component="EnvPath" ComponentId="{AA00D10F-F777-43F4-98F2-32DB6EC3BD75}" Directory_="APPDIR" Attributes="256" Condition="ADJUSTSYSTEMPATHENV=&quot;1&quot;"/>
     <ROW Component="FIPS_VALIDATED.pdb" ComponentId="{FEC969D8-813D-4831-BB93-88A82DFA6B4C}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.pdb" Type="4"/>
     <ROW Component="LICENSE.txt" ComponentId="{6A1F00EB-DFE7-47B7-B559-0623EA47904F}" Directory_="APPDIR" Attributes="0" KeyPath="LICENSE.txt"/>
     <ROW Component="RegistryKeys" ComponentId="{BBCB0F4B-DF23-43FB-BB0F-13BFFDFCB010}" Directory_="APPDIR" Attributes="260" KeyPath="EnvPath"/>
@@ -541,9 +543,9 @@
     <ROW FileKey="openssl.cnf_1" Component_="fips.dll_1" File_="openssl.cnf" DestName="openssl.cnf" DestFolder="osslmodules_Dir"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiEnvComponent">
-    <ROW Environment="Include" Name="=-*Include" Value="[include_Dir];[~]" Component_="AI_ExePath"/>
-    <ROW Environment="Lib" Name="=-*Lib" Value="[lib_Dir];[~]" Component_="AI_ExePath"/>
-    <ROW Environment="Path" Name="=-*Path" Value="[bin_Dir];[~]" Component_="AI_ExePath"/>
+    <ROW Environment="Include" Name="=-*Include" Value="[include_Dir];[~]" Component_="EnvPath"/>
+    <ROW Environment="Lib" Name="=-*Lib" Value="[lib_Dir];[~]" Component_="EnvPath"/>
+    <ROW Environment="Path" Name="=-*Path" Value="[bin_Dir];[~]" Component_="EnvPath"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiEventMappingComponent">
     <ROW Dialog_="WelcomeDlg" Control_="ProgressBar" Event="SetProgress" Attribute="Progress"/>
@@ -556,6 +558,7 @@
     <ROW Feature_="DebugFiles" Component_="legacy.pdb"/>
     <ROW Feature_="AlwaysInstalled" Component_="legacy.dll"/>
     <ROW Feature_="AlwaysInstalled" Component_="APPDIR"/>
+    <ROW Feature_="AlwaysInstalled" Component_="EnvPath"/>
     <ROW Feature_="AlwaysInstalled" Component_="version.dat"/>
     <ROW Feature_="AlwaysInstalled" Component_="LICENSE.txt"/>
     <ROW Feature_="Development" Component_="legacy.lib"/>

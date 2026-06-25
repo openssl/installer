@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="18.9" version="23.5.1" Modules="enterprise" RootPath="." Language="en" Id="{AC2B6856-EDC2-4FAD-A624-ED761804420F}" Backup="false">
+<DOCUMENT Type="Advanced Installer" CreateVersion="18.9" version="23.7" Modules="enterprise" RootPath="." Language="en" Id="{AC2B6856-EDC2-4FAD-A624-ED761804420F}" Backup="false">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="ADJUSTSYSTEMPATHENV" Value="1" Type="4"/>
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
@@ -17,7 +17,7 @@
     <ROW Property="ARPCONTACT" Value="support@openssl.org"/>
     <ROW Property="ARPHELPLINK" Value="https://openssl-corporation.org/solutions/support/"/>
     <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
-    <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1#Build:1#MsiBuild_1:1"/>
+    <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://openssl-corporation.org/solutions/support/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://openssl-library.org"/>
     <ROW Property="AiEmbeddedUI" Value="1" MultiBuildValue="DefaultBuild:#Build:#MsiBuild_1:#ExeBuild_1:"/>
@@ -185,10 +185,10 @@
     <ROW Action="AI_AppSearchEx" Condition="AI_BOOTSTRAPPER" Sequence="251"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="Build" BuildName="MsiBuild" BuildOrder="2" BuildType="0" PackageFolder="..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-VS-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" SummInfoMetadata="Page Count:450" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" MsiPackageType="x64"/>
-    <ROW BuildKey="DefaultBuild" BuildName="ExeBuild" BuildOrder="1" BuildType="0" PackageFolder="..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-VS-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" ExeName="OpenSSL-x64-VS-[|ProductVersion]" MsiPackageType="x64"/>
-    <ROW BuildKey="ExeBuild_1" BuildName="ExeBuild_hybrid" BuildOrder="4" BuildType="0" PackageFolder="..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-hybrid-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" SummInfoMetadata="Page Count:450" UseLargeSchema="true" ExeName="OpenSSL-x64-hybrid-[|ProductVersion]" MsiPackageType="x64"/>
-    <ROW BuildKey="MsiBuild_1" BuildName="MsiBuild_hybrid" BuildOrder="3" BuildType="0" PackageFolder="..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-hybrid-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" SummInfoMetadata="Page Count:450" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" MsiPackageType="x64"/>
+    <ROW BuildKey="Build" BuildName="MsiBuild" BuildOrder="2" BuildType="0" PackageFolder="..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-VS-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" MsiPackageType="x64"/>
+    <ROW BuildKey="DefaultBuild" BuildName="ExeBuild" BuildOrder="1" BuildType="0" PackageFolder="..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-VS-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" ExeName="OpenSSL-x64-VS-[|ProductVersion]" MsiPackageType="x64"/>
+    <ROW BuildKey="ExeBuild_1" BuildName="ExeBuild_hybrid" BuildOrder="4" BuildType="0" PackageFolder="..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-hybrid-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" ExeIconPath="resources\logo.ico" SummInfoMetadata="Page Count:450" UseLargeSchema="true" ExeName="OpenSSL-x64-hybrid-[|ProductVersion]" MsiPackageType="x64"/>
+    <ROW BuildKey="MsiBuild_1" BuildName="MsiBuild_hybrid" BuildOrder="3" BuildType="0" PackageFolder="..\build-target\Installer64\[|AI_BUILD_NAME]" PackageFileName="OpenSSL-x64-hybrid-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" MsiPackageType="x64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -248,8 +248,8 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
     <ROW Property="INSTALL_VISUAL_STUDIO" Signature_="AppSearchSign"/>
-    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild;Build;MsiBuild_1;ExeBuild_1"/>
-    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild;Build;MsiBuild_1;ExeBuild_1"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild;ExeBuild_1"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild;ExeBuild_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
     <ROW Name="Prereq.dll" SourcePath="&lt;AI_CUSTACTS&gt;Prereq.dll"/>
@@ -607,16 +607,16 @@
     <ROW Action="AI_DATA_SETTER_1" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;validated&quot; )" Sequence="6402"/>
     <ROW Action="CopyFileFolder_1" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;current&quot; )" Sequence="6405"/>
     <ROW Action="AI_DATA_SETTER_2" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;current&quot; )" Sequence="6404"/>
-    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_DeleteRCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="198" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_ExtractCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="197" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_FindExeLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="196" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_ExtractLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1549" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_DeleteRLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1548" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="DefaultBuild;Build;MsiBuild_1"/>
-    <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild;Build;MsiBuild_1"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="DefaultBuild"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteRCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="198" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="197" Builds="DefaultBuild"/>
+    <ROW Action="AI_FindExeLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="196" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1549" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteRLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1548" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild"/>
     <ROW Action="AI_DATA_SETTER_3" Sequence="1398"/>
     <ROW Action="AI_AiRemoveFilesImmediate" Sequence="3499"/>
   </COMPONENT>
@@ -644,7 +644,7 @@
     <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1"/>
     <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1"/>
     <ROW Condition="(VersionNT &lt;&gt; 600)" Description="[ProductName] cannot be installed on [WindowsTypeNT60Display]." DescriptionLocId="AI.LaunchCondition.NoNT60" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1"/>
-    <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="DefaultBuild;Build;MsiBuild_1;ExeBuild_1"/>
+    <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="DefaultBuild;ExeBuild_1"/>
     <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRadioButtonComponent">

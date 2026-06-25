@@ -206,6 +206,7 @@ jobs:
         uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39  # v3 (= release v3.2.4)
         with:
           enable-cache: true
+          cache-dependency-glob: "" # disables lockfile requirement
 
       - name: Install Python deps
         run: uv sync --frozen || uv sync

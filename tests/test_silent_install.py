@@ -127,7 +127,7 @@ def test_fipsinstall_runs_during_install(installer: InstallerInfo, install_dir: 
     assert cnf_path.exists(), f"{cnf_path} missing — `openssl fipsinstall` did not run during install"
 
     content = cnf_path.read_text(encoding="utf-8")
-    assert "[fipsmodule_sect]" in content, f"missing [fipsmodule_sect] in fipsmodule.cnf:\n{content}"
+    assert "[fips_sect]" in content, f"missing [fips_sect] in fipsmodule.cnf:\n{content}"
     assert "module-mac" in content, f"missing module-mac in fipsmodule.cnf:\n{content}"
 
     exe = install_dir / "bin" / "openssl.exe"

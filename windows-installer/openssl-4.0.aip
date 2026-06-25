@@ -28,7 +28,6 @@
     <ROW Property="INSTALL_APP" Value="1" Type="4"/>
     <ROW Property="INSTALL_FIPS_TYPE" Value="validated" Type="4"/>
     <ROW Property="INSTALL_SDK" Value="1" Type="4"/>
-    <ROW Property="LibraryButton" Value="LibraryButton.png" Type="1"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7#Build:7#MsiBuild_1:7#ExeBuild_1:7"/>
     <ROW Property="Manufacturer" Value="OpenSSL Corporation"/>
     <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp#Build:vp#MsiBuild_1:vp#ExeBuild_1:vp"/>
@@ -251,7 +250,6 @@
     <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild;Build;MsiBuild_1;ExeBuild_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
-    <ROW Name="LibraryButton.png" SourcePath="resources\LibraryButton.png"/>
     <ROW Name="Prereq.dll" SourcePath="&lt;AI_CUSTACTS&gt;Prereq.dll"/>
     <ROW Name="ResourceCleaner.dll" SourcePath="&lt;AI_CUSTACTS&gt;ResourceCleaner.dll"/>
     <ROW Name="TxtUpdater.dll" SourcePath="&lt;AI_CUSTACTS&gt;TxtUpdater.dll"/>

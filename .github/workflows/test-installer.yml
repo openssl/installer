@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-2025
     env:
       # VS 2022 Enterprise and Strawberry Perl are preinstalled on windows-2025.
-      VCVARS: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat'
+      VCVARS: 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Auxiliary\Build\vcvars64.bat'
       # All currently-tested OpenSSL refs pair with the same NIST-validated
       # FIPS module (3.1.2). Pulled in as a sibling 'openssl-fips' checkout.
       FIPS_REF: openssl-3.1.2

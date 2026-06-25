@@ -18,6 +18,7 @@
     <ROW Property="ARPHELPLINK" Value="https://openssl-corporation.org/solutions/support/"/>
     <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="ARPPRODUCTICON" Value="logo.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://openssl-corporation.org/solutions/support/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://openssl-library.org"/>
     <ROW Property="AiEmbeddedUI" Value="1" MultiBuildValue="DefaultBuild:#Build:#MsiBuild_1:#ExeBuild_1:"/>
@@ -580,6 +581,9 @@
     <ROW Feature_="Development" Component_="man1"/>
     <ROW Feature_="Development" Component_="man3_1"/>
     <ROW Feature_="Development" Component_="man5_1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="logo.exe" SourcePath="resources\logo.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1505"/>

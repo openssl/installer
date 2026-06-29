@@ -164,7 +164,7 @@ jobs:
           advinst-version: '23.8'
           advinst-license: ${{ secrets.ADVINST_LICENSE_KEY }}
           advinst-enable-automation: 'true'
-          aip-path: ${{ github.workspace }}\windows-installer\${{ matrix.openssl-ref }}.aip
+          aip-path: ${{ github.workspace }}\windows-installer\openssl.aip
           aip-build-name: MsiBuild
           # ResetSig is unconditional: this workflow produces unsigned
           # builds. The .aip's signing config references a certificate

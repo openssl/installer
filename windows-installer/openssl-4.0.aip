@@ -259,6 +259,7 @@
     <ROW Name="file_deleter.ps1" SourcePath="&lt;AI_SCRIPTS&gt;file_deleter.ps1"/>
     <ROW Name="logo.png" SourcePath="resources\logo.png"/>
     <ROW Name="lzmaextractor.dll" SourcePath="&lt;AI_CUSTACTS&gt;lzmaextractor.dll"/>
+    <ROW Name="openssl_logo_library_transparent.png" SourcePath="resources\openssl_logo_library_transparent.png"/>
     <ROW Name="tempFiles.dll" SourcePath="&lt;AI_CUSTACTS&gt;tempFiles.dll"/>
     <ROW Name="viewer.exe" SourcePath="&lt;AI_CUSTACTS&gt;viewer.exe" DigSign="true"/>
   </COMPONENT>
@@ -275,14 +276,16 @@
     <ROW Feature_="Development" Level="1" Condition="INSTALL_SDK = &quot;1&quot;"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
-    <ROW Dialog_="AboutDlg" Control="Text_1" Type="Text" X="14" Y="75" Width="300" Height="35" Attributes="65539" Property="TEXT_1_PROP_4" Text="Built using Advanced Installer&#13;&#10;Generously provided by Caphyon" TextStyle="[ManufacturerFontSmall]" Order="600"/>
+    <ROW Dialog_="AboutDlg" Control="Text_1" Type="Text" X="14" Y="75" Width="300" Height="35" Attributes="65539" Property="TEXT_1_PROP_4" Text="Built using Advanced Installer, by Caphyon" TextStyle="[ManufacturerFontSmall]" Order="600"/>
     <ROW Dialog_="AboutDlg" Control="LicenseAgreementLink" Type="Hyperlink" X="21" Y="63" Width="193" Height="15" Attributes="65536" Text="&lt;a href=&quot;[AiLicenseAgreementLink]&quot;&gt;[Manufacturer] Software License Terms&lt;/a&gt;" TextStyle="[HyperlinkFont]" Order="700" TextLocId="AppInstaller.Control.Text.LicenseAgreementLink" MsiKey="AboutDlg#LicenseAgreementLink"/>
-    <ROW Dialog_="AboutDlg" Control="Bitmap_1" Type="Bitmap" X="239" Y="8" Width="75" Height="75" Attributes="1" Text="logo.png" Order="800"/>
+    <ROW Dialog_="AboutDlg" Control="Hyperlink_1" Type="Hyperlink" X="14" Y="87" Width="200" Height="16" Attributes="3" Property="HYPERLINK_1_PROP" Text="&lt;a href=&quot;https://www.advancedinstaller.com&quot;&gt;https://www.advancedinstaller.com&lt;/a&gt;" Order="800"/>
+    <ROW Dialog_="AboutDlg" Control="Bitmap_1" Type="Bitmap" X="183" Y="11" Width="131" Height="32" Attributes="1" Text="openssl_logo_library_transparent.png" Order="900"/>
     <ROW Dialog_="AdminWelcomeDlg" Control="Next" Type="ImageButton" X="394" Y="250" Width="74" Height="28" Attributes="3" Text="[ButtonImage]" TextStyle="[ImageBtnFont]" Order="500" MsiKey="AdminWelcomeDlg#Next" Options="1" ExtType="ImageButton" ExtData="[ButtonText_Next]" ExtDataLocId="-"/>
     <ROW Dialog_="ExitDialog" Control="ProductNameTitle" Type="Text" X="15" Y="17" Width="364" Height="32" Attributes="196611" Text="[ProductName] has been [Progress2]" TextStyle="[ProductNameTitleFont]" Order="500" MsiKey="ExitDialog#ProductNameTitle"/>
     <ROW Dialog_="ExitDialog" Control="ProducVersionText" Type="Text" X="16" Y="60" Width="362" Height="15" Attributes="196611" Text="Version: [ProductVersion]" TextStyle="[ManufacturerFont]" Order="800" TextLocId="AppInstaller.Control.Text.ProductVersion" MsiKey="ExitDialog#ProducVersionText"/>
     <ROW Dialog_="ExitDialog" Control="LaunchBtn" Type="ImageButton" X="280" Y="210" Width="95" Height="28" Attributes="3" Text="[ButtonImage]" TextStyle="[ImageBtnFont]" Order="900" MsiKey="ExitDialog#LaunchBtn" ExtType="ImageButton" ExtData="Launch" ExtDataLocId="AppInstaller.Control.Text.LaunchBtn"/>
-    <ROW Dialog_="ExitDialog" Control="Text_2" Type="Text" X="34" Y="244" Width="300" Height="25" Attributes="65539" Property="TEXT_1_PROP_4_1" Text="Built using Advanced Installer&#13;&#10;Generously provided by Caphyon" TextStyle="ManufacturerLightSmall" Order="1100"/>
+    <ROW Dialog_="ExitDialog" Control="Text_1" Type="Text" X="34" Y="244" Width="300" Height="35" Attributes="65539" Property="TEXT_1_PROP_4_2" Text="Built using Advanced Installer, by Caphyon" TextStyle="[ManufacturerFontSmall]" Order="1100"/>
+    <ROW Dialog_="ExitDialog" Control="Hyperlink_1" Type="Hyperlink" X="34" Y="256" Width="200" Height="16" Attributes="3" Property="HYPERLINK_1_PROP_1" Text="&lt;a href=&quot;https://www.advancedinstaller.com&quot;&gt;https://www.advancedinstaller.com&lt;/a&gt;" Order="1200"/>
     <ROW Dialog_="FolderDialog_0" Control="Cancel" Type="ImageButton" X="0" Y="0" Width="0" Height="0" Attributes="2" Text="[ButtonImage]" TextStyle="ImageButtonLight_EAAD7B6E_A773_4204E99F4_2C47_4B6A_9D3E_7179DB33176D" Order="100" ExtType="ImageButton" ExtData="[ButtonText_Cancel]" ExtDataLocId="-"/>
     <ROW Dialog_="FolderDialog_0" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="490" Height="290" Attributes="1" Text="[Background]" Order="200"/>
     <ROW Dialog_="FolderDialog_0" Control="Next" Type="ImageButton" X="393" Y="250" Width="74" Height="28" Attributes="3" Text="[ButtonImage]" TextStyle="ImageButtonLight_EAAD7B6E_A773_4204E99F4_2C47_4B6A_9D3E_7179DB33176D" Order="300" ExtType="ImageButton" ExtData="[ButtonText_Next]" ExtDataLocId="-"/>
@@ -541,7 +544,7 @@
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDialogComponent">
-    <ROW Dialog="AboutDlg" HCentering="50" VCentering="50" Width="326" Height="116" Attributes="7" Title="[ProductName] [ProductVersion] [Setup]" Control_Default="No" Control_Cancel="No" MsiKey="AboutDlg"/>
+    <ROW Dialog="AboutDlg" HCentering="50" VCentering="50" Width="326" Height="116" Attributes="7" Title="About [ProductName]" Control_Default="No" Control_Cancel="No" MsiKey="AboutDlg"/>
     <ROW Dialog="AdminWelcomeDlg" HCentering="50" VCentering="50" Width="490" Height="290" Attributes="7" Title="[ProductName] [ProductVersion] [Setup]" Control_Default="Next" Control_Cancel="Cancel" MsiKey="AdminWelcomeDlg"/>
     <ROW Dialog="BrowseDlg" HCentering="50" VCentering="50" Width="490" Height="290" Attributes="3" Title="[ProductName] [ProductVersion] [Setup]" Control_Default="OK" Control_Cancel="Cancel" MsiKey="BrowseDlg"/>
     <ROW Dialog="CancelDlg" HCentering="50" VCentering="50" Width="330" Height="120" Attributes="7" Title="[ProductName] [ProductVersion] [Setup]" Control_Default="No" Control_Cancel="No" MsiKey="CancelDlg"/>
@@ -599,12 +602,12 @@
     <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf"/>
     <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf.dist"/>
     <ROW Feature_="AlwaysInstalled" Component_="openssl.cnf"/>
-    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
     <ROW Feature_="Development" Component_="man7_1"/>
     <ROW Feature_="Development" Component_="openssl"/>
     <ROW Feature_="Development" Component_="man1"/>
     <ROW Feature_="Development" Component_="man3_1"/>
     <ROW Feature_="Development" Component_="man5_1"/>
+    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="logo.exe" SourcePath="resources\logo.ico" Index="0"/>

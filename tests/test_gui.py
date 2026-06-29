@@ -6,6 +6,7 @@
 # wizard is restructured, expect these selectors to need updates.
 from __future__ import annotations
 
+import os
 import subprocess
 import time
 from contextlib import suppress
@@ -141,7 +142,7 @@ def _current_static(dlg: Any) -> str:
     """Return the dialog's header label text (Static in AI's layout)."""
     return dlg.Static.window_text()
 
-
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="GUI tests require interactive session")
 def test_welcome_to_install_full_flow(wizard: Wizard, installer: InstallerInfo) -> None:
     """Walk the wizard from welcome through the additional-options dialog,
     asserting expected state at each step. The fixture cancels on teardown."""
@@ -185,6 +186,7 @@ def test_welcome_to_install_full_flow(wizard: Wizard, installer: InstallerInfo) 
     assert dlg.CheckBox2.get_toggle_state() == 0, "FIPS should default OFF"
 
 
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="GUI tests require interactive session")
 def test_fips_requires_app(wizard: Wizard) -> None:
     """On the additional-options page, enabling FIPS without the app must
     produce 'FIPS can't be installed without the openssl app.'."""

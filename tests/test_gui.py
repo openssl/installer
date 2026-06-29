@@ -43,8 +43,12 @@ def wizard(installer: InstallerInfo):
     uninstall(installer)
     if installer.path.suffix.lower() == ".exe":
         proc = subprocess.Popen([str(installer.path)])
+        # wait for startup
+        time.sleep(2)
     else:
         proc = subprocess.Popen(["msiexec.exe", "/i", str(installer.path)])
+        # wait for startup
+        time.sleep(2)
     try:
         app = Application(backend="uia").connect(
             title_re=f"OpenSSL Library {installer.version} Setup",
@@ -134,8 +138,8 @@ def _click_and_advance(dlg: Any, app: Any, button: str = "Next") -> Any:
 
 
 def _current_static(dlg: Any) -> str:
-    """Return the dialog's header label text (Static2 in AI's layout)."""
-    return dlg.Static2.window_text()
+    """Return the dialog's header label text (Static1 in AI's layout)."""
+    return dlg.Static1.window_text()
 
 
 def test_welcome_to_install_full_flow(wizard: Wizard, installer: InstallerInfo) -> None:
@@ -143,28 +147,25 @@ def test_welcome_to_install_full_flow(wizard: Wizard, installer: InstallerInfo) 
     asserting expected state at each step. The fixture cancels on teardown."""
     app, dlg = wizard
 
-    # ---- 1. Welcome dialog ----
-    dlg = _click_and_advance(dlg, app)
+    # ---- 1. License agreement ----
+    assert _current_static(dlg) == "OpenSSL Library License Agreement", f"unexpected dialog title: {_current_static(dlg)!r}"
+    dlg.IAgree.click()  # Accept
 
-    # ---- 2. License agreement ----
-    assert _current_static(dlg) == "End-User License Agreement", f"unexpected dialog title: {_current_static(dlg)!r}"
-    assert not dlg.Next.is_enabled(), "Next should be disabled before accepting the license"
-    dlg.RadioButton1.click()  # Accept
-    assert dlg.Next.is_enabled(), "Next should be enabled after accepting the license"
-    dlg = _click_and_advance(dlg, app)
-
-    # ---- 3. Install path ----
-    assert _current_static(dlg) == "Select Installation Folder", f"unexpected dialog title: {_current_static(dlg)!r}"
+    # ---- 2. Install path ----
+    dlg = app.top_window()
+    assert _current_static(dlg) == "Choose install location", f"unexpected dialog title: {_current_static(dlg)!r}"
     expected_path = f"C:\\Program Files\\OpenSSL Library\\openssl-{installer.short}\\"
-    actual_path = dlg.ComboBox.selected_text()
+    actual_path = dlg.Edit.get_value()
     assert actual_path == expected_path, f"install path: expected {expected_path!r}, got {actual_path!r}"
     dlg = _click_and_advance(dlg, app)
 
-    # ---- 4. Components ----
-    assert _current_static(dlg) == "Components to install"
+    # ---- 3. Components ----
+    dlg = app.top_window()
+    assert _current_static(dlg) == "Options to install"
     # App and SDK should default to on.
     assert dlg.CheckBox1.get_toggle_state() == 1, "Install application should default ON"
     assert dlg.CheckBox2.get_toggle_state() == 1, "Install SDK should default ON"
+    assert dlg.CheckBox3.get_toggle_state() == 1, "Adjust path should default ON"
 
     # Turning both off should be blocked.
     dlg.CheckBox1.click()
@@ -177,8 +178,9 @@ def test_welcome_to_install_full_flow(wizard: Wizard, installer: InstallerInfo) 
     dlg.CheckBox2.click()
     dlg = _click_and_advance(dlg, app)
 
-    # ---- 5. Additional options ----
-    assert _current_static(dlg) == "Configuring additional Options"
+    # ---- 4. Additional options ----
+    dlg = app.top_window()
+    assert _current_static(dlg) == "Options to install"
     # FIPS off by default; its sub-options should not be enabled.
     assert dlg.CheckBox2.get_toggle_state() == 0, "FIPS should default OFF"
 
@@ -188,20 +190,21 @@ def test_fips_requires_app(wizard: Wizard) -> None:
     produce 'FIPS can't be installed without the openssl app.'."""
     app, dlg = wizard
 
-    # Welcome → License (accept) → Path → Components
+    # License (accept) → Path → Components
+    dlg.IAgree.click()  # Accept
+    dlg = app.top_window()
     dlg = _click_and_advance(dlg, app)
-    dlg.RadioButton1.click()
-    dlg = _click_and_advance(dlg, app)
-    dlg = _click_and_advance(dlg, app)
+    dlg = app.top_window()
 
     # Components: turn the app off.
-    assert _current_static(dlg) == "Components to install"
+    assert _current_static(dlg) == "Options to install"
     dlg.CheckBox1.click()
     dlg = _click_and_advance(dlg, app)
+    dlg = app.top_window()
 
     # Additional options: enable FIPS — should error.
-    assert _current_static(dlg) == "Configuring additional Options"
-    dlg.CheckBox2.click()
-    dlg.Next.click()
-    popup = _find_popup(app, "openssl app")
+    assert _current_static(dlg) == "Options to install"
+    dlg.CheckBox.click()
+    dlg.Install.click()
+    popup = _find_popup(app, "it is required to generate the FIPS configuration file")
     popup.OK.click()

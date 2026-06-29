@@ -57,9 +57,7 @@ def test_fips_validated(installer: InstallerInfo, install_dir: Path, config: dic
         ],
     )
     check_files(config, installer, ("app", "sdk", "fips", "fips_sdk"))
-    expected = config["fips"]["validated_versions"].get(installer.short)
-    if expected is None:
-        pytest.skip(f"no validated FIPS version configured for OpenSSL {installer.short}")
+    expected = config["fips"]["validated_versions"]
     check_fips_provider(install_dir, expected)
 
 

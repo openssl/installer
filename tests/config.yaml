@@ -3,13 +3,8 @@
 # in .github/workflows/test-installer.yml.
 
 fips:
-  # Expected FIPS provider version per OpenSSL major.minor. test_fips_validated
-  # asserts `openssl list -provider=fips` reports this string when
-  # INSTALL_FIPS_TYPE=validated. Major.minor releases absent from this map
-  # skip the validated-FIPS check (e.g., master / pre-release branches).
-  # The "current" FIPS module always matches the OpenSSL version under test.
-  validated_versions:
-    "3.5": "3.1.2"
+  # The current validated module
+  validated_versions: "3.1.2"
 
 paths:
   install_root: 'C:\Program Files\OpenSSL Library'

@@ -29,6 +29,7 @@
     <ROW Property="INSTALL_APP" Value="1" Type="4"/>
     <ROW Property="INSTALL_FIPS_TYPE" Value="validated" Type="4"/>
     <ROW Property="INSTALL_SDK" Value="1" Type="4"/>
+    <ROW Property="InstallerVersion" Value="0.9.0"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7#Build:7#MsiBuild_1:7#ExeBuild_1:7"/>
     <ROW Property="Manufacturer" Value="OpenSSL Corporation"/>
     <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp#Build:vp#MsiBuild_1:vp#ExeBuild_1:vp"/>
@@ -276,10 +277,12 @@
     <ROW Feature_="Development" Level="1" Condition="INSTALL_SDK = &quot;1&quot;"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
+    <ROW Dialog_="AboutDlg" Control="ProducVersionText" Type="Text" X="14" Y="52" Width="200" Height="15" Attributes="196611" Text="© [AI_CURRENT_YEAR] [Manufacturer]" TextStyle="[ManufacturerFontSmall]" Order="500" TextLocId="-" MsiKey="AboutDlg#ProducVersionText"/>
     <ROW Dialog_="AboutDlg" Control="Text_1" Type="Text" X="14" Y="75" Width="300" Height="35" Attributes="65539" Property="TEXT_1_PROP_4" Text="Built using Advanced Installer, by Caphyon" TextStyle="[ManufacturerFontSmall]" Order="600"/>
     <ROW Dialog_="AboutDlg" Control="LicenseAgreementLink" Type="Hyperlink" X="21" Y="63" Width="193" Height="15" Attributes="65536" Text="&lt;a href=&quot;[AiLicenseAgreementLink]&quot;&gt;[Manufacturer] Software License Terms&lt;/a&gt;" TextStyle="[HyperlinkFont]" Order="700" TextLocId="AppInstaller.Control.Text.LicenseAgreementLink" MsiKey="AboutDlg#LicenseAgreementLink"/>
     <ROW Dialog_="AboutDlg" Control="Hyperlink_1" Type="Hyperlink" X="14" Y="87" Width="200" Height="16" Attributes="3" Property="HYPERLINK_1_PROP" Text="&lt;a href=&quot;https://www.advancedinstaller.com&quot;&gt;https://www.advancedinstaller.com&lt;/a&gt;" Order="800"/>
     <ROW Dialog_="AboutDlg" Control="Bitmap_1" Type="Bitmap" X="183" Y="11" Width="131" Height="32" Attributes="1" Text="openssl_logo_library_transparent.png" Order="900"/>
+    <ROW Dialog_="AboutDlg" Control="Text_2" Type="Text" X="14" Y="40" Width="200" Height="15" Attributes="65539" Property="TEXT_2_PROP" Text="Installer version: [InstallerVersion]" TextStyle="[ManufacturerFontSmall]" Order="1000"/>
     <ROW Dialog_="AdminWelcomeDlg" Control="Next" Type="ImageButton" X="394" Y="250" Width="74" Height="28" Attributes="3" Text="[ButtonImage]" TextStyle="[ImageBtnFont]" Order="500" MsiKey="AdminWelcomeDlg#Next" Options="1" ExtType="ImageButton" ExtData="[ButtonText_Next]" ExtDataLocId="-"/>
     <ROW Dialog_="ExitDialog" Control="ProductNameTitle" Type="Text" X="15" Y="17" Width="364" Height="32" Attributes="196611" Text="[ProductName] has been [Progress2]" TextStyle="[ProductNameTitleFont]" Order="500" MsiKey="ExitDialog#ProductNameTitle"/>
     <ROW Dialog_="ExitDialog" Control="ProducVersionText" Type="Text" X="16" Y="60" Width="362" Height="15" Attributes="196611" Text="Version: [ProductVersion]" TextStyle="[ManufacturerFont]" Order="800" TextLocId="AppInstaller.Control.Text.ProductVersion" MsiKey="ExitDialog#ProducVersionText"/>

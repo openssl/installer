@@ -145,6 +145,9 @@ jobs:
         working-directory: openssl
         run: |
           call "%VCVARS%"
+          rem MSVC hardening flags
+          set "CFLAGS=/guard:cf /Qspectre"
+          set "LDFLAGS=/GUARD:CF /CETCOMPAT"
           perl Configure VC-WIN64A enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
           jom /j4 /S
           jom build_docs

@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build MSI (${{ matrix.openssl-ref }})
+    name: Build installers (${{ matrix.openssl-ref }})
     runs-on: windows-2025
     env:
       # VS 2022 Enterprise and Strawberry Perl are preinstalled on windows-2025.
@@ -158,14 +158,13 @@ jobs:
           perl Configure VC-WIN64A enable-fips no-makedepend
           jom /j4 /S
 
-      - name: Build installer
+      - name: Build installers
         uses: caphyon/advinst-github-action@7edde34c6ff935e53e3de72a5699efcfceb5f6c6  # v2.0.3 (current main HEAD)
         with:
           advinst-version: '23.8'
           advinst-license: ${{ secrets.ADVINST_LICENSE_KEY }}
           advinst-enable-automation: 'true'
           aip-path: ${{ github.workspace }}\windows-installer\openssl.aip
-          aip-build-name: MsiBuild
           # ResetSig is unconditional: this workflow produces unsigned
           # builds. The .aip's signing config references a certificate
           # that isn't available to GitHub Actions runners; ResetSig
@@ -177,29 +176,36 @@ jobs:
             SetProperty VERSION_MINOR=${{ steps.openssl_version.outputs.minor }}
             SetProperty VERSION_REGISTRY=${{ steps.openssl_version.outputs.winctx }}
 
-      - name: Upload installer
+      - name: Upload installers
         uses: actions/upload-artifact@v4
         with:
-          name: installer-${{ matrix.openssl-ref }}
-          path: build-target/Installer64/MsiBuild/*.msi
+          name: installers-${{ matrix.openssl-ref }}
+          path: |
+            build-target/Installer64/*.exe
+            build-target/Installer64/*.msi
           if-no-files-found: error
 
   test:
-    name: Test on ${{ matrix.os }} (${{ matrix.openssl-ref }})
+    name: Test ${{ matrix.installer }} on ${{ matrix.os }}
     needs: build
     strategy:
       fail-fast: false
       matrix:
         os: [windows-2022, windows-2025]
         openssl-ref: [openssl-4.0]
+        installer:
+          - OpenSSL-x64-VS-*.exe
+          - OpenSSL-x64-VS-*.msi
+          - OpenSSL-x64-hybrid-*.exe
+          - OpenSSL-x64-hybrid-*.msi
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
 
-      - name: Download installer
+      - name: Download installers
         uses: actions/download-artifact@v4
         with:
-          name: installer-${{ matrix.openssl-ref }}
+          name: installers-${{ matrix.openssl-ref }}
           path: build
 
       - name: Install uv
@@ -215,9 +221,14 @@ jobs:
         id: installer
         shell: pwsh
         run: |
-          $msi = Get-ChildItem build -Recurse -Filter '*.msi' | Select-Object -First 1
-          if (-not $msi) { throw "No installer .msi found in build/" }
-          "path=$($msi.FullName)" >> $env:GITHUB_OUTPUT
+          $pattern = '${{ matrix.installer }}'
+          $file = Get-ChildItem build -Recurse -File |
+              Where-Object { $_.Name -like $pattern } |
+              Select-Object -First 1
+          if (-not $file) { throw "No installer matching '$pattern' found in build/" }
+          $mb = [math]::Round($file.Length / 1MB, 2)
+          Write-Host "Testing installer: $($file.Name) ($mb MB)"
+          "path=$($file.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: Run pytest
         run: uv run pytest tests --installer "${{ steps.installer.outputs.path }}" -v

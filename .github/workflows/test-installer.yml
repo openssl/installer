@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build installers (${{ matrix.openssl-ref }})
+    name: Build ${{ matrix.crt.flavor }} installers (${{ matrix.openssl-ref }})
     runs-on: windows-2025
     env:
       # VS 2022 Enterprise and Strawberry Perl are preinstalled on windows-2025.
@@ -23,6 +23,15 @@ jobs:
       matrix:
         # Only refs with a corresponding windows-installer/<ref>.aip.
         openssl-ref: [openssl-4.0]
+        # The two CRT flavors build on separate runners (in parallel). Each leg
+        # compiles its own OpenSSL target into ..\openssl and packages the
+        # matching installers from that tree, so the hybrid installers really
+        # contain HybridCRT binaries — no second source dir needed in the .aip.
+        #   vs     → VC-WIN64A           → dynamic VC++ runtime (needs the redist)
+        #   hybrid → VC-WIN64A-HYBRIDCRT → UCRT via forwarders, no VC++ redist
+        crt:
+          - { flavor: vs,     target: VC-WIN64A,           keep: OpenSSL-x64-VS-* }
+          - { flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, keep: OpenSSL-x64-hybrid-* }
     steps:
       - name: Checkout installer
         uses: actions/checkout@v6
@@ -84,7 +93,7 @@ jobs:
           # valid until a new tag appears (which bumps `version`) or
           # FIPS_REF changes. Bump the suffix (-v1 → -v2 …) to manually
           # invalidate if build flags change.
-          key: openssl-build-${{ runner.os }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-fips-${{ env.FIPS_REF }}-v1
+          key: openssl-build-${{ runner.os }}-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-fips-${{ env.FIPS_REF }}-v1
 
       - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
         if: steps.openssl_cache.outputs.cache-hit != 'true'
@@ -139,22 +148,32 @@ jobs:
           git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-Windows-Use-Z7-compiler-flag-to-enable-parallel-buil.patch"
           if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
 
-      - name: Build OpenSSL
+      - name: Build OpenSSL (${{ matrix.crt.target }})
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: cmd
         working-directory: openssl
         run: |
           call "%VCVARS%"
-          perl Configure VC-WIN64A enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
+          perl Configure ${{ matrix.crt.target }} enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
           jom /j4 /S
           jom build_docs
 
-      - name: Build OpenSSL (FIPS source)
+      - name: Build OpenSSL FIPS (VC-WIN64A)
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: cmd
         working-directory: openssl-fips
         run: |
           call "%VCVARS%"
+          rem The validated FIPS module is ALWAYS built VC-WIN64A — on BOTH the
+          rem vs and hybrid legs (note: not ${{ matrix.crt.target }}). It is
+          rem compiled from openssl-3.1.2 and shipped unchanged in every
+          rem installer. It is deliberately NOT built HybridCRT: that would
+          rem deviate from the module's validated Security Policy (and
+          rem openssl-3.1.2 predates Configurations/50-win-hybridcrt.conf
+          rem anyway, so VC-WIN64A-HYBRIDCRT is unknown in this tree). The
+          rem hybrid installer still packages this VC-WIN64A module, but its UI
+          rem no longer offers the "validated" option (commit 63b0a77), so the
+          rem VC++-runtime dependency the module carries is never surfaced there.
           perl Configure VC-WIN64A enable-fips no-makedepend
           jom /j4 /S
 
@@ -179,10 +198,13 @@ jobs:
       - name: Upload installers
         uses: actions/upload-artifact@v4
         with:
-          name: installers-${{ matrix.openssl-ref }}
+          name: installers-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}
+          # advinst builds all four builds from this leg's tree; upload only the
+          # two whose names match this flavor — the other two would carry the
+          # wrong CRT. (Output is flat in build-target\Installer64 since e8ecd4b.)
           path: |
-            build-target/Installer64/*.exe
-            build-target/Installer64/*.msi
+            build-target/Installer64/${{ matrix.crt.keep }}.exe
+            build-target/Installer64/${{ matrix.crt.keep }}.msi
           if-no-files-found: error
 
   test:
@@ -205,8 +227,11 @@ jobs:
       - name: Download installers
         uses: actions/download-artifact@v4
         with:
-          name: installers-${{ matrix.openssl-ref }}
+          # Both flavor artifacts (installers-vs-* and installers-hybrid-*)
+          # merged into one dir; the select step below picks this leg's file.
+          pattern: installers-*-${{ matrix.openssl-ref }}
           path: build
+          merge-multiple: true
 
       - name: Install uv
         uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39  # v3 (= release v3.2.4)
@@ -217,7 +242,7 @@ jobs:
       - name: Install Python deps
         run: uv sync --frozen || uv sync
 
-      - name: Isolate installer under test
+      - name: Select installer under test
         id: installer
         shell: pwsh
         run: |
@@ -228,18 +253,13 @@ jobs:
           if (-not $file) { throw "No installer matching '$pattern' found in build/" }
           $mb = [math]::Round($file.Length / 1MB, 2)
           Write-Host "Testing installer: $($file.Name) ($mb MB)"
-          # Copy ONLY the installer under test into an empty directory, and
-          # point pytest at that copy. download-artifact co-locates all four
-          # builds, so a non-self-contained .exe bootstrapper would silently
-          # launch a sibling .msi from the same folder and pass — masking a
-          # stub build. Each artifact must stand on its own: an installer is a
-          # standalone deliverable, so we test it the way a user runs it.
-          $dir = Join-Path $env:RUNNER_TEMP 'installer-under-test'
-          Remove-Item -Recurse -Force $dir -ErrorAction SilentlyContinue
-          New-Item -ItemType Directory -Force -Path $dir | Out-Null
-          $dest = Join-Path $dir $file.Name
-          Copy-Item -LiteralPath $file.FullName -Destination $dest -Force
-          "path=$dest" >> $env:GITHUB_OUTPUT
+          # download-artifact co-locates all four builds in build/, so a
+          # non-self-contained .exe bootstrapper could silently launch a sibling
+          # .msi from the same folder and pass — masking a stub build. The pytest
+          # `installer` fixture defends against this: it copies the single file
+          # under test into an otherwise-empty temp dir before installing, so
+          # each artifact is exercised the way a user runs a standalone download.
+          "path=$($file.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: Run pytest
         run: uv run pytest tests --installer "${{ steps.installer.outputs.path }}" -v

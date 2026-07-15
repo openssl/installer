@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -98,6 +99,7 @@ class InstallerInfo:
     minor: str  # "0"
     patch: str  # "0"
     short: str  # "4.0" — also the registry_version
+    flavor: str  # CRT flavor: "vs" (VC-WIN64A) or "hybrid" (VC-WIN64A-HYBRIDCRT)
 
 
 @pytest.fixture(scope="session")
@@ -193,8 +195,27 @@ def _strip_url_credentials(url: str) -> str:
     return urlunparse(parsed._replace(netloc=netloc))
 
 
+def _detect_flavor(filename: str) -> str:
+    """Derive the CRT flavor from the installer filename.
+
+    Artifacts are named OpenSSL-x64-VS-<ver>.{exe,msi} (VC-WIN64A, dynamic
+    VC++ runtime) or OpenSSL-x64-hybrid-<ver>.{exe,msi} (VC-WIN64A-HYBRIDCRT,
+    static vcruntime + UCRT via forwarders). The token, not the file contents,
+    is authoritative — it's what distinguishes the two artifacts a build
+    produces from the same source tree.
+    """
+    if re.search(r"-hybrid-", filename, re.IGNORECASE):
+        return "hybrid"
+    if re.search(r"-vs-", filename, re.IGNORECASE):
+        return "vs"
+    pytest.exit(
+        f"Cannot determine CRT flavor (expected '-VS-' or '-hybrid-') from installer filename: {filename}",
+        returncode=2,
+    )
+
+
 @pytest.fixture(scope="session")
-def installer(request) -> InstallerInfo:
+def installer(request, tmp_path_factory) -> InstallerInfo:
     arg = request.config.getoption("--installer")
     if not arg:
         pytest.exit("--installer <path-or-url-to-exe-or-msi> is required", returncode=2)
@@ -214,13 +235,27 @@ def installer(request) -> InstallerInfo:
     assert m is not None  # pytest.exit above raises; this narrows for mypy
     version = m.group(1)
     major, minor, patch = version.split(".")
+    flavor = _detect_flavor(path.name)
+
+    # Isolation: copy ONLY this installer into an otherwise-empty directory and
+    # test that copy. A non-self-contained .exe bootstrapper co-located with a
+    # sibling .msi (as in the CI artifact dir, or any download folder) could
+    # silently borrow the sibling and pass — masking a broken/stub build. Each
+    # installer is a standalone deliverable, so we exercise it in isolation the
+    # way a user who downloaded just that one file would. Session-scoped: copied
+    # once per run.
+    isolated_dir = tmp_path_factory.mktemp("installer-under-test")
+    isolated_path = isolated_dir / path.name
+    shutil.copy2(path, isolated_path)
+
     return InstallerInfo(
-        path=path,
+        path=isolated_path,
         version=version,
         major=major,
         minor=minor,
         patch=patch,
         short=f"{major}.{minor}",
+        flavor=flavor,
     )
 
 
@@ -337,6 +372,15 @@ def repair(info: InstallerInfo) -> None:
         raise RuntimeError("no OpenSSL Library product installed to repair")
     for product_code, _ in products:
         _msiexec(["/fa", product_code, "/qn"], check=True)
+
+
+def supported_fips_type(info: InstallerInfo) -> str:
+    """The FIPS module type a flavor offers: VS installers default to the
+    validated 3.1.2 module; hybrid installers only offer the current-version
+    module (commit 63b0a77 disabled the validated option there, because the
+    validated module is VC-WIN64A and would drag the VC++ runtime into an
+    otherwise-HybridCRT install)."""
+    return "validated" if info.flavor == "vs" else "current"
 
 
 # --- expected-file checks ----------------------------------------------
@@ -482,3 +526,121 @@ def check_registry(config: dict, info: InstallerInfo, install_dir: Path):
                 except FileNotFoundError as e:
                     raise AssertionError(f"registry value missing: HKLM\\{path}::{name}") from e
                 assert _path_eq_winsafe(actual, expected), f"HKLM\\{path}::{name}: expected {expected!r}, got {actual!r}"
+
+
+# --- PE import-table checks (CRT flavor) -------------------------------
+#
+# The definitive on-disk signature of the CRT flavor: a VC-WIN64A ("VS")
+# binary links the dynamic VC++ runtime and therefore imports
+# vcruntime140.dll; a VC-WIN64A-HYBRIDCRT ("hybrid") binary links vcruntime
+# statically and reaches the UCRT through the OS api-ms-win-crt-* forwarders,
+# so it imports neither vcruntime140.dll nor msvcp140.dll. This is checked
+# directly against the installed binaries because it is robust on GitHub
+# runners, which ship the VC++ runtime pre-installed — a plain install test
+# would pass on both flavors regardless.
+
+VCRUNTIME_DLLS = ("vcruntime140.dll", "vcruntime140_1.dll", "msvcp140.dll")
+
+
+def imported_dlls(binary: Path) -> set[str]:
+    """Return the set of DLL names (lowercased) in `binary`'s PE import table."""
+    import pefile  # imported lazily so conftest loads without pefile on dev boxes
+
+    pe = pefile.PE(str(binary), fast_load=True)
+    try:
+        pe.parse_data_directories(directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_IMPORT"]])
+        names: set[str] = set()
+        for entry in getattr(pe, "DIRECTORY_ENTRY_IMPORT", []):
+            if entry.dll:
+                names.add(entry.dll.decode("ascii", "ignore").lower())
+        return names
+    finally:
+        pe.close()
+
+
+# --- MSI UI-table introspection (FIPS-disable-in-hybrid check) ---------
+#
+# Commit 63b0a77 disables the *validated* FIPS option in the hybrid installers
+# purely at the UI layer, gated on the build name (AI_BUILD_NAME is one of
+# "ExeBuild_hybrid" / "MsiBuild_hybrid"):
+#   * ControlCondition hides RadioButtonGroup_1 (the validated/current picker);
+#   * a ControlEvent forces INSTALL_FIPS_TYPE=current when OptionsDlg opens.
+# The validated file components are NOT build-gated, so a headless silent
+# install can't observe the change — the faithful check is to read these rows
+# straight out of the MSI database via the Windows Installer automation object.
+
+HYBRID_BUILD_NAMES = ("ExeBuild_hybrid", "MsiBuild_hybrid")
+VS_BUILD_NAMES = ("ExeBuild", "MsiBuild")
+
+
+def _msi_installer_com():
+    """The WindowsInstaller.Installer automation object (pywin32, Windows-only)."""
+    import win32com.client  # provided by pywin32, a transitive pywinauto dependency
+
+    return win32com.client.Dispatch("WindowsInstaller.Installer")
+
+
+def open_installer_database(info: InstallerInfo):
+    """Open the installer's MSI database read-only via Windows Installer COM.
+
+    For a bare .msi the file is opened directly. For the .exe bootstrapper the
+    inner MSI isn't a loose file, so we read the copy Windows Installer cached
+    at install time (ProductInfo/LocalPackage) — the caller must have installed
+    the product first. The cached package keeps the full authoring tables
+    (Property, Control*, ...), which is all this introspection needs.
+    """
+    inst = _msi_installer_com()
+    msi_open_read_only = 0
+    if info.path.suffix.lower() == ".msi":
+        return inst.OpenDatabase(str(info.path), msi_open_read_only)
+    products = _find_installed_openssl_products()
+    if not products:
+        raise RuntimeError("cannot introspect an .exe installer's MSI before the product is installed")
+    product_code = products[0][0]
+    local_package = inst.ProductInfo(product_code, "LocalPackage")
+    return inst.OpenDatabase(local_package, msi_open_read_only)
+
+
+def msi_query_one(db, sql: str) -> str | None:
+    """Run `sql` against MSI database `db` and return the first column of the
+    first row, or None if the query returns no rows."""
+    view = db.OpenView(sql)
+    view.Execute()
+    try:
+        record = view.Fetch()
+        return record.StringData(1) if record is not None else None
+    finally:
+        view.Close()
+
+
+def msi_fips_ui_facts(db) -> dict[str, str | None]:
+    """Extract the FIPS-related UI facts the hybrid-disable relies on."""
+    return {
+        "build_name": msi_query_one(db, "SELECT `Value` FROM `Property` WHERE `Property`='AI_BUILD_NAME'"),
+        "default_type": msi_query_one(db, "SELECT `Value` FROM `Property` WHERE `Property`='INSTALL_FIPS_TYPE'"),
+        "hide_condition": msi_query_one(
+            db,
+            "SELECT `Condition` FROM `ControlCondition` WHERE `Dialog_`='OptionsDlg' "
+            "AND `Control_`='RadioButtonGroup_1' AND `Action`='Hide'",
+        )
+        or "",
+        "force_current_condition": msi_query_one(
+            db,
+            "SELECT `Condition` FROM `ControlEvent` WHERE `Dialog_`='OptionsDlg' "
+            "AND `Event`='[INSTALL_FIPS_TYPE]' AND `Argument`='current'",
+        )
+        or "",
+    }
+
+
+def validated_option_disabled(facts: dict[str, str | None]) -> bool:
+    """Given the MSI's own AI_BUILD_NAME, decide whether the validated FIPS
+    option is disabled for THIS build.
+
+    The hide/force rows live in every build's MSI but are conditioned on the
+    hybrid build names; the option is disabled only when this build's name is
+    the one named in both conditions. Matching the fully-quoted name avoids the
+    "MsiBuild" ⊂ "MsiBuild_hybrid" substring trap.
+    """
+    quoted = f'"{facts["build_name"]}"'
+    return quoted in (facts["hide_condition"] or "") and quoted in (facts["force_current_condition"] or "")

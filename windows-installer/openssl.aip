@@ -25,6 +25,7 @@
     <ROW Property="AiWinUI" Value="1" MultiBuildValue="DefaultBuild:#Build:#MsiBuild_1:#ExeBuild_1:"/>
     <ROW Property="AppLogoIcon" Value="applogo.png" MultiBuildValue="DefaultBuild:logo.png#Build:logo.png#MsiBuild_1:logo.png#ExeBuild_1:logo.png" Type="1" MsiKey="AppLogoIcon"/>
     <ROW Property="FIPS_CONF" Value="openssl"/>
+    <ROW Property="FIPS_OPTION_TEXT" Value="Install FIPS provider" MultiBuildValue="MsiBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_1:Install FIPS provider ([|ProductVersion])"/>
     <ROW Property="FIPS_VALIDATED" Value="fips"/>
     <ROW Property="INSTALL_APP" Value="1" Type="4"/>
     <ROW Property="INSTALL_FIPS_TYPE" Value="validated" Type="4"/>
@@ -322,6 +323,7 @@
     <ROW Dialog_="MaintenanceWelcomeDlg" Control="Description" Type="Text" X="16" Y="158" Width="454" Height="30" Attributes="196610" Text="Reinstall or launch [ProductName]" TextStyle="[DescriptionFont]" Order="600" TextLocId="AppInstaller.Control.Text.MaintDesc" MsiKey="MaintenanceWelcomeDlg#Description"/>
     <ROW Dialog_="MaintenanceWelcomeDlg" Control="ProductNameTitle" Type="Text" X="15" Y="17" Width="364" Height="32" Attributes="196611" Text="Maintain [ProductName]" TextStyle="[ProductNameTitleFont]" Order="700" MsiKey="MaintenanceWelcomeDlg#ProductNameTitle"/>
     <ROW Dialog_="MaintenanceWelcomeDlg" Control="UninstallButton" Type="ImageButton" X="314" Y="250" Width="74" Height="28" Attributes="3" Text="[ButtonImage]" TextStyle="[ImageBtnFont]" Order="1200" ExtType="ImageButton" ExtData="Uninstall"/>
+    <ROW Dialog_="OptionsDlg" Control="OptionsDlgDialogInitializer" Type="DialogInitializer" X="0" Y="0" Width="0" Height="0" Attributes="0" Order="-1" TextLocId="-" HelpLocId="-" ExtDataLocId="-"/>
     <ROW Dialog_="OptionsDlg" Control="Cancel" Type="ImageButton" X="0" Y="0" Width="0" Height="0" Attributes="2" Text="[ButtonImage]" TextStyle="[ImageBtnFont]" Order="100" ExtType="ImageButton" ExtData="[ButtonText_Cancel]" ExtDataLocId="-"/>
     <ROW Dialog_="OptionsDlg" Control="Bitmap" Type="Bitmap" X="1" Y="1" Width="490" Height="290" Attributes="1" Text="[Background]" Order="200"/>
     <ROW Dialog_="OptionsDlg" Control="Next" Type="ImageButton" X="393" Y="250" Width="74" Height="28" Attributes="8388611" Text="[ButtonImage]" TextStyle="[ImageBtnFont]" Order="300" ExtType="ImageButton" ExtData="[ButtonText_Install]"/>
@@ -331,7 +333,7 @@
     <ROW Dialog_="OptionsDlg" Control="ProducVersionText" Type="Text" X="16" Y="60" Width="362" Height="15" Attributes="196611" Text="Version: [ProductVersion]" TextStyle="[ManufacturerFont]" Order="700"/>
     <ROW Dialog_="OptionsDlg" Control="AboutBtn" Type="ImageButton" X="5" Y="269" Width="18" Height="18" Attributes="4718595" Text="[AboutBtnIcon]" TextStyle="[ManufacturerFont]" Order="800" ExtType="ImageButton" ExtData="[InfoIconMsi]"/>
     <ROW Dialog_="OptionsDlg" Control="ProgressBar" Type="StyledProgressBar" X="18" Y="236" Width="450" Height="2" Attributes="65537" Text="ProgressImage.png" Order="900" ExtType="StyledProgressBar"/>
-    <ROW Dialog_="OptionsDlg" Control="CheckBox_2" Type="CheckBox" X="15" Y="92" Width="450" Height="16" Attributes="3" Property="INSTALL_FIPS" Text="Install FIPS provider" Order="1000"/>
+    <ROW Dialog_="OptionsDlg" Control="CheckBox_2" Type="CheckBox" X="15" Y="92" Width="450" Height="16" Attributes="3" Property="INSTALL_FIPS" Text="[FIPS_OPTION_TEXT]" Order="1000"/>
     <ROW Dialog_="OptionsDlg" Control="RadioButtonGroup_1" Type="RadioButtonGroup" X="33" Y="112" Width="225" Height="44" Attributes="1" Property="INSTALL_FIPS_TYPE" Text="RadioButtonGroup" Order="1100"/>
     <ROW Dialog_="OptionsDlg" Control="Bitmap_1" Type="Bitmap" X="404" Y="15" Width="70" Height="70" Attributes="1" Text="[AppLogoIcon]" Order="1200"/>
     <ROW Dialog_="OutOfRbDiskDlg" Control="Description" Type="Text" X="16" Y="94" Width="458" Height="57" Attributes="196611" Text="The highlighted volumes do not have enough disk space available for the currently selected features. You can either remove some files from the highlighted volumes,or select different destination drive(s). Alternatively, you may choose to disable the installer&apos;s rollback functionality. Click Yes if you wish to take the risk to disable rollback." TextStyle="[DescriptionFont]" Order="400" TextLocId="AppInstaller.Control.Text.OutOfRbDiskDlg#Description" MsiKey="OutOfRbDiskDlg#Description"/>
@@ -396,6 +398,7 @@
     <ROW Dialog_="OptionsDlg" Control_="RadioButtonGroup_1" Action="Disable" Condition="NOT INSTALL_FIPS"/>
     <ROW Dialog_="SDKDlg" Control_="Text_3" Action="Show" Condition="INSTALL_APP = &quot;1&quot; AND NOT INSTALL_VISUAL_STUDIO"/>
     <ROW Dialog_="SDKDlg" Control_="Text_3" Action="Hide" Condition="NOT INSTALL_APP = &quot;1&quot;"/>
+    <ROW Dialog_="OptionsDlg" Control_="RadioButtonGroup_1" Action="Hide" Condition="AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot;"/>
     <ATTRIBUTE name="DeletedRows" value="AboutDlg#Hyperlink#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR NOT AiReadmeLink@ExitDialog#ViewReadmeCheckBox#Hide#(((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 1) AND (CTRLS &lt;&gt; 3))) OR AiReadmeLink@ExitDialog#ViewReadmeText#Hide#(((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 1) AND (CTRLS &lt;&gt; 3))) OR AiReadmeLink@ProgressDlg#LaunchCheckBox#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 2) AND (CTRLS &lt;&gt; 3))@UI.aip@UpgradeDlg.aip@WelcomeDlg#LaunchCheckBox#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 2) AND (CTRLS &lt;&gt; 3))@WelcomeDlg.aip"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
@@ -477,6 +480,7 @@
     <ROW Dialog_="SpawnDialog_1" Control_="Ok" Event="EndDialog" Argument="Return" Condition="1" Ordering="100"/>
     <ROW Dialog_="SpawnDialog_1" Control_="AboutBtn" Event="SpawnDialog" Argument="AboutDlg" Condition="1" Ordering="1"/>
     <ROW Dialog_="OptionsDlg" Control_="Next" Event="SpawnDialog" Argument="SpawnDialog_1" Condition="(NOT INSTALL_APP = &quot;1&quot;) AND (INSTALL_FIPS = &quot;1&quot;)" Ordering="1"/>
+    <ROW Dialog_="OptionsDlg" Control_="OptionsDlgDialogInitializer" Event="[INSTALL_FIPS_TYPE]" Argument="current" Condition="( AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot; )" Ordering="0"/>
     <ATTRIBUTE name="DeletedRows" value="ExitDialog#LaunchBtn#DoAction#AI_LaunchApp#(AI_INSTALL OR AI_PATCH OR AI_MAINT)@ExitDialog#LaunchBtn#EndDialog#Exit#1@MaintenanceWelcomeDlg#LaunchButton#EndDialog#Exit#1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
@@ -625,12 +629,12 @@
     <ROW Feature_="Development" Component_="man1"/>
     <ROW Feature_="Development" Component_="man3_1"/>
     <ROW Feature_="Development" Component_="man5_1"/>
-    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
     <ROW Feature_="MainFeature" Component_="libcrypto4x64.dll"/>
     <ROW Feature_="MainFeature" Component_="libssl4x64.dll"/>
     <ROW Feature_="Development" Component_="libcrypto4x64.dll_1"/>
     <ROW Feature_="Development" Component_="libcrypto.lib"/>
     <ROW Feature_="Development" Component_="libssl4x64.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="logo.exe" SourcePath="resources\logo.ico" Index="0"/>
@@ -661,7 +665,6 @@
     <ROW Action="AI_DATA_SETTER_1" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;validated&quot; )" Sequence="6402"/>
     <ROW Action="CopyFileFolder_1" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;current&quot; )" Sequence="6405"/>
     <ROW Action="AI_DATA_SETTER_2" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;current&quot; )" Sequence="6404"/>
-    <ROW Action="AI_AiRemoveFilesImmediate" Sequence="3499"/>
     <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="DefaultBuild;ExeBuild_1"/>
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101" Builds="DefaultBuild;ExeBuild_1"/>
     <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="DefaultBuild;ExeBuild_1"/>
@@ -673,6 +676,7 @@
     <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="DefaultBuild;ExeBuild_1"/>
     <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild;ExeBuild_1"/>
     <ROW Action="AI_DATA_SETTER_3" Sequence="1398"/>
+    <ROW Action="AI_AiRemoveFilesImmediate" Sequence="3499"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>

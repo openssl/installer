@@ -91,13 +91,13 @@
     <ROW Component="legacy.lib" Value="{4C9596AC-B498-4578-BE2F-39C9F2B5FD9F}"/>
     <ROW Component="legacy.pdb" Value="{BEE58FD3-8E7D-4610-9CC4-02CE66F162F1}"/>
     <ROW Component="lib"/>
-    <ROW Component="libcrypto.lib"/>
-    <ROW Component="libcrypto4x64.dll"/>
-    <ROW Component="libcrypto4x64.dll_1"/>
+    <ROW Component="libcrypto.lib" Value="{F6581237-5D18-4597-85A1-C8EC51F407B3}"/>
+    <ROW Component="libcrypto4x64.dll" Value="{15ACB028-4237-47DB-9D86-7F07BF7B78E8}"/>
+    <ROW Component="libcrypto4x64.dll_1" Value="{4A68FE71-7688-4FCE-8851-768BA1D1FE52}"/>
     <ROW Component="libcrypto_static.lib"/>
     <ROW Component="libssl.lib"/>
-    <ROW Component="libssl4x64.dll"/>
-    <ROW Component="libssl4x64.dll_1"/>
+    <ROW Component="libssl4x64.dll" Value="{712669B6-2EED-46B6-9AE7-28FB38865B63}"/>
+    <ROW Component="libssl4x64.dll_1" Value="{3C50C09A-B206-4492-A775-47EDEA1259A7}"/>
     <ROW Component="libssl_static.lib"/>
     <ROW Component="man1" Value="{7078F394-AA47-4531-A467-CBE3E7E4122E}"/>
     <ROW Component="man3"/>
@@ -125,6 +125,11 @@
     <ROW Component="legacy.dll" ComponentId="{87885DBB-B06C-494F-8554-75CEA941BF72}" Directory_="osslmodules_Dir" Attributes="256" KeyPath="legacy.dll"/>
     <ROW Component="legacy.lib" ComponentId="{3C6CD8EF-D532-45F2-BD82-A25CEBACDB37}" Directory_="osslmodules_Dir" Attributes="256" KeyPath="legacy.lib"/>
     <ROW Component="legacy.pdb" ComponentId="{ABDAFA2A-6C63-4C9D-90F9-E035EA181884}" Directory_="osslmodules_Dir" Attributes="256" KeyPath="legacy.pdb" Type="4"/>
+    <ROW Component="libcrypto.lib" Directory_="lib_Dir" Attributes="0" KeyPath="libcrypto.lib" Type="0"/>
+    <ROW Component="libcrypto4x64.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libcrypto4x64.dll"/>
+    <ROW Component="libcrypto4x64.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto4x64.dll_1"/>
+    <ROW Component="libssl4x64.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libssl4x64.dll"/>
+    <ROW Component="libssl4x64.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libssl4x64.dll_1"/>
     <ROW Component="man1" Directory_="man1_Dir" Attributes="0"/>
     <ROW Component="man3_1" ComponentId="{66677893-A70D-4214-9572-9328EEA44A79}" Directory_="man3_Dir" Attributes="0"/>
     <ROW Component="man5_1" ComponentId="{1AEAA992-AEE9-4A55-99CC-4805101E9D0E}" Directory_="man5_Dir" Attributes="0"/>
@@ -159,6 +164,16 @@
     <ROW File="ct_log_list.cnf.dist" Component_="ct_log_list.cnf.dist" FileName="CT_LOG~1.DIS|ct_log_list.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\ct_log_list.cnf" SelfReg="false"/>
     <ROW File="openssl.cnf" Component_="openssl.cnf" FileName="openssl.cnf" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
     <ROW File="openssl.cnf.dist" Component_="config_files" FileName="OPENSS~1.DIS|openssl.cnf.dist" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.cnf" SelfReg="false"/>
+    <ROW File="libcrypto4x64.dll" Component_="libcrypto4x64.dll" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libssl4x64.dll" Component_="libssl4x64.dll" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\openssl\libssl-4-x64.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libcrypto4x64.dll_1" Component_="libcrypto4x64.dll_1" FileName="LIBCRY~1.DLL|libcrypto-4-x64.dll" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libcrypto4x64.pdb" Component_="libcrypto4x64.dll_1" FileName="LIBCRY~1.PDB|libcrypto-4-x64.pdb" Attributes="0" SourcePath="..\openssl\libcrypto-4-x64.pdb" SelfReg="false"/>
+    <ROW File="libcrypto.lib" Component_="libcrypto.lib" FileName="LIBCRY~1.LIB|libcrypto.lib" Attributes="0" SourcePath="..\openssl\libcrypto.lib" SelfReg="false"/>
+    <ROW File="libcrypto_static.lib" Component_="libcrypto.lib" FileName="LIBCRY~2.LIB|libcrypto_static.lib" Attributes="0" SourcePath="..\openssl\libcrypto_static.lib" SelfReg="false"/>
+    <ROW File="libssl4x64.dll_1" Component_="libssl4x64.dll_1" FileName="LIBSSL~1.DLL|libssl-4-x64.dll" Attributes="0" SourcePath="..\openssl\libssl-4-x64.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libssl4x64.pdb" Component_="libssl4x64.dll_1" FileName="LIBSSL~1.PDB|libssl-4-x64.pdb" Attributes="0" SourcePath="..\openssl\libssl-4-x64.pdb" SelfReg="false"/>
+    <ROW File="libssl.lib" Component_="libcrypto.lib" FileName="libssl.lib" Attributes="0" SourcePath="..\openssl\libssl.lib" SelfReg="false"/>
+    <ROW File="libssl_static.lib" Component_="libcrypto.lib" FileName="LIBSSL~1.LIB|libssl_static.lib" Attributes="0" SourcePath="..\openssl\libssl_static.lib" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentDataComponent">
     <ROW PersistentRow="ct_log_list.cnf" Type="0" Condition="1"/>
@@ -611,6 +626,11 @@
     <ROW Feature_="Development" Component_="man3_1"/>
     <ROW Feature_="Development" Component_="man5_1"/>
     <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
+    <ROW Feature_="MainFeature" Component_="libcrypto4x64.dll"/>
+    <ROW Feature_="MainFeature" Component_="libssl4x64.dll"/>
+    <ROW Feature_="Development" Component_="libcrypto4x64.dll_1"/>
+    <ROW Feature_="Development" Component_="libcrypto.lib"/>
+    <ROW Feature_="Development" Component_="libssl4x64.dll_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="logo.exe" SourcePath="resources\logo.ico" Index="0"/>
@@ -753,8 +773,8 @@
     <ROW Directory_="man3_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man3" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="12"/>
     <ROW Directory_="man5_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man5" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="12"/>
     <ROW Directory_="man7_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;doc\html\man7" Feature="Development" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="12"/>
-    <ROW Directory_="bin_Dir" SourcePath="..\openssl" Feature="MainFeature" IncludePattern="libcrypto*.dll|libssl*.dll" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="12"/>
-    <ROW Directory_="lib_Dir" SourcePath="..\openssl" Feature="Development" IncludePattern="libcrypto*.dll|libcrypto*.lib|libcrypto*.pdb|libssl*.dll|libssl*.lib|libssl*.pdb" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="12"/>
+    <ROW Directory_="bin_Dir" SourcePath="..\openssl" Feature="MainFeature" IncludePattern="libcrypto*.dll|libssl*.dll" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="4"/>
+    <ROW Directory_="lib_Dir" SourcePath="..\openssl" Feature="Development" IncludePattern="libcrypto*.dll|libcrypto*.lib|libcrypto*.pdb|libssl*.dll|libssl*.lib|libssl*.pdb" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="4"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.TempFileComponent">
     <ROW FileId="vcruntime140.dll" Name="VCRUNT~1.DLL|vcruntime140.dll" Directory_="bin_Dir" Property="AI_VCRUNTIME140.DLL" Condition="INSTALL_FIPS = &quot;1&quot; AND UILevel = 2 AND AI_BUILD_NAME = &quot;MsiBuild&quot;" Options="0" Data="resources\vcruntime140.dll"/>

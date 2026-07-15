@@ -15,6 +15,7 @@ from pathlib import Path
 import pytest
 from conftest import install
 from conftest import InstallerInfo
+from conftest import supported_fips_type
 from conftest import uninstall
 
 
@@ -100,14 +101,20 @@ def test_installer_file_magic(installer: InstallerInfo) -> None:
 def installed_artifact(installer: InstallerInfo) -> Iterator[None]:
     """Install the MSI with every component so the file tree contains every
     binary the product can ship — then uninstall at session end. Used by tests
-    that walk the install dir."""
+    that walk the install dir.
+
+    The FIPS module type follows the flavor: VS lays down the validated 3.1.2
+    module, hybrid the current one (its only offered type — commit 63b0a77). The
+    validated module ships in the hybrid installer too but isn't installed on
+    the supported path; it's the same VC-WIN64A binary the VS run already
+    signature-checks, so nothing is lost."""
     install(
         installer,
         [
             "INSTALL_APP=1",
             "INSTALL_SDK=1",
             "INSTALL_FIPS=1",
-            "INSTALL_FIPS_TYPE=validated",
+            f"INSTALL_FIPS_TYPE={supported_fips_type(installer)}",
         ],
     )
     yield

@@ -208,3 +208,31 @@ def test_fips_requires_app(wizard: Wizard) -> None:
     dlg.Install.click()
     popup = _find_popup(app, "it is required to generate the FIPS configuration file")
     popup.OK.click()
+
+
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="GUI tests require interactive session")
+def test_fips_module_type_selector_matches_flavor(wizard: Wizard, installer: InstallerInfo) -> None:
+    """The FIPS module-type selector (validated 3.1.2 vs current) is offered
+    only by the VS installers. Hybrid installers hide it and silently force the
+    'current' module (commit 63b0a77): the validated module is VC-WIN64A and
+    would drag the VC++ runtime into an otherwise-HybridCRT install.
+
+    The radio group is hidden on the build name alone, independent of the FIPS
+    checkbox state, so it's checked here without toggling FIPS."""
+    app, dlg = wizard
+
+    # License (accept) → Path → Components → Additional options.
+    dlg.IAgree.click()
+    dlg = app.top_window()
+    dlg = _click_and_advance(dlg, app)  # path → components
+    assert _current_static(dlg) == "Options to install"
+    dlg = _click_and_advance(dlg, app)  # components → additional options
+    assert _current_static(dlg) == "Options to install"
+
+    # The "Validated module (3.1.2)" radio button; present+visible only on VS.
+    validated = dlg.child_window(title_re="(?i).*validated.*")
+    shown = validated.exists(timeout=5) and validated.is_visible()
+    if installer.flavor == "hybrid":
+        assert not shown, "hybrid installer must not show the validated FIPS module option (commit 63b0a77)"
+    else:
+        assert shown, "VS installer must show the validated FIPS module option"

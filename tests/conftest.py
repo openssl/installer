@@ -511,6 +511,36 @@ def check_openssl_version(install_dir: Path, expected_version: str):
     assert reported == expected_version, f"openssl version mismatch: expected {expected_version}, got {reported}"
 
 
+def check_openssl_crypto(install_dir: Path):
+    """Verify the installed openssl.exe actually *computes*, not just that it
+    reports a version — it loads libcrypto and runs real operations against the
+    built-in default provider (so no openssl.cnf is needed):
+
+      * its SHA-256 of a known input matches Python's hashlib (reference), and
+      * an AES-256-CBC encrypt → decrypt round-trips back to the plaintext.
+    """
+    exe = install_dir / "bin" / "openssl.exe"
+    data = b"OpenSSL installer functional test\n" * 8
+
+    # SHA-256 must match the reference implementation (bytes in, bytes out).
+    res = subprocess.run([str(exe), "dgst", "-sha256"], input=data, check=True, capture_output=True)
+    out = res.stdout.decode("ascii", "replace")
+    m = re.search(r"([0-9a-fA-F]{64})", out)
+    assert m, f"no SHA-256 digest in `openssl dgst -sha256` output: {out!r}"
+    expected = hashlib.sha256(data).hexdigest()
+    assert m.group(1).lower() == expected, f"openssl SHA-256 {m.group(1).lower()} != reference {expected}"
+
+    # AES-256-CBC encrypt → decrypt must round-trip.
+    pass_args = ["-aes-256-cbc", "-pbkdf2", "-pass", "pass:installer-test"]
+    ciphertext = subprocess.run(
+        [str(exe), "enc", "-e", *pass_args], input=data, check=True, capture_output=True
+    ).stdout
+    roundtrip = subprocess.run(
+        [str(exe), "enc", "-d", *pass_args], input=ciphertext, check=True, capture_output=True
+    ).stdout
+    assert roundtrip == data, "AES-256-CBC encrypt/decrypt did not round-trip to the original plaintext"
+
+
 def check_legacy_provider(install_dir: Path):
     exe = install_dir / "bin" / "openssl.exe"
     res = subprocess.run(

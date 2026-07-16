@@ -99,15 +99,14 @@ def test_installer_file_magic(installer: InstallerInfo) -> None:
 
 @pytest.fixture(scope="session")
 def installed_artifact(installer: InstallerInfo) -> Iterator[None]:
-    """Install the MSI with every component so the file tree contains every
+    """Install the installer with every component so the file tree contains every
     binary the product can ship — then uninstall at session end. Used by tests
     that walk the install dir.
 
     The FIPS module type follows the flavor: VS lays down the validated 3.1.2
-    module, hybrid the current one (its only offered type — commit 63b0a77). The
-    validated module ships in the hybrid installer too but isn't installed on
-    the supported path; it's the same VC-WIN64A binary the VS run already
-    signature-checks, so nothing is lost."""
+    module, hybrid the current one. The validated module ships in the hybrid
+    installer too but isn't installed on the supported path; it's the same
+    VC-WIN64A binary the VS run already signature-checks, so nothing is lost."""
     install(
         installer,
         [

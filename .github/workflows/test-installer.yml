@@ -239,7 +239,7 @@ jobs:
       - name: Install Python deps
         run: uv sync --frozen || uv sync
 
-      - name: Isolate installer under test
+      - name: Select installer under test
         id: installer
         shell: pwsh
         run: |
@@ -250,18 +250,12 @@ jobs:
           if (-not $file) { throw "No installer matching '$pattern' found in build/" }
           $mb = [math]::Round($file.Length / 1MB, 2)
           Write-Host "Testing installer: $($file.Name) ($mb MB)"
-          # Copy ONLY the installer under test into an empty directory, and
-          # point pytest at that copy. download-artifact co-locates all four
-          # builds, so a non-self-contained .exe bootstrapper would silently
-          # launch a sibling .msi from the same folder and pass — masking a
-          # stub build. Each artifact must stand on its own: an installer is a
-          # standalone deliverable, so we test it the way a user runs it.
-          $dir = Join-Path $env:RUNNER_TEMP 'installer-under-test'
-          Remove-Item -Recurse -Force $dir -ErrorAction SilentlyContinue
-          New-Item -ItemType Directory -Force -Path $dir | Out-Null
-          $dest = Join-Path $dir $file.Name
-          Copy-Item -LiteralPath $file.FullName -Destination $dest -Force
-          "path=$dest" >> $env:GITHUB_OUTPUT
+          # Just resolve the path; the pytest `installer` fixture handles
+          # isolation — it copies the single file under test into an otherwise-
+          # empty temp dir before installing, so a non-self-contained .exe
+          # bootstrapper can't silently borrow a co-located sibling .msi from
+          # build/ (which holds all four artifacts) and mask a stub build.
+          "path=$($file.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: Run pytest
         run: uv run pytest tests --installer "${{ steps.installer.outputs.path }}" -v

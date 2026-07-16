@@ -17,7 +17,6 @@ from conftest import imported_dlls
 from conftest import install
 from conftest import InstallerInfo
 from conftest import msi_fips_ui_facts
-from conftest import open_installer_database
 from conftest import supported_fips_type
 from conftest import uninstall
 from conftest import validated_option_disabled
@@ -210,7 +209,14 @@ def test_crt_flavor_import_table(installer: InstallerInfo, install_dir: Path) ->
             if "vcruntime140.dll" not in dlls:
                 problems.append(f"{binary.name}: VS build must import vcruntime140.dll, imports {sorted(dlls)}")
     if problems:
-        raise AssertionError("CRT import-table mismatch:\n" + "\n".join(f"  - {p}" for p in problems))
+        msg = "CRT import-table mismatch:\n" + "\n".join(f"  - {p}" for p in problems)
+        if installer.flavor == "hybrid":
+            msg += (
+                "\nHybridCRT binaries link vcruntime statically; a dynamic-runtime import means this "
+                "tree wasn't fully (re)built with VC-WIN64A-HYBRIDCRT. If only some binaries are dirty, "
+                "the tree is mixed — do a clean build (fresh dir / nmake clean) per flavor."
+            )
+        raise AssertionError(msg)
 
 
 @pytest.mark.fips
@@ -225,12 +231,11 @@ def test_fips_validated_option_disabled_in_hybrid(installer: InstallerInfo) -> N
       * vs     -> neither, and INSTALL_FIPS_TYPE still defaults to "validated".
     """
     # The .exe bootstrapper's inner MSI is only readable once cached by an
-    # install; a bare .msi is opened directly. A default install satisfies both.
+    # install; a bare .msi is read directly. A default install satisfies both.
     if installer.path.suffix.lower() == ".exe":
         install(installer)
 
-    db = open_installer_database(installer)
-    facts = msi_fips_ui_facts(db)
+    facts = msi_fips_ui_facts(installer)
     disabled = validated_option_disabled(facts)
     build_name = facts["build_name"]
     default_type = facts["default_type"]

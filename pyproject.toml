@@ -10,11 +10,9 @@ dependencies = [
     "pywinauto>=0.6",
     "pillow>=10",
     # PE import-table inspection (CRT-flavor check in test_silent_install.py).
+    # MSI UI-table introspection is done via tests/msi_query.ps1 (PowerShell +
+    # WindowsInstaller COM), so no Python COM binding is needed.
     "pefile>=2023.2.7",
-    # WindowsInstaller.Installer COM automation for MSI table introspection
-    # (FIPS-disable-in-hybrid check). Also pulled in transitively by pywinauto;
-    # declared explicitly and gated to Windows (no Linux wheels).
-    "pywin32>=306; sys_platform == 'win32'",
 ]
 
 [tool.mypy]
@@ -23,7 +21,7 @@ python_version = "3.11"
 platform = "win32"
 
 [[tool.mypy.overrides]]
-module = ["pywinauto", "pywinauto.*", "pefile", "win32com", "win32com.*"]
+module = ["pywinauto", "pywinauto.*", "pefile"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

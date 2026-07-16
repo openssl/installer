@@ -22,13 +22,22 @@ import requests
 import yaml
 
 
-# Switch COM apartment to multi-threaded (MTA) before any pywinauto.uia import.
-# pywinauto defaults to STA, which trips RPC_E_CANTCALLOUT_ININPUTSYNCCALL
-# (0x8001010d) on Windows Server 2022/2025 when modal dialogs transition while
-# pytest is mid-call. This assignment runs while conftest loads — test_gui.py
-# (the only file that imports pywinauto) loads later, so the flag is in place
-# by the time pywinauto initializes COM.
-sys.coinit_flags = 0  # type: ignore[attr-defined]
+# COM apartment for pywinauto's UIA backend, selectable via OPENSSL_TESTS_COINIT
+# ("mta" default, or "sta"). Must be set before pywinauto.uia is imported; it
+# runs at conftest load and test_gui.py (the only pywinauto importer) loads
+# later, so the flag is in place by the time pywinauto initializes COM.
+#
+# It's a genuine trade-off on Windows Server, hence the knob:
+#   * MTA (default): avoids RPC_E_CANTCALLOUT_ININPUTSYNCCALL (0x8001010d) on
+#     Server 2022/2025 when a modal dialog transitions mid-call, but UIA element
+#     handles can fail to marshal across MTA threads — surfacing as COMError
+#     0x80040155 (REGDB_E_IIDNOTREG) or 0x80040201 (EVENT_E_ALL_SUBSCRIBERS_
+#     FAILED) inside element lookups during a dialog transition.
+#   * STA: single-threaded; often steadier for UIA tree-walks, but can
+#     reintroduce 0x8001010d on transitions.
+# If GUI tests error inside pywinauto element lookups, try OPENSSL_TESTS_COINIT=sta.
+_coinit = os.environ.get("OPENSSL_TESTS_COINIT", "mta").strip().lower()
+sys.coinit_flags = 2 if _coinit == "sta" else 0  # type: ignore[attr-defined]
 
 
 CONFIG_PATH = Path(__file__).parent / "config.yaml"
@@ -64,6 +73,62 @@ def pytest_runtest_makereport(item, call):
     report = outcome.get_result()
     if report.failed and "gui" in item.keywords:
         _capture_screenshot(f"{item.name}_{report.when}")
+        if report.when == "call":
+            _dump_wizard_windows(item)
+
+
+def _dump_wizard_windows(item) -> None:
+    """On a GUI failure, dump UIA-independent (Win32) facts about the wizard's
+    windows, plus versions and the resolved COM apartment, then attempt a UIA
+    control dump. The Win32 props work even when pywinauto's UIA resolution is
+    exactly what failed, so this shows what's actually on the dialog. Everything
+    is best-effort — diagnostics must never mask the real failure."""
+    wiz = getattr(item, "funcargs", {}).get("wizard")
+    if not wiz:
+        return
+    app = wiz[0]
+    print("\n[gui-diag] ===== wizard UI diagnostics =====", flush=True)
+    try:
+        import comtypes
+        import pywinauto
+
+        print(
+            f"[gui-diag] pywinauto={pywinauto.__version__} comtypes={comtypes.__version__} "
+            f"coinit_flags={getattr(sys, 'coinit_flags', '?')}",
+            flush=True,
+        )
+    except Exception as e:
+        print(f"[gui-diag] version probe failed: {e}", flush=True)
+    try:
+        from pywinauto import findwindows
+        from pywinauto import handleprops
+
+        pid = app.process
+        print(f"[gui-diag] wizard pid={pid}", flush=True)
+        for scope, top_only in (("top-level", True), ("all", False)):
+            try:
+                handles = findwindows.find_windows(process=pid, top_level_only=top_only, visible_only=False, backend="win32")
+            except Exception as e:
+                print(f"[gui-diag] find_windows({scope}) failed: {e}", flush=True)
+                continue
+            print(f"[gui-diag] {scope} windows ({len(handles)}):", flush=True)
+            for h in handles:
+                try:
+                    print(
+                        f"[gui-diag]   hwnd=0x{h:X} cls={handleprops.classname(h)!r} "
+                        f"text={handleprops.text(h)!r} rect={handleprops.rectangle(h)}",
+                        flush=True,
+                    )
+                except Exception as e:
+                    print(f"[gui-diag]   hwnd=0x{h:X}: prop error: {e}", flush=True)
+    except Exception as e:
+        print(f"[gui-diag] window enumeration failed: {e}", flush=True)
+    try:
+        print("[gui-diag] UIA control identifiers of top window (may itself fail — that's data too):", flush=True)
+        app.top_window().print_control_identifiers(depth=4)
+    except Exception as e:
+        print(f"[gui-diag] print_control_identifiers failed: {type(e).__name__}: {e}", flush=True)
+    print("[gui-diag] ===== end diagnostics =====", flush=True)
 
 
 def _capture_screenshot(label: str) -> None:
@@ -314,6 +379,15 @@ def _find_installed_openssl_products() -> list[tuple[str, str]]:
                     if display_name.startswith("OpenSSL Library"):
                         results.append((subkey_name, display_name))
     return results
+
+
+def openssl_product_installed() -> bool:
+    """True if any 'OpenSSL Library' product is currently registered.
+
+    Used as the committed-install signal by the UI-install test: it lets that
+    test detect completion by polling registry state rather than the wizard's
+    finish dialog, so it doesn't depend on finish-dialog control identifiers."""
+    return bool(_find_installed_openssl_products())
 
 
 @pytest.fixture
@@ -567,80 +641,59 @@ def imported_dlls(binary: Path) -> set[str]:
 #   * a ControlEvent forces INSTALL_FIPS_TYPE=current when OptionsDlg opens.
 # The validated file components are NOT build-gated, so a headless silent
 # install can't observe the change — the faithful check is to read these rows
-# straight out of the MSI database via the Windows Installer automation object.
+# straight out of the MSI database. That's done through the msi_query.ps1 helper
+# (WindowsInstaller COM via PowerShell, mirroring authenticode.ps1) rather than
+# win32com: MSI's parameterized StringData property is unreachable through
+# win32com's dynamic dispatch (it invokes the property-get as a method).
 
 HYBRID_BUILD_NAMES = ("ExeBuild_hybrid", "MsiBuild_hybrid")
 VS_BUILD_NAMES = ("ExeBuild", "MsiBuild")
 
-
-def _msi_installer_com():
-    """The WindowsInstaller.Installer automation object (pywin32, Windows-only)."""
-    import win32com.client  # provided by pywin32, a transitive pywinauto dependency
-
-    return win32com.client.Dispatch("WindowsInstaller.Installer")
+_MSI_QUERY_SCRIPT = Path(__file__).parent / "msi_query.ps1"
 
 
-def open_installer_database(info: InstallerInfo):
-    """Open the installer's MSI database read-only via Windows Installer COM.
+def msi_fips_ui_facts(info: InstallerInfo) -> dict[str, str | None]:
+    """Read the FIPS-related UI facts (build name, default FIPS type, and the
+    hide/force-current conditions) from the installer's MSI database.
 
-    For a bare .msi the file is opened directly. For the .exe bootstrapper the
-    inner MSI isn't a loose file, so we read the copy Windows Installer cached
-    at install time (ProductInfo/LocalPackage) — the caller must have installed
-    the product first. The cached package keeps the full authoring tables
-    (Property, Control*, ...), which is all this introspection needs.
+    A bare .msi is read directly. The .exe bootstrapper's inner MSI isn't a
+    loose file, so we read the copy Windows Installer cached at install time
+    (by product code) — the product must already be installed. The cached
+    package keeps the full authoring tables, which is all we need here.
     """
-    inst = _msi_installer_com()
-    msi_open_read_only = 0
     if info.path.suffix.lower() == ".msi":
-        return inst.OpenDatabase(str(info.path), msi_open_read_only)
-    products = _find_installed_openssl_products()
-    if not products:
-        raise RuntimeError("cannot introspect an .exe installer's MSI before the product is installed")
-    product_code = products[0][0]
-    local_package = inst.ProductInfo(product_code, "LocalPackage")
-    return inst.OpenDatabase(local_package, msi_open_read_only)
-
-
-def msi_query_one(db, sql: str) -> str | None:
-    """Run `sql` against MSI database `db` and return the first column of the
-    first row, or None if the query returns no rows."""
-    view = db.OpenView(sql)
-    view.Execute()
-    try:
-        record = view.Fetch()
-        return record.StringData(1) if record is not None else None
-    finally:
-        view.Close()
-
-
-def msi_fips_ui_facts(db) -> dict[str, str | None]:
-    """Extract the FIPS-related UI facts the hybrid-disable relies on."""
-    return {
-        "build_name": msi_query_one(db, "SELECT `Value` FROM `Property` WHERE `Property`='AI_BUILD_NAME'"),
-        "default_type": msi_query_one(db, "SELECT `Value` FROM `Property` WHERE `Property`='INSTALL_FIPS_TYPE'"),
-        "hide_condition": msi_query_one(
-            db,
-            "SELECT `Condition` FROM `ControlCondition` WHERE `Dialog_`='OptionsDlg' "
-            "AND `Control_`='RadioButtonGroup_1' AND `Action`='Hide'",
-        )
-        or "",
-        "force_current_condition": msi_query_one(
-            db,
-            "SELECT `Condition` FROM `ControlEvent` WHERE `Dialog_`='OptionsDlg' "
-            "AND `Event`='[INSTALL_FIPS_TYPE]' AND `Argument`='current'",
-        )
-        or "",
-    }
+        selector = ["-MsiPath", str(info.path)]
+    else:
+        products = _find_installed_openssl_products()
+        if not products:
+            raise RuntimeError("cannot introspect an .exe installer's MSI before the product is installed")
+        selector = ["-ProductCode", products[0][0]]
+    res = subprocess.run(
+        ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(_MSI_QUERY_SCRIPT), *selector],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    facts = json.loads(res.stdout)
+    # Normalize nulls to "" so the substring checks in validated_option_disabled
+    # never see None.
+    facts["hide_condition"] = facts.get("hide_condition") or ""
+    facts["force_current_condition"] = facts.get("force_current_condition") or ""
+    return facts
 
 
 def validated_option_disabled(facts: dict[str, str | None]) -> bool:
-    """Given the MSI's own AI_BUILD_NAME, decide whether the validated FIPS
-    option is disabled for THIS build.
+    """Decide whether the validated FIPS option is disabled for THIS build.
 
-    The hide/force rows live in every build's MSI but are conditioned on the
-    hybrid build names; the option is disabled only when this build's name is
-    the one named in both conditions. Matching the fully-quoted name avoids the
-    "MsiBuild" ⊂ "MsiBuild_hybrid" substring trap.
+    Keys on the RadioButtonGroup_1 *Hide* condition — the authoritative "the
+    user can't pick validated" signal. That row lives in every build's MSI but
+    is conditioned on the hybrid build names, so it applies to this build only
+    when the build's own AI_BUILD_NAME is named in the condition. Matching the
+    fully-quoted name avoids the "MsiBuild" ⊂ "MsiBuild_hybrid" substring trap.
+
+    (The INSTALL_FIPS_TYPE=current force is the belt-and-suspenders other half of
+    the mechanism, read into facts for diagnostics; hiding the radio is what
+    actually removes selectability, so that's what we gate on.)
     """
     quoted = f'"{facts["build_name"]}"'
-    return quoted in (facts["hide_condition"] or "") and quoted in (facts["force_current_condition"] or "")
+    return quoted in (facts["hide_condition"] or "")

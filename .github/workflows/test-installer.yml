@@ -196,8 +196,8 @@ jobs:
         installer:
           - OpenSSL-x64-VS-*.exe
           - OpenSSL-x64-VS-*.msi
-          - OpenSSL-x64-hybrid-*.exe
-          - OpenSSL-x64-hybrid-*.msi
+          - OpenSSL-x64-hybridCRT-*.exe
+          - OpenSSL-x64-hybridCRT-*.msi
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6

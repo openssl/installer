@@ -9,6 +9,7 @@ import pytest
 from conftest import check_files
 from conftest import check_fips_provider
 from conftest import check_legacy_provider
+from conftest import check_openssl_crypto
 from conftest import check_openssl_version
 from conftest import check_post_uninstall
 from conftest import check_registry
@@ -41,6 +42,15 @@ def test_default(installer: InstallerInfo, install_dir: Path, config: dict) -> N
     check_openssl_version(install_dir, installer.version)
     check_registry(config, installer, install_dir)
     check_legacy_provider(install_dir)
+
+
+@pytest.mark.usefixtures("clean_install")
+def test_openssl_exe_works(installer: InstallerInfo, install_dir: Path) -> None:
+    """The installed openssl.exe must actually run and compute correctly — a
+    SHA-256 matching hashlib and an AES round-trip — not merely report a
+    version. This catches a broken/mislinked build the version check misses."""
+    install(installer)
+    check_openssl_crypto(install_dir)
 
 
 @pytest.mark.usefixtures("clean_install")

@@ -264,17 +264,17 @@ def _detect_flavor(filename: str) -> str:
     """Derive the CRT flavor from the installer filename.
 
     Artifacts are named OpenSSL-x64-VS-<ver>.{exe,msi} (VC-WIN64A, dynamic
-    VC++ runtime) or OpenSSL-x64-hybrid-<ver>.{exe,msi} (VC-WIN64A-HYBRIDCRT,
+    VC++ runtime) or OpenSSL-x64-hybridCRT-<ver>.{exe,msi} (VC-WIN64A-HYBRIDCRT,
     static vcruntime + UCRT via forwarders). The token, not the file contents,
     is authoritative — it's what distinguishes the two artifacts a build
     produces from the same source tree.
     """
-    if re.search(r"-hybrid-", filename, re.IGNORECASE):
+    if re.search(r"-hybridCRT-", filename, re.IGNORECASE):
         return "hybrid"
     if re.search(r"-vs-", filename, re.IGNORECASE):
         return "vs"
     pytest.exit(
-        f"Cannot determine CRT flavor (expected '-VS-' or '-hybrid-') from installer filename: {filename}",
+        f"Cannot determine CRT flavor (expected '-VS-' or '-hybridCRT-') from installer filename: {filename}",
         returncode=2,
     )
 

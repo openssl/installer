@@ -10,28 +10,37 @@ on:
 
 jobs:
   build:
-    name: Build ${{ matrix.crt.flavor }} installers (${{ matrix.openssl-ref }})
+    name: Build installers (${{ matrix.openssl-ref }})
     runs-on: windows-2025
     env:
+      # VS 2022 Enterprise and Strawberry Perl are preinstalled on windows-2025.
       VCVARS: 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Auxiliary\Build\vcvars64.bat'
+      # All currently-tested OpenSSL refs pair with the same NIST-validated
+      # FIPS module (3.1.2). Pulled in as a sibling 'openssl-fips' checkout.
       FIPS_REF: openssl-3.1.2
     strategy:
       fail-fast: false
       matrix:
+        # Only refs with a corresponding windows-installer/<ref>.aip.
         openssl-ref: [openssl-4.0]
-        crt:
-          - { flavor: vs,     target: VC-WIN64A,           keep: OpenSSL-x64-VS-* }
-          - { flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, keep: OpenSSL-x64-hybrid-* }
     steps:
       - name: Checkout installer
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Checkout OpenSSL (${{ matrix.openssl-ref }})
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: openssl/openssl
           ref: ${{ matrix.openssl-ref }}
           path: openssl
+          fetch-tags: true
+
+      - name: Checkout OpenSSL for HybridCRT (${{ matrix.openssl-ref }})
+        uses: actions/checkout@v7
+        with:
+          repository: openssl/openssl
+          ref: ${{ matrix.openssl-ref }}
+          path: openssl-hybrid
           fetch-tags: true
 
       - name: Detect OpenSSL version from latest tag
@@ -39,6 +48,15 @@ jobs:
         shell: pwsh
         working-directory: openssl
         run: |
+          # Pick the highest patch-version tag in this branch's family. The
+          # branch name itself is the tag prefix: openssl-4.0 branch → tags
+          # named openssl-4.0.*. version:refname sort uses numeric component
+          # ordering so openssl-4.0.10 ranks above openssl-4.0.9.
+          #
+          # We deliberately don't use --merged HEAD: the checkout is shallow
+          # (fetch-depth: 1) so git can't compute reachability — the merged
+          # filter would return an empty list. Pattern matching on the
+          # branch's own tag prefix is the equivalent constraint.
           $pattern = '${{ matrix.openssl-ref }}.*'
           $tag = git tag --list $pattern --sort=-version:refname | Select-Object -First 1
           if (-not $tag) {
@@ -56,9 +74,13 @@ jobs:
           "winctx=$($parts[0]).$($parts[1])-OpenSSLProject"   >> $env:GITHUB_OUTPUT
 
       - name: Check out detected tag
-        shell: cmd
-        working-directory: openssl
-        run: git -c advice.detachedHead=false checkout tags/openssl-${{ steps.openssl_version.outputs.version }}
+        shell: pwsh
+        run: |
+          $tag = "tags/openssl-${{ steps.openssl_version.outputs.version }}"
+          foreach ($d in "openssl", "openssl-hybrid") {
+            git -C $d -c advice.detachedHead=false checkout $tag
+            if ($LASTEXITCODE -ne 0) { throw "checkout $tag in $d failed" }
+          }
 
       - name: Restore OpenSSL build cache
         id: openssl_cache
@@ -66,8 +88,9 @@ jobs:
         with:
           path: |
             openssl
+            openssl-hybrid
             openssl-fips
-          key: openssl-build-${{ runner.os }}-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-fips-${{ env.FIPS_REF }}-v1
+          key: openssl-build-${{ runner.os }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-fips-${{ env.FIPS_REF }}-v2
 
       - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
         if: steps.openssl_cache.outputs.cache-hit != 'true'
@@ -78,6 +101,8 @@ jobs:
           path: openssl-fips
 
       - name: Apply Windows build patches to FIPS source
+        # openssl-3.1.2 needs two backported fixes to build on modern MSVC.
+        # Skipped for other FIPS refs.
         if: steps.openssl_cache.outputs.cache-hit != 'true' && env.FIPS_REF == 'openssl-3.1.2'
         shell: pwsh
         working-directory: openssl-fips
@@ -115,22 +140,34 @@ jobs:
       - name: Apply jom build patches to older than 4.1
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: pwsh
-        working-directory: openssl
         run: |
-          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-Windows-Use-Z7-compiler-flag-to-enable-parallel-buil.patch"
-          if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
+          $patch = "$env:GITHUB_WORKSPACE\windows-installer\0001-Windows-Use-Z7-compiler-flag-to-enable-parallel-buil.patch"
+          foreach ($d in "openssl", "openssl-hybrid") {
+            git -C $d apply --verbose $patch
+            if ($LASTEXITCODE -ne 0) { throw "jom patch failed in $d" }
+          }
 
-      - name: Build OpenSSL (${{ matrix.crt.target }})
+      - name: Build OpenSSL (VC-WIN64A)
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: cmd
         working-directory: openssl
         run: |
           call "%VCVARS%"
-          perl Configure ${{ matrix.crt.target }} enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
+          perl Configure VC-WIN64A enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
           jom /j4 /S
           jom build_docs
 
-      - name: Build OpenSSL FIPS (VC-WIN64A)
+      - name: Build OpenSSL (VC-WIN64A-HYBRIDCRT)
+        if: steps.openssl_cache.outputs.cache-hit != 'true'
+        shell: cmd
+        working-directory: openssl-hybrid
+        run: |
+          call "%VCVARS%"
+          perl Configure VC-WIN64A-HYBRIDCRT enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
+          jom /j4 /S
+          jom build_docs
+
+      - name: Build OpenSSL (FIPS source)
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: cmd
         working-directory: openssl-fips
@@ -146,20 +183,28 @@ jobs:
           advinst-license: ${{ secrets.ADVINST_LICENSE_KEY }}
           advinst-enable-automation: 'true'
           aip-path: ${{ github.workspace }}\windows-installer\openssl.aip
+          aip-build-name: MsiBuild_hybrid
           aip-commands: |
             ResetSig
             SetVersion ${{ steps.openssl_version.outputs.version }}
             SetProperty VERSION_MAJOR=${{ steps.openssl_version.outputs.major }}
             SetProperty VERSION_MINOR=${{ steps.openssl_version.outputs.minor }}
             SetProperty VERSION_REGISTRY=${{ steps.openssl_version.outputs.winctx }}
+            UpdatePathVariable -name OPENSSL_SOURCE_DIR -value ..\openssl -valuetype Folder
+            Save
+            Build -buildslist ExeBuild
+            Build -buildslist MsiBuild
+            UpdatePathVariable -name OPENSSL_SOURCE_DIR -value ..\openssl-hybrid -valuetype Folder
+            Save
+            Build -buildslist ExeBuild_hybrid
 
       - name: Upload installers
         uses: actions/upload-artifact@v4
         with:
-          name: installers-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}
+          name: installers-${{ matrix.openssl-ref }}
           path: |
-            build-target/Installer64/${{ matrix.crt.keep }}.exe
-            build-target/Installer64/${{ matrix.crt.keep }}.msi
+            build-target/Installer64/*.exe
+            build-target/Installer64/*.msi
           if-no-files-found: error
 
   test:
@@ -177,14 +222,13 @@ jobs:
           - OpenSSL-x64-hybridCRT-*.msi
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Download installers
         uses: actions/download-artifact@v4
         with:
-          pattern: installers-*-${{ matrix.openssl-ref }}
+          name: installers-${{ matrix.openssl-ref }}
           path: build
-          merge-multiple: true
 
       - name: Install uv
         uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39  # v3 (= release v3.2.4)
@@ -195,7 +239,7 @@ jobs:
       - name: Install Python deps
         run: uv sync --frozen || uv sync
 
-      - name: Select installer under test
+      - name: Isolate installer under test
         id: installer
         shell: pwsh
         run: |
@@ -206,7 +250,18 @@ jobs:
           if (-not $file) { throw "No installer matching '$pattern' found in build/" }
           $mb = [math]::Round($file.Length / 1MB, 2)
           Write-Host "Testing installer: $($file.Name) ($mb MB)"
-          "path=$($file.FullName)" >> $env:GITHUB_OUTPUT
+          # Copy ONLY the installer under test into an empty directory, and
+          # point pytest at that copy. download-artifact co-locates all four
+          # builds, so a non-self-contained .exe bootstrapper would silently
+          # launch a sibling .msi from the same folder and pass — masking a
+          # stub build. Each artifact must stand on its own: an installer is a
+          # standalone deliverable, so we test it the way a user runs it.
+          $dir = Join-Path $env:RUNNER_TEMP 'installer-under-test'
+          Remove-Item -Recurse -Force $dir -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $dir | Out-Null
+          $dest = Join-Path $dir $file.Name
+          Copy-Item -LiteralPath $file.FullName -Destination $dest -Force
+          "path=$dest" >> $env:GITHUB_OUTPUT
 
       - name: Run pytest
         run: uv run pytest tests --installer "${{ steps.installer.outputs.path }}" -v

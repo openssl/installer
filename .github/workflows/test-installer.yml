@@ -8,21 +8,101 @@ on:
     - cron: '0 4 * * *'
   workflow_dispatch:
 
+env:
+  # VS 2022 Enterprise and Strawberry Perl are preinstalled on windows-2025.
+  VCVARS: 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Auxiliary\Build\vcvars64.bat'
+  # The NIST-validated FIPS module is built once from this ref (VC-WIN64A) and
+  # shared by every installer flavor via the `fips` job's artifact.
+  FIPS_REF: openssl-3.1.2
+
 jobs:
-  build:
-    name: Build installers (${{ matrix.openssl-ref }})
+  fips:
+    name: Build FIPS module
     runs-on: windows-2025
-    env:
-      # VS 2022 Enterprise and Strawberry Perl are preinstalled on windows-2025.
-      VCVARS: 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Auxiliary\Build\vcvars64.bat'
-      # All currently-tested OpenSSL refs pair with the same NIST-validated
-      # FIPS module (3.1.2). Pulled in as a sibling 'openssl-fips' checkout.
-      FIPS_REF: openssl-3.1.2
+    steps:
+      - name: Checkout installer
+        uses: actions/checkout@v7
+
+      - name: Restore FIPS build cache
+        id: fips_cache
+        uses: actions/cache@v5
+        with:
+          path: openssl-fips
+          key: openssl-fips-${{ runner.os }}-${{ env.FIPS_REF }}-v1
+
+      - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
+        if: steps.fips_cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v7
+        with:
+          repository: openssl/openssl
+          ref: ${{ env.FIPS_REF }}
+          path: openssl-fips
+
+      - name: Apply Windows build patches to FIPS source
+        if: steps.fips_cache.outputs.cache-hit != 'true' && env.FIPS_REF == 'openssl-3.1.2'
+        shell: pwsh
+        working-directory: openssl-fips
+        run: |
+          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-win-Fix-warning-build-issue.patch"
+          if ($LASTEXITCODE -ne 0) { throw "patch 0001 failed" }
+          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0002-windows-makefile-libdir-absolute.patch"
+          if ($LASTEXITCODE -ne 0) { throw "patch 0002 failed" }
+          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-3.1-Windows-Use-Z7-compiler-flag-to-enable-parallel-.patch"
+          if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
+
+      - name: install nasm
+        if: steps.fips_cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          $installer = "nasm-3.01-installer-x64.exe"
+          Invoke-WebRequest -Uri "https://openssl-library.org/ci-deps/$installer" -OutFile $installer
+          $expected = (Get-Content "$env:GITHUB_WORKSPACE\.github\ci-deps.json" -Raw | ConvertFrom-Json).$installer
+          $actual = (Get-FileHash $installer -Algorithm SHA256).Hash
+          if ($actual -ne $expected) { throw "SHA256 mismatch for $installer (expected $expected, got $actual)" }
+          Start-Process -FilePath ".\$installer" -ArgumentList '/S' -Wait
+          "C:\Program Files\NASM" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+
+      - name: install jom
+        if: steps.fips_cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          mkdir C:\jom
+          Invoke-WebRequest -Uri "https://openssl-library.org/ci-deps/jom-1.1.7.exe" -OutFile C:\jom\jom.exe
+          $expected = (Get-Content "$env:GITHUB_WORKSPACE\.github\ci-deps.json" -Raw | ConvertFrom-Json).'jom-1.1.7.exe'
+          $actual = (Get-FileHash C:\jom\jom.exe -Algorithm SHA256).Hash
+          if ($actual -ne $expected) { throw "SHA256 mismatch for jom.exe (expected $expected, got $actual)" }
+          "C:\jom" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+
+      - name: Build FIPS module (VC-WIN64A)
+        if: steps.fips_cache.outputs.cache-hit != 'true'
+        shell: cmd
+        working-directory: openssl-fips
+        run: |
+          call "%VCVARS%"
+          perl Configure VC-WIN64A enable-fips no-makedepend
+          jom /j4 /S
+
+      - name: Upload FIPS providers
+        uses: actions/upload-artifact@v4
+        with:
+          name: openssl-fips-providers
+          path: |
+            openssl-fips/providers/fips.dll
+            openssl-fips/providers/fips.lib
+            openssl-fips/providers/fips.pdb
+          if-no-files-found: error
+
+  build:
+    name: Build ${{ matrix.crt.flavor }} installers (${{ matrix.openssl-ref }})
+    needs: fips
+    runs-on: windows-2025
     strategy:
       fail-fast: false
       matrix:
-        # Only refs with a corresponding windows-installer/<ref>.aip.
         openssl-ref: [openssl-4.0]
+        crt:
+          - { flavor: vs, target: VC-WIN64A, exe_build: ExeBuild, msi_build: MsiBuild, keep: OpenSSL-x64-VS-* }
+          - { flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, exe_build: ExeBuild_hybrid, msi_build: MsiBuild_hybrid, keep: OpenSSL-x64-hybridCRT-* }
     steps:
       - name: Checkout installer
         uses: actions/checkout@v7
@@ -35,28 +115,12 @@ jobs:
           path: openssl
           fetch-tags: true
 
-      - name: Checkout OpenSSL for HybridCRT (${{ matrix.openssl-ref }})
-        uses: actions/checkout@v7
-        with:
-          repository: openssl/openssl
-          ref: ${{ matrix.openssl-ref }}
-          path: openssl-hybrid
-          fetch-tags: true
-
       - name: Detect OpenSSL version from latest tag
         id: openssl_version
         shell: pwsh
         working-directory: openssl
         run: |
-          # Pick the highest patch-version tag in this branch's family. The
-          # branch name itself is the tag prefix: openssl-4.0 branch → tags
-          # named openssl-4.0.*. version:refname sort uses numeric component
-          # ordering so openssl-4.0.10 ranks above openssl-4.0.9.
-          #
-          # We deliberately don't use --merged HEAD: the checkout is shallow
-          # (fetch-depth: 1) so git can't compute reachability — the merged
-          # filter would return an empty list. Pattern matching on the
-          # branch's own tag prefix is the equivalent constraint.
+          # Pick the highest patch-version tag in this branch's family.
           $pattern = '${{ matrix.openssl-ref }}.*'
           $tag = git tag --list $pattern --sort=-version:refname | Select-Object -First 1
           if (-not $tag) {
@@ -74,45 +138,16 @@ jobs:
           "winctx=$($parts[0]).$($parts[1])-OpenSSLProject"   >> $env:GITHUB_OUTPUT
 
       - name: Check out detected tag
-        shell: pwsh
-        run: |
-          $tag = "tags/openssl-${{ steps.openssl_version.outputs.version }}"
-          foreach ($d in "openssl", "openssl-hybrid") {
-            git -C $d -c advice.detachedHead=false checkout $tag
-            if ($LASTEXITCODE -ne 0) { throw "checkout $tag in $d failed" }
-          }
+        shell: cmd
+        working-directory: openssl
+        run: git -c advice.detachedHead=false checkout tags/openssl-${{ steps.openssl_version.outputs.version }}
 
       - name: Restore OpenSSL build cache
         id: openssl_cache
         uses: actions/cache@v5
         with:
-          path: |
-            openssl
-            openssl-hybrid
-            openssl-fips
-          key: openssl-build-${{ runner.os }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-fips-${{ env.FIPS_REF }}-v2
-
-      - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
-        if: steps.openssl_cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v6
-        with:
-          repository: openssl/openssl
-          ref: ${{ env.FIPS_REF }}
-          path: openssl-fips
-
-      - name: Apply Windows build patches to FIPS source
-        # openssl-3.1.2 needs two backported fixes to build on modern MSVC.
-        # Skipped for other FIPS refs.
-        if: steps.openssl_cache.outputs.cache-hit != 'true' && env.FIPS_REF == 'openssl-3.1.2'
-        shell: pwsh
-        working-directory: openssl-fips
-        run: |
-          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-win-Fix-warning-build-issue.patch"
-          if ($LASTEXITCODE -ne 0) { throw "patch 0001 failed" }
-          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0002-windows-makefile-libdir-absolute.patch"
-          if ($LASTEXITCODE -ne 0) { throw "patch 0002 failed" }
-          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-3.1-Windows-Use-Z7-compiler-flag-to-enable-parallel-.patch"
-          if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
+          path: openssl
+          key: openssl-build-${{ runner.os }}-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-v1
 
       - name: install nasm
         if: steps.openssl_cache.outputs.cache-hit != 'true'
@@ -140,41 +175,26 @@ jobs:
       - name: Apply jom build patches to older than 4.1
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: pwsh
+        working-directory: openssl
         run: |
-          $patch = "$env:GITHUB_WORKSPACE\windows-installer\0001-Windows-Use-Z7-compiler-flag-to-enable-parallel-buil.patch"
-          foreach ($d in "openssl", "openssl-hybrid") {
-            git -C $d apply --verbose $patch
-            if ($LASTEXITCODE -ne 0) { throw "jom patch failed in $d" }
-          }
+          git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-Windows-Use-Z7-compiler-flag-to-enable-parallel-buil.patch"
+          if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
 
-      - name: Build OpenSSL (VC-WIN64A)
+      - name: Build OpenSSL (${{ matrix.crt.target }})
         if: steps.openssl_cache.outputs.cache-hit != 'true'
         shell: cmd
         working-directory: openssl
         run: |
           call "%VCVARS%"
-          perl Configure VC-WIN64A enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
+          perl Configure ${{ matrix.crt.target }} enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
           jom /j4 /S
           jom build_docs
 
-      - name: Build OpenSSL (VC-WIN64A-HYBRIDCRT)
-        if: steps.openssl_cache.outputs.cache-hit != 'true'
-        shell: cmd
-        working-directory: openssl-hybrid
-        run: |
-          call "%VCVARS%"
-          perl Configure VC-WIN64A-HYBRIDCRT enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
-          jom /j4 /S
-          jom build_docs
-
-      - name: Build OpenSSL (FIPS source)
-        if: steps.openssl_cache.outputs.cache-hit != 'true'
-        shell: cmd
-        working-directory: openssl-fips
-        run: |
-          call "%VCVARS%"
-          perl Configure VC-WIN64A enable-fips no-makedepend
-          jom /j4 /S
+      - name: Download FIPS providers
+        uses: actions/download-artifact@v4
+        with:
+          name: openssl-fips-providers
+          path: openssl-fips/providers
 
       - name: Build installers
         uses: caphyon/advinst-github-action@7edde34c6ff935e53e3de72a5699efcfceb5f6c6  # v2.0.3 (current main HEAD)
@@ -183,28 +203,22 @@ jobs:
           advinst-license: ${{ secrets.ADVINST_LICENSE_KEY }}
           advinst-enable-automation: 'true'
           aip-path: ${{ github.workspace }}\windows-installer\openssl.aip
-          aip-build-name: MsiBuild_hybrid
+          aip-build-name: ${{ matrix.crt.msi_build }}
           aip-commands: |
             ResetSig
             SetVersion ${{ steps.openssl_version.outputs.version }}
             SetProperty VERSION_MAJOR=${{ steps.openssl_version.outputs.major }}
             SetProperty VERSION_MINOR=${{ steps.openssl_version.outputs.minor }}
             SetProperty VERSION_REGISTRY=${{ steps.openssl_version.outputs.winctx }}
-            UpdatePathVariable -name OPENSSL_SOURCE_DIR -value ..\openssl -valuetype Folder
-            Save
-            Build -buildslist ExeBuild
-            Build -buildslist MsiBuild
-            UpdatePathVariable -name OPENSSL_SOURCE_DIR -value ..\openssl-hybrid -valuetype Folder
-            Save
-            Build -buildslist ExeBuild_hybrid
+            Build -buildslist ${{ matrix.crt.exe_build }}
 
       - name: Upload installers
         uses: actions/upload-artifact@v4
         with:
-          name: installers-${{ matrix.openssl-ref }}
+          name: installers-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}
           path: |
-            build-target/Installer64/*.exe
-            build-target/Installer64/*.msi
+            build-target/Installer64/${{ matrix.crt.keep }}.exe
+            build-target/Installer64/${{ matrix.crt.keep }}.msi
           if-no-files-found: error
 
   test:
@@ -227,8 +241,9 @@ jobs:
       - name: Download installers
         uses: actions/download-artifact@v4
         with:
-          name: installers-${{ matrix.openssl-ref }}
+          pattern: installers-*-${{ matrix.openssl-ref }}
           path: build
+          merge-multiple: true
 
       - name: Install uv
         uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39  # v3 (= release v3.2.4)
@@ -250,11 +265,6 @@ jobs:
           if (-not $file) { throw "No installer matching '$pattern' found in build/" }
           $mb = [math]::Round($file.Length / 1MB, 2)
           Write-Host "Testing installer: $($file.Name) ($mb MB)"
-          # Just resolve the path; the pytest `installer` fixture handles
-          # isolation — it copies the single file under test into an otherwise-
-          # empty temp dir before installing, so a non-self-contained .exe
-          # bootstrapper can't silently borrow a co-located sibling .msi from
-          # build/ (which holds all four artifacts) and mask a stub build.
           "path=$($file.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: Run pytest

@@ -194,11 +194,11 @@ def test_crt_flavor_import_table(installer: InstallerInfo, install_dir: Path) ->
     reflect the installer's flavor (the shared validated FIPS module is always
     VC-WIN64A and is intentionally excluded here)."""
     install(installer, ["INSTALL_APP=1", "INSTALL_SDK=1"])
-    major = installer.major
+    major, arch = installer.major, installer.arch
     binaries = [
         install_dir / "bin" / "openssl.exe",
-        install_dir / "bin" / f"libcrypto-{major}-x64.dll",
-        install_dir / "bin" / f"libssl-{major}-x64.dll",
+        install_dir / "bin" / f"libcrypto-{major}-{arch}.dll",
+        install_dir / "bin" / f"libssl-{major}-{arch}.dll",
         install_dir / "lib" / "ossl-modules" / "legacy.dll",
     ]
     problems: list[str] = []

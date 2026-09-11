@@ -26,20 +26,21 @@ registry:
 # Expected files. Keys are directories relative to {install_dir}; "" is the root.
 # Each entry's `flags` indicates which install configurations include it:
 #   all, app, sdk, fips, fips_sdk
-# Placeholders in `name`: {major}, {minor}, {patch}
+# Placeholders in `name`: {major}, {minor}, {patch}, {arch} ("x64" or "arm64",
+# taken from the installer filename; it is also OpenSSL's DLL name suffix).
 files:
   "":
     - { name: LICENSE.txt, flags: all }
     - { name: version.dat, flags: all }
   "bin":
-    - { name: openssl.exe,                 flags: app }
-    - { name: "libcrypto-{major}-x64.dll", flags: app }
-    - { name: "libssl-{major}-x64.dll",    flags: app }
+    - { name: openssl.exe,                    flags: app }
+    - { name: "libcrypto-{major}-{arch}.dll", flags: app }
+    - { name: "libssl-{major}-{arch}.dll",    flags: app }
   "lib":
-    - { name: "libcrypto-{major}-x64.dll", flags: sdk }
-    - { name: "libssl-{major}-x64.dll",    flags: sdk }
-    - { name: "libcrypto-{major}-x64.pdb", flags: sdk }
-    - { name: "libssl-{major}-x64.pdb",    flags: sdk }
+    - { name: "libcrypto-{major}-{arch}.dll", flags: sdk }
+    - { name: "libssl-{major}-{arch}.dll",    flags: sdk }
+    - { name: "libcrypto-{major}-{arch}.pdb", flags: sdk }
+    - { name: "libssl-{major}-{arch}.pdb",    flags: sdk }
     - { name: libcrypto.lib,               flags: sdk }
     - { name: libssl.lib,                  flags: sdk }
     - { name: libcrypto_static.lib,        flags: sdk }

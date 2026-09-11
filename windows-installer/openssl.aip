@@ -3,37 +3,37 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="ADJUSTSYSTEMPATHENV" Value="1" Type="4"/>
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
-    <ROW Property="AI_CF_FRAME_STYLE" MultiBuildValue="Build:true;true;true#MsiBuild_arm64:true;true;true"/>
-    <ROW Property="AI_CF_TYPE" Value="1" MultiBuildValue="DefaultBuild:0#ExeBuild_arm64:0"/>
+    <ROW Property="AI_CF_FRAME_STYLE" MultiBuildValue="Build:true;true;true#MsiBuild_arm64:true;true;true#MsiBuild_x86:true;true;true"/>
+    <ROW Property="AI_CF_TYPE" Value="1" MultiBuildValue="DefaultBuild:0#ExeBuild_arm64:0#ExeBuild_x86:0"/>
     <ROW Property="AI_CLEAN_RESOURCES_DISABLE_UPGRADE" Value="1"/>
     <ROW Property="AI_CLEAN_RESOURCES_UNINSTALL" Value="1"/>
     <ROW Property="AI_CLEAN_RESOURCES_USER_PROMPT_BASIC_UI" Value="0"/>
     <ROW Property="AI_CLEAN_RESOURCES_USER_PROMPT_FULL_UI" Value="0"/>
     <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
-    <ROW Property="AI_PREREQ_REPAIR_ENABLED" MultiBuildValue="DefaultBuild:1#Build:1#ExeBuild_arm64:1#MsiBuild_arm64:1"/>
+    <ROW Property="AI_PREREQ_REPAIR_ENABLED" MultiBuildValue="DefaultBuild:1#Build:1#ExeBuild_arm64:1#MsiBuild_arm64:1#ExeBuild_x86:1#MsiBuild_x86:1"/>
     <ROW Property="AI_UPGRADE" Value="No"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPCONTACT" Value="support@openssl.org"/>
     <ROW Property="ARPHELPLINK" Value="https://openssl-corporation.org/solutions/support/"/>
-    <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1#ExeBuild_arm64:1"/>
-    <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1#ExeBuild_1:1#ExeBuild_arm64:1"/>
+    <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1#ExeBuild_arm64:1#ExeBuild_x86:1"/>
+    <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1#ExeBuild_1:1#ExeBuild_arm64:1#ExeBuild_x86:1#ExeBuild_x86_hybrid:1"/>
     <ROW Property="ARPPRODUCTICON" Value="logo.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://openssl-corporation.org/solutions/support/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://openssl-library.org"/>
-    <ROW Property="AiEmbeddedUI" Value="1" MultiBuildValue="DefaultBuild:#Build:#MsiBuild_1:#ExeBuild_1:#ExeBuild_arm64:#MsiBuild_arm64:"/>
-    <ROW Property="AiWinUI" Value="1" MultiBuildValue="DefaultBuild:#Build:#MsiBuild_1:#ExeBuild_1:#ExeBuild_arm64:#MsiBuild_arm64:"/>
-    <ROW Property="AppLogoIcon" Value="applogo.png" MultiBuildValue="DefaultBuild:logo.png#Build:logo.png#MsiBuild_1:logo.png#ExeBuild_1:logo.png#ExeBuild_arm64:logo.png#MsiBuild_arm64:logo.png" Type="1" MsiKey="AppLogoIcon"/>
+    <ROW Property="AiEmbeddedUI" Value="1" MultiBuildValue="DefaultBuild:#Build:#MsiBuild_1:#ExeBuild_1:#ExeBuild_arm64:#MsiBuild_arm64:#ExeBuild_x86:#MsiBuild_x86:#ExeBuild_x86_hybrid:#MsiBuild_x86_hybrid:"/>
+    <ROW Property="AiWinUI" Value="1" MultiBuildValue="DefaultBuild:#Build:#MsiBuild_1:#ExeBuild_1:#ExeBuild_arm64:#MsiBuild_arm64:#ExeBuild_x86:#MsiBuild_x86:#ExeBuild_x86_hybrid:#MsiBuild_x86_hybrid:"/>
+    <ROW Property="AppLogoIcon" Value="applogo.png" MultiBuildValue="DefaultBuild:logo.png#Build:logo.png#MsiBuild_1:logo.png#ExeBuild_1:logo.png#ExeBuild_arm64:logo.png#MsiBuild_arm64:logo.png#ExeBuild_x86:logo.png#MsiBuild_x86:logo.png#ExeBuild_x86_hybrid:logo.png#MsiBuild_x86_hybrid:logo.png" Type="1" MsiKey="AppLogoIcon"/>
     <ROW Property="FIPS_CONF" Value="openssl"/>
-    <ROW Property="FIPS_OPTION_TEXT" Value="Install FIPS provider" MultiBuildValue="MsiBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_1:Install FIPS provider ([|ProductVersion])"/>
+    <ROW Property="FIPS_OPTION_TEXT" Value="Install FIPS provider" MultiBuildValue="MsiBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_x86_hybrid:Install FIPS provider ([|ProductVersion])#MsiBuild_x86_hybrid:Install FIPS provider ([|ProductVersion])"/>
     <ROW Property="FIPS_VALIDATED" Value="fips"/>
     <ROW Property="INSTALL_APP" Value="1" Type="4"/>
     <ROW Property="INSTALL_FIPS_TYPE" Value="validated" Type="4"/>
     <ROW Property="INSTALL_SDK" Value="1" Type="4"/>
     <ROW Property="InstallerVersion" Value="0.9.0"/>
-    <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7#Build:7#MsiBuild_1:7#ExeBuild_1:7#ExeBuild_arm64:7#MsiBuild_arm64:7"/>
+    <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7#Build:7#MsiBuild_1:7#ExeBuild_1:7#ExeBuild_arm64:7#MsiBuild_arm64:7#ExeBuild_x86:7#MsiBuild_x86:7#ExeBuild_x86_hybrid:7#MsiBuild_x86_hybrid:7"/>
     <ROW Property="Manufacturer" Value="OpenSSL Corporation"/>
-    <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp#Build:vp#MsiBuild_1:vp#ExeBuild_1:vp#ExeBuild_arm64:vp#MsiBuild_arm64:vp"/>
+    <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp#Build:vp#MsiBuild_1:vp#ExeBuild_1:vp#ExeBuild_arm64:vp#MsiBuild_arm64:vp#ExeBuild_x86:vp#MsiBuild_x86:vp#ExeBuild_x86_hybrid:vp#MsiBuild_x86_hybrid:vp"/>
     <ROW Property="PRE_RELEASE" Value="0"/>
     <ROW Property="ProductCode" Value="1033:{DF69CA39-8B77-4D13-9809-E6A3F976A4E7} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
@@ -45,18 +45,18 @@
     <ROW Property="VERSION_MAJOR" Value="4"/>
     <ROW Property="VERSION_MINOR" Value="0"/>
     <ROW Property="VERSION_REGISTRY" Value="4.0-OpenSSLProject"/>
-    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME#MsiBuild_1:Windows 9x/ME#ExeBuild_1:Windows 9x/ME#ExeBuild_arm64:Windows 9x/ME" ValueLocId="-"/>
-    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME#MsiBuild_1:Windows 9x/ME#ExeBuild_1:Windows 9x/ME#ExeBuild_arm64:Windows 9x/ME" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT" MultiBuildValue="DefaultBuild:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#Build:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#MsiBuild_1:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#ExeBuild_1:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#ExeBuild_arm64:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#MsiBuild_arm64:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0#MsiBuild_1:Windows NT 4.0#ExeBuild_1:Windows NT 4.0#ExeBuild_arm64:Windows NT 4.0" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0#MsiBuild_1:Windows NT 4.0#ExeBuild_1:Windows NT 4.0#ExeBuild_arm64:Windows NT 4.0" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000#MsiBuild_1:Windows 2000#ExeBuild_1:Windows 2000#ExeBuild_arm64:Windows 2000" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000#MsiBuild_1:Windows 2000#ExeBuild_1:Windows 2000#ExeBuild_arm64:Windows 2000" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003#MsiBuild_1:Windows XP/2003#ExeBuild_1:Windows XP/2003#ExeBuild_arm64:Windows XP/2003" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003#MsiBuild_1:Windows XP/2003#ExeBuild_1:Windows XP/2003#ExeBuild_arm64:Windows XP/2003" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT60" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008#MsiBuild_1:Windows Vista/Server 2008#ExeBuild_1:Windows Vista/Server 2008#ExeBuild_arm64:Windows Vista/Server 2008" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNT60Display" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008#MsiBuild_1:Windows Vista/Server 2008#ExeBuild_1:Windows Vista/Server 2008#ExeBuild_arm64:Windows Vista/Server 2008" ValueLocId="-"/>
-    <ROW Property="WindowsTypeNTDisplay" MultiBuildValue="DefaultBuild:32-bit Windows versions#Build:32-bit Windows versions#MsiBuild_1:32-bit Windows versions#ExeBuild_1:32-bit Windows versions#ExeBuild_arm64:32-bit Windows versions#MsiBuild_arm64:32-bit Windows versions" ValueLocId="-"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME#MsiBuild_1:Windows 9x/ME#ExeBuild_1:Windows 9x/ME#ExeBuild_arm64:Windows 9x/ME#ExeBuild_x86:Windows 9x/ME#ExeBuild_x86_hybrid:Windows 9x/ME#MsiBuild_x86_hybrid:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME#MsiBuild_1:Windows 9x/ME#ExeBuild_1:Windows 9x/ME#ExeBuild_arm64:Windows 9x/ME#ExeBuild_x86:Windows 9x/ME#ExeBuild_x86_hybrid:Windows 9x/ME#MsiBuild_x86_hybrid:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT" MultiBuildValue="DefaultBuild:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#Build:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#MsiBuild_1:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#ExeBuild_1:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#ExeBuild_arm64:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#MsiBuild_arm64:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#ExeBuild_x86:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#MsiBuild_x86:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#ExeBuild_x86_hybrid:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86#MsiBuild_x86_hybrid:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0#MsiBuild_1:Windows NT 4.0#ExeBuild_1:Windows NT 4.0#ExeBuild_arm64:Windows NT 4.0#ExeBuild_x86:Windows NT 4.0#ExeBuild_x86_hybrid:Windows NT 4.0#MsiBuild_x86_hybrid:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0#MsiBuild_1:Windows NT 4.0#ExeBuild_1:Windows NT 4.0#ExeBuild_arm64:Windows NT 4.0#ExeBuild_x86:Windows NT 4.0#ExeBuild_x86_hybrid:Windows NT 4.0#MsiBuild_x86_hybrid:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000#MsiBuild_1:Windows 2000#ExeBuild_1:Windows 2000#ExeBuild_arm64:Windows 2000#ExeBuild_x86:Windows 2000#ExeBuild_x86_hybrid:Windows 2000#MsiBuild_x86_hybrid:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000#MsiBuild_1:Windows 2000#ExeBuild_1:Windows 2000#ExeBuild_arm64:Windows 2000#ExeBuild_x86:Windows 2000#ExeBuild_x86_hybrid:Windows 2000#MsiBuild_x86_hybrid:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003#MsiBuild_1:Windows XP/2003#ExeBuild_1:Windows XP/2003#ExeBuild_arm64:Windows XP/2003#ExeBuild_x86:Windows XP/2003#ExeBuild_x86_hybrid:Windows XP/2003#MsiBuild_x86_hybrid:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003#MsiBuild_1:Windows XP/2003#ExeBuild_1:Windows XP/2003#ExeBuild_arm64:Windows XP/2003#ExeBuild_x86:Windows XP/2003#ExeBuild_x86_hybrid:Windows XP/2003#MsiBuild_x86_hybrid:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008#MsiBuild_1:Windows Vista/Server 2008#ExeBuild_1:Windows Vista/Server 2008#ExeBuild_arm64:Windows Vista/Server 2008#ExeBuild_x86:Windows Vista/Server 2008#ExeBuild_x86_hybrid:Windows Vista/Server 2008#MsiBuild_x86_hybrid:Windows Vista/Server 2008" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60Display" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008#MsiBuild_1:Windows Vista/Server 2008#ExeBuild_1:Windows Vista/Server 2008#ExeBuild_arm64:Windows Vista/Server 2008#ExeBuild_x86:Windows Vista/Server 2008#ExeBuild_x86_hybrid:Windows Vista/Server 2008#MsiBuild_x86_hybrid:Windows Vista/Server 2008" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNTDisplay" MultiBuildValue="DefaultBuild:32-bit Windows versions#Build:32-bit Windows versions#MsiBuild_1:32-bit Windows versions#ExeBuild_1:32-bit Windows versions#ExeBuild_arm64:32-bit Windows versions#MsiBuild_arm64:32-bit Windows versions#ExeBuild_x86:32-bit Windows versions#MsiBuild_x86:32-bit Windows versions#ExeBuild_x86_hybrid:32-bit Windows versions#MsiBuild_x86_hybrid:32-bit Windows versions" ValueLocId="-"/>
     <ATTRIBUTE name="DeletedRows" value="AI_CF_CLOSEBTN_BASE_COLOR@AI_CF_CLOSEBTN_BORDER_COLORS@AI_CF_CLOSEBTN_COLORS@AI_CF_FRAME_BASE_COLOR@AI_CF_FRAME_BORDER1_COLORS@AI_CF_FRAME_BORDER2_COLORS@AI_CF_FRAME_BORDER3_COLORS@AI_CF_FRAME_CAPTION2_COLORS@AI_CF_FRAME_METRICS@AI_CF_FRAME_STYLE@AI_CF_MINBTN_BASE_COLOR@AI_CF_MINBTN_BORDER_COLORS@AI_CF_MINBTN_COLORS@AiSkipExitDlg"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
@@ -110,6 +110,10 @@
     <ROW Component="libcrypto4arm64.dll_1" Value="{E34B297B-EB22-4A55-94DA-705B14ECC4A3}"/>
     <ROW Component="libssl4arm64.dll" Value="{8AECD3B0-C0F8-4C33-82E5-D59F4A577596}"/>
     <ROW Component="libssl4arm64.dll_1" Value="{3C886D49-62BC-4F78-8A74-E8775580B878}"/>
+    <ROW Component="libcrypto4x86.dll" Value="{D48832D8-4E27-5ED2-9AB3-0FC7DB47FE40}"/>
+    <ROW Component="libcrypto4x86.dll_1" Value="{F3A430DB-8036-5675-AE5B-0A3B444D7F52}"/>
+    <ROW Component="libssl4x86.dll" Value="{91CAA7A1-1E73-5312-B334-99C91F7D6812}"/>
+    <ROW Component="libssl4x86.dll_1" Value="{B3F541AF-EE46-59AC-8ACC-82DB482CC8F3}"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_ExePath" ComponentId="{6F396ED5-F66D-4150-A035-B5C6F152123F}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
@@ -148,6 +152,11 @@
     <ROW Component="libcrypto4arm64.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto4arm64.dll_1"/>
     <ROW Component="libssl4arm64.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libssl4arm64.dll"/>
     <ROW Component="libssl4arm64.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libssl4arm64.dll_1"/>
+    <ROW Component="VCRedistX86" ComponentId="{2F0DC34F-7029-56D1-B8C5-5220EDD719FF}" Directory_="APPDIR" Attributes="260" KeyPath="VCRedistX86" Options="2"/>
+    <ROW Component="libcrypto4x86.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libcrypto4x86.dll"/>
+    <ROW Component="libcrypto4x86.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto4x86.dll_1"/>
+    <ROW Component="libssl4x86.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libssl4x86.dll"/>
+    <ROW Component="libssl4x86.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libssl4x86.dll_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="AlwaysInstalled" Title="AlwaysInstalled" Description="Always installed" Display="11" Level="1" Directory_="APPDIR" Attributes="0"/>
@@ -157,10 +166,13 @@
     <ROW Feature="MainFeature" Title="Application" Display="1" Level="4" Directory_="APPDIR" Attributes="24"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
     <ROW Feature="VCRedistARM64" Title="Visual C++ Redistributable for Visual Studio 2015-2022 arm64" Description="Visual C++ Redistributable for Visual Studio 2015-2022 arm64" Display="15" Level="1" Attributes="16" Builds="ExeBuild_arm64;MsiBuild_arm64"/>
+    <ROW Feature="VCRedistX86" Title="Visual C++ Redistributable for Visual Studio 2015-2022 x86" Description="Visual C++ Redistributable for Visual Studio 2015-2022 x86" Display="17" Level="1" Attributes="16" Builds="ExeBuild_x86;MsiBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
     <ROW Feature="MainFeature_x64" Feature_Parent="MainFeature" Title="MainFeature (x64)" Description="libcrypto/libssl x64 binaries" Display="0" Level="4" Directory_="APPDIR" Attributes="2" Builds="DefaultBuild;Build;MsiBuild_1;ExeBuild_1"/>
     <ROW Feature="MainFeature_arm64" Feature_Parent="MainFeature" Title="MainFeature (arm64)" Description="libcrypto/libssl arm64 binaries" Display="0" Level="4" Directory_="APPDIR" Attributes="2" Builds="ExeBuild_arm64;MsiBuild_arm64"/>
+    <ROW Feature="MainFeature_x86" Feature_Parent="MainFeature" Title="MainFeature (x86)" Description="libcrypto/libssl x86 binaries" Display="0" Level="4" Directory_="APPDIR" Attributes="2" Builds="ExeBuild_x86;MsiBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
     <ROW Feature="Development_x64" Feature_Parent="Development" Title="Development (x64)" Description="libcrypto/libssl x64 binaries" Display="0" Level="4" Directory_="APPDIR" Attributes="2" Builds="DefaultBuild;Build;MsiBuild_1;ExeBuild_1"/>
     <ROW Feature="Development_arm64" Feature_Parent="Development" Title="Development (arm64)" Description="libcrypto/libssl arm64 binaries" Display="0" Level="4" Directory_="APPDIR" Attributes="2" Builds="ExeBuild_arm64;MsiBuild_arm64"/>
+    <ROW Feature="Development_x86" Feature_Parent="Development" Title="Development (x86)" Description="libcrypto/libssl x86 binaries" Display="0" Level="4" Directory_="APPDIR" Attributes="2" Builds="ExeBuild_x86;MsiBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="openssl.exe" Component_="openssl.exe" FileName="openssl.exe" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.exe" SelfReg="false" DigSign="true"/>
@@ -195,6 +207,12 @@
     <ROW File="libcrypto4arm64.pdb" Component_="libcrypto4arm64.dll_1" FileName="LIBCRY~2.PDB|libcrypto-4-arm64.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4-arm64.pdb" SelfReg="false"/>
     <ROW File="libssl4arm64.dll_1" Component_="libssl4arm64.dll_1" FileName="LIBSSL~2.DLL|libssl-4-arm64.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4-arm64.dll" SelfReg="false" DigSign="true"/>
     <ROW File="libssl4arm64.pdb" Component_="libssl4arm64.dll_1" FileName="LIBSSL~2.PDB|libssl-4-arm64.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4-arm64.pdb" SelfReg="false"/>
+    <ROW File="libcrypto4x86.dll" Component_="libcrypto4x86.dll" FileName="LIBCRY~3.DLL|libcrypto-4.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libssl4x86.dll" Component_="libssl4x86.dll" FileName="LIBSSL~3.DLL|libssl-4.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libcrypto4x86.dll_1" Component_="libcrypto4x86.dll_1" FileName="LIBCRY~3.DLL|libcrypto-4.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libcrypto4x86.pdb" Component_="libcrypto4x86.dll_1" FileName="LIBCRY~3.PDB|libcrypto-4.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libcrypto-4.pdb" SelfReg="false"/>
+    <ROW File="libssl4x86.dll_1" Component_="libssl4x86.dll_1" FileName="LIBSSL~3.DLL|libssl-4.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="libssl4x86.pdb" Component_="libssl4x86.dll_1" FileName="LIBSSL~3.PDB|libssl-4.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4.pdb" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentDataComponent">
     <ROW PersistentRow="ct_log_list.cnf" Type="0" Condition="1"/>
@@ -227,6 +245,10 @@
     <ROW BuildKey="MsiBuild_1" BuildName="MsiBuild_hybrid" BuildOrder="3" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x64-hybridCRT-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" Unicode="true" MsiPackageType="x64"/>
     <ROW BuildKey="ExeBuild_arm64" BuildName="ExeBuild_arm64" BuildOrder="5" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-arm64-VS-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-arm64-VS-[|ProductVersion]" MsiPackageType="Arm64"/>
     <ROW BuildKey="MsiBuild_arm64" BuildName="MsiBuild_arm64" BuildOrder="6" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-arm64-VS-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" Unicode="true" MsiPackageType="Arm64"/>
+    <ROW BuildKey="ExeBuild_x86" BuildName="ExeBuild_x86" BuildOrder="7" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x86-VS-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-x86-VS-[|ProductVersion]" MsiPackageType="x86"/>
+    <ROW BuildKey="MsiBuild_x86" BuildName="MsiBuild_x86" BuildOrder="8" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x86-VS-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" Unicode="true" MsiPackageType="x86"/>
+    <ROW BuildKey="ExeBuild_x86_hybrid" BuildName="ExeBuild_x86_hybrid" BuildOrder="9" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x86-hybridCRT-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" SummInfoMetadata="Page Count:450" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-x86-hybridCRT-[|ProductVersion]" MsiPackageType="x86"/>
+    <ROW BuildKey="MsiBuild_x86_hybrid" BuildName="MsiBuild_x86_hybrid" BuildOrder="10" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x86-hybridCRT-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" Unicode="true" MsiPackageType="x86"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -286,8 +308,8 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
     <ROW Property="INSTALL_VISUAL_STUDIO" Signature_="AppSearchSign"/>
-    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild;Build;ExeBuild_1;ExeBuild_arm64;MsiBuild_arm64"/>
-    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild;Build;ExeBuild_1;ExeBuild_arm64;MsiBuild_arm64"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild;Build;ExeBuild_1;ExeBuild_arm64;MsiBuild_arm64;ExeBuild_x86;MsiBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild;Build;ExeBuild_1;ExeBuild_arm64;MsiBuild_arm64;ExeBuild_x86;MsiBuild_x86;ExeBuild_x86_hybrid"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
     <ROW Name="Prereq.dll" SourcePath="&lt;AI_CUSTACTS&gt;Prereq.dll"/>
@@ -317,6 +339,8 @@
     <ROW Feature_="Development_x64" Level="1" Condition="INSTALL_SDK = &quot;1&quot;"/>
     <ROW Feature_="MainFeature_arm64" Level="1" Condition="INSTALL_APP = &quot;1&quot;"/>
     <ROW Feature_="Development_arm64" Level="1" Condition="INSTALL_SDK = &quot;1&quot;"/>
+    <ROW Feature_="MainFeature_x86" Level="1" Condition="INSTALL_APP = &quot;1&quot;"/>
+    <ROW Feature_="Development_x86" Level="1" Condition="INSTALL_SDK = &quot;1&quot;"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
     <ROW Dialog_="AboutDlg" Control="ProducVersionText" Type="Text" X="14" Y="52" Width="200" Height="15" Attributes="196611" Text="© [AI_CURRENT_YEAR] [Manufacturer]" TextStyle="[ManufacturerFontSmall]" Order="500" TextLocId="-" MsiKey="AboutDlg#ProducVersionText"/>
@@ -424,7 +448,7 @@
     <ROW Dialog_="OptionsDlg" Control_="RadioButtonGroup_1" Action="Disable" Condition="NOT INSTALL_FIPS"/>
     <ROW Dialog_="SDKDlg" Control_="Text_3" Action="Show" Condition="INSTALL_APP = &quot;1&quot; AND NOT INSTALL_VISUAL_STUDIO"/>
     <ROW Dialog_="SDKDlg" Control_="Text_3" Action="Hide" Condition="NOT INSTALL_APP = &quot;1&quot;"/>
-    <ROW Dialog_="OptionsDlg" Control_="RadioButtonGroup_1" Action="Hide" Condition="AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot;"/>
+    <ROW Dialog_="OptionsDlg" Control_="RadioButtonGroup_1" Action="Hide" Condition="AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;ExeBuild_x86_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_x86_hybrid&quot;"/>
     <ATTRIBUTE name="DeletedRows" value="AboutDlg#Hyperlink#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR NOT AiReadmeLink@ExitDialog#ViewReadmeCheckBox#Hide#(((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 1) AND (CTRLS &lt;&gt; 3))) OR AiReadmeLink@ExitDialog#ViewReadmeText#Hide#(((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 1) AND (CTRLS &lt;&gt; 3))) OR AiReadmeLink@ProgressDlg#LaunchCheckBox#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 2) AND (CTRLS &lt;&gt; 3))@UI.aip@UpgradeDlg.aip@WelcomeDlg#LaunchCheckBox#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 2) AND (CTRLS &lt;&gt; 3))@WelcomeDlg.aip"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
@@ -506,7 +530,7 @@
     <ROW Dialog_="SpawnDialog_1" Control_="Ok" Event="EndDialog" Argument="Return" Condition="1" Ordering="100"/>
     <ROW Dialog_="SpawnDialog_1" Control_="AboutBtn" Event="SpawnDialog" Argument="AboutDlg" Condition="1" Ordering="1"/>
     <ROW Dialog_="OptionsDlg" Control_="Next" Event="SpawnDialog" Argument="SpawnDialog_1" Condition="(NOT INSTALL_APP = &quot;1&quot;) AND (INSTALL_FIPS = &quot;1&quot;)" Ordering="1"/>
-    <ROW Dialog_="OptionsDlg" Control_="OptionsDlgDialogInitializer" Event="[INSTALL_FIPS_TYPE]" Argument="current" Condition="( AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot; )" Ordering="0"/>
+    <ROW Dialog_="OptionsDlg" Control_="OptionsDlgDialogInitializer" Event="[INSTALL_FIPS_TYPE]" Argument="current" Condition="( AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;ExeBuild_x86_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_x86_hybrid&quot; )" Ordering="0"/>
     <ATTRIBUTE name="DeletedRows" value="ExitDialog#LaunchBtn#DoAction#AI_LaunchApp#(AI_INSTALL OR AI_PATCH OR AI_MAINT)@ExitDialog#LaunchBtn#EndDialog#Exit#1@MaintenanceWelcomeDlg#LaunchButton#EndDialog#Exit#1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
@@ -587,8 +611,8 @@
     <ROW Action="CopyFileFolder" Type="3073" Source="aicustact.dll" Target="CopyFileFolder" Options="1" AdditionalSeq="AI_DATA_SETTER_1"/>
     <ROW Action="CopyFileFolder_1" Type="3073" Source="aicustact.dll" Target="CopyFileFolder" Options="1" AdditionalSeq="AI_DATA_SETTER_2"/>
     <ROW Action="LaunchFile" Type="3074" Source="viewer.exe" Target="/RunAsAdmin /HideWindow &quot;[APPDIR]\bin\openssl.exe&quot; fipsinstall -module &quot;[osslmodules_Dir]fips.dll&quot; -out &quot;[APPDIR]config\fipsmodule.cnf&quot;" Options="1"/>
-    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#Build:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_1:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_1:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_arm64:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_arm64:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]"/>
-    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#Build:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_1:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_1:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_arm64:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_arm64:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#Build:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_1:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_1:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_arm64:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_arm64:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_x86:[ProgramFilesFolder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_x86:[ProgramFilesFolder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_x86_hybrid:[ProgramFilesFolder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_x86_hybrid:[ProgramFilesFolder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#Build:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_1:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_1:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_arm64:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_arm64:[ProgramFiles64Folder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_x86:[ProgramFilesFolder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_x86:[ProgramFilesFolder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#ExeBuild_x86_hybrid:[ProgramFilesFolder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]#MsiBuild_x86_hybrid:[ProgramFilesFolder][ProductName]\openssl-[VERSION_MAJOR].[VERSION_MINOR]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDialogComponent">
@@ -666,6 +690,11 @@
     <ROW Feature_="MainFeature_arm64" Component_="libssl4arm64.dll"/>
     <ROW Feature_="Development_arm64" Component_="libcrypto4arm64.dll_1"/>
     <ROW Feature_="Development_arm64" Component_="libssl4arm64.dll_1"/>
+    <ROW Feature_="VCRedistX86" Component_="VCRedistX86"/>
+    <ROW Feature_="MainFeature_x86" Component_="libcrypto4x86.dll"/>
+    <ROW Feature_="MainFeature_x86" Component_="libssl4x86.dll"/>
+    <ROW Feature_="Development_x86" Component_="libcrypto4x86.dll_1"/>
+    <ROW Feature_="Development_x86" Component_="libssl4x86.dll_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="logo.exe" SourcePath="resources\logo.ico" Index="0"/>
@@ -696,16 +725,16 @@
     <ROW Action="AI_DATA_SETTER_1" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;validated&quot; )" Sequence="6402"/>
     <ROW Action="CopyFileFolder_1" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;current&quot; )" Sequence="6405"/>
     <ROW Action="AI_DATA_SETTER_2" Condition="( NOT Installed ) AND ( INSTALL_FIPS AND INSTALL_FIPS_TYPE = &quot;current&quot; )" Sequence="6404"/>
-    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_DeleteRCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="198" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_ExtractCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="197" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_FindExeLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="196" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_ExtractLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1549" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_DeleteRLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1548" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_DeleteRCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="198" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_ExtractCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="197" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_FindExeLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="196" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_ExtractLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1549" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_DeleteRLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1548" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
     <ROW Action="AI_DATA_SETTER_3" Sequence="1398"/>
     <ROW Action="AI_AiRemoveFilesImmediate" Sequence="3499"/>
   </COMPONENT>
@@ -728,12 +757,12 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="( Version9X OR VersionNT64 )" Description="[ProductName] cannot be installed on [WindowsTypeNTDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT" IsPredefined="true" Builds="DefaultBuild;Build;MsiBuild_1;ExeBuild_1;ExeBuild_arm64;MsiBuild_arm64"/>
-    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Condition="(VersionNT &lt;&gt; 600)" Description="[ProductName] cannot be installed on [WindowsTypeNT60Display]." DescriptionLocId="AI.LaunchCondition.NoNT60" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64"/>
-    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64"/>
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
+    <ROW Condition="(VersionNT &lt;&gt; 600)" Description="[ProductName] cannot be installed on [WindowsTypeNT60Display]." DescriptionLocId="AI.LaunchCondition.NoNT60" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
+    <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="DefaultBuild;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild;MsiBuild_1;ExeBuild_1;ExeBuild_arm64;ExeBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRadioButtonComponent">
     <ROW Property="AI_UPGRADE" Order="1" Value="Yes" X="0" Y="0" Width="250" Height="15" Text="[AI_Upgrade_Question_Yes]" TextStyle="[ManufacturerFont]" TextLocId="-" MsiKey="AI_UPGRADE#1"/>
@@ -769,6 +798,7 @@
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
     <ROW Registry="Wow6432Node" Root="-1" Key="Software\Wow6432Node" Name="+" Component_="RegistryKeys"/>
     <ROW Registry="VCRedistARM64" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="VCRedistARM64" Value="1" Component_="VCRedistARM64"/>
+    <ROW Registry="VCRedistX86" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="VCRedistX86" Value="1" Component_="VCRedistX86"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRemoveFileComponent">
     <ROW FileKey="_" Component_="openssl.exe" DirProperty="bin_Dir" InstallMode="2"/>
@@ -799,11 +829,13 @@
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqComponent">
     <ROW PrereqKey="C4FE6FD5B7C4D07B3A313E754A9A6A8" DisplayName="Visual C++ Redistributable for Visual Studio 2015-2022 x64" VersionMin="14.40" SetupFileUrl="Prerequisites\Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x64.exe" Location="0" ExactSize="0" WinNTVersions="Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" WinNT64Versions="Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64" Operator="1" ComLine="/q /norestart" NoUiComLine="/q /norestart" Options="xfm" TargetName="Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x64.exe" Builds="DefaultBuild;Build" Feature="C4FE6FD5B7C4D07B3A313E754A9A6A8" RetValPropName="INSTALL_VISUAL_STUDIO" InstallCondition="INSTALL_APP"/>
     <ROW PrereqKey="VCRedistARM64" DisplayName="Visual C++ Redistributable for Visual Studio 2015-2022 arm64" VersionMin="14.40" SetupFileUrl="Prerequisites\Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.arm64.exe" Location="0" ExactSize="0" WinNTVersions="Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" WinNT64Versions="Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64" Operator="1" ComLine="/q /norestart" NoUiComLine="/q /norestart" Options="xfm" TargetName="Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.arm64.exe" Builds="ExeBuild_arm64;MsiBuild_arm64" Feature="VCRedistARM64" RetValPropName="INSTALL_VISUAL_STUDIO" InstallCondition="INSTALL_APP"/>
-    <ATTRIBUTE name="PrereqsOrder" value="C4FE6FD5B7C4D07B3A313E754A9A6A8 VCRedistARM64"/>
+    <ROW PrereqKey="VCRedistX86" DisplayName="Visual C++ Redistributable for Visual Studio 2015-2022 x86" VersionMin="14.40" SetupFileUrl="Prerequisites\Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x86.exe" Location="0" ExactSize="0" WinNTVersions="Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" WinNT64Versions="Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64" Operator="1" ComLine="/q /norestart" NoUiComLine="/q /norestart" Options="xfm" TargetName="Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x86.exe" Builds="ExeBuild_x86;MsiBuild_x86" Feature="VCRedistX86" RetValPropName="INSTALL_VISUAL_STUDIO" InstallCondition="INSTALL_APP"/>
+    <ATTRIBUTE name="PrereqsOrder" value="C4FE6FD5B7C4D07B3A313E754A9A6A8 VCRedistARM64 VCRedistX86"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqSearchComponent">
     <ROW SearchKey="C4FE6FD5B7C4D07B3A313E754A9A6A8Vers" Prereq="C4FE6FD5B7C4D07B3A313E754A9A6A8" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_C4FE6FD5B7C4D07B3A313E" Platform="1"/>
     <ROW SearchKey="VCRedistARM64Vers" Prereq="VCRedistARM64" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_VCRedistARM64" Platform="1"/>
+    <ROW SearchKey="VCRedistX86Vers" Prereq="VCRedistX86" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_VCRedistX86"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">
     <ROW Directory_="openssl_Dir" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;include\openssl" Feature="Development" IncludePattern="*.h" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="12"/>

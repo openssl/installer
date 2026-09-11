@@ -29,9 +29,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { arch: x64, runner: windows-2025, target: VC-WIN64A, vcvars: vcvars64.bat }
+          - { arch: x64, runner: windows-2025, target: VC-WIN64A, vcvars: vcvars64.bat, configure_extra: "" }
           # Native arm64-hosted toolset first, x86-hosted cross compiler as fallback.
-          - { arch: arm64, runner: windows-11-arm, target: VC-WIN64-ARM, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat" }
+          # no-md4: MD4 does not build for VC-WIN64-ARM.
+          - { arch: arm64, runner: windows-11-arm, target: VC-WIN64-ARM, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", configure_extra: no-md4 }
     steps:
       - name: Checkout installer
         uses: actions/checkout@v7
@@ -108,7 +109,7 @@ jobs:
         working-directory: openssl-fips
         run: |
           call "%VCVARS%"
-          perl Configure ${{ matrix.target }} enable-fips no-makedepend
+          perl Configure ${{ matrix.target }} enable-fips no-makedepend ${{ matrix.configure_extra }}
           jom /j4 /S
 
       - name: Upload FIPS providers
@@ -130,10 +131,11 @@ jobs:
       matrix:
         openssl-ref: [openssl-4.0]
         crt:
-          - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, flavor: vs, target: VC-WIN64A, exe_build: ExeBuild, msi_build: MsiBuild, keep: OpenSSL-x64-VS-* }
-          - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, exe_build: ExeBuild_hybrid, msi_build: MsiBuild_hybrid, keep: OpenSSL-x64-hybridCRT-* }
+          - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, configure_extra: "", flavor: vs, target: VC-WIN64A, exe_build: ExeBuild, msi_build: MsiBuild, keep: OpenSSL-x64-VS-* }
+          - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, configure_extra: "", flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, exe_build: ExeBuild_hybrid, msi_build: MsiBuild_hybrid, keep: OpenSSL-x64-hybridCRT-* }
           # No hybrid flavor: OpenSSL has no VC-WIN64-ARM-HYBRIDCRT target.
-          - { arch: arm64, runner: windows-11-arm, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", flavor: vs, target: VC-WIN64-ARM, exe_build: ExeBuild_arm64, msi_build: MsiBuild_arm64, keep: OpenSSL-arm64-VS-* }
+          # no-md4: MD4 does not build for VC-WIN64-ARM.
+          - { arch: arm64, runner: windows-11-arm, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", configure_extra: no-md4, flavor: vs, target: VC-WIN64-ARM, exe_build: ExeBuild_arm64, msi_build: MsiBuild_arm64, keep: OpenSSL-arm64-VS-* }
     steps:
       - name: Checkout installer
         uses: actions/checkout@v7
@@ -233,7 +235,7 @@ jobs:
         working-directory: openssl
         run: |
           call "%VCVARS%"
-          perl Configure ${{ matrix.crt.target }} enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
+          perl Configure ${{ matrix.crt.target }} enable-fips no-makedepend ${{ matrix.crt.configure_extra }} -DOSSL_WINCTX=OpenSSLProject
           jom /j4 /S
           jom build_docs
 

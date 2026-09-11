@@ -94,8 +94,9 @@ def test_upgrade_from_previous_version(installer: InstallerInfo) -> None:
 # Minimum VC++ runtime version the .aip's PreReqSearch enforces. If the
 # installer's prereq mechanism works, this version (or newer) is on the
 # machine after install — either because it was already there or because
-# the MSI downloaded https://aka.ms/vs/17/release/vc_redist.x64.exe and
-# installed it silently.
+# the MSI installed its bundled VC_redist.<arch>.exe silently. The key is
+# the same for the x64 and arm64 runtimes (both live in the native 64-bit
+# registry view), which is also what the .aip's search looks at.
 _VCRUNTIME_KEY = r"SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum"
 _VCRUNTIME_MIN = (14, 40, 33816)
 
@@ -109,9 +110,10 @@ def _version_tuple(s: str, length: int) -> tuple[int, ...]:
 
 @pytest.mark.usefixtures("clean_install")
 def test_vc_runtime_present_after_install(installer: InstallerInfo) -> None:
-    """After install, the VC++ 2015-2022 x64 runtime must satisfy the .aip's
-    declared minimum (>= 14.40.33816). The MSI either uses an already-installed
-    runtime or downloads + installs vc_redist.x64.exe during install."""
+    """After install, the VC++ 2015-2022 runtime for the installer's
+    architecture must satisfy the .aip's declared minimum (>= 14.40.33816).
+    The MSI either uses an already-installed runtime or installs its bundled
+    VC_redist.<arch>.exe during install."""
     install(installer)
     _assert_vc_runtime_meets_minimum()
 
@@ -138,16 +140,19 @@ def _assert_vc_runtime_meets_minimum() -> None:
     assert actual >= _VCRUNTIME_MIN, f"VC++ runtime version {version!r} < required {required_str!r}"
 
 
-# Matches "Microsoft Visual C++ 2015/2017/2019/2022 (- ... -)? Redistributable (x64) ..."
+# Matches "Microsoft Visual C++ 2015/2017/2019/2022 (- ... -)? Redistributable (<arch>) ..."
 # in DisplayName. Older Visual C++ families (2008/2010/2012/2013) live on
 # different servicing branches and aren't what our installer requires, so
 # we leave them alone.
-_VC_REDIST_X64_PATTERN = re.compile(r"visual c\+\+ 20(15|17|19|22).*x64", re.IGNORECASE)
+def _vc_redist_pattern(arch: str) -> re.Pattern[str]:
+    return re.compile(r"visual c\+\+ 20(15|17|19|22).*" + re.escape(arch), re.IGNORECASE)
 
 
-def _find_vc_redist_x64_products() -> list[tuple[str, str]]:
-    """Return [(product_code, display_name)] for installed VC++ 2015-2022 x64
-    redistributables — the family our MSI's prereq targets."""
+def _find_vc_redist_products(arch: str) -> list[tuple[str, str]]:
+    """Return [(product_code, display_name)] for installed VC++ 2015-2022
+    redistributables of the given architecture — the family our MSI's prereq
+    targets."""
+    pattern = _vc_redist_pattern(arch)
     results: list[tuple[str, str]] = []
     for hive_path in (
         r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
@@ -172,7 +177,7 @@ def _find_vc_redist_x64_products() -> list[tuple[str, str]]:
                         display_name = winreg.QueryValueEx(subkey, "DisplayName")[0]
                     except FileNotFoundError:
                         continue
-                    if _VC_REDIST_X64_PATTERN.search(display_name):
+                    if pattern.search(display_name):
                         results.append((subkey_name, display_name))
     return results
 
@@ -181,21 +186,21 @@ def _find_vc_redist_x64_products() -> list[tuple[str, str]]:
 @pytest.mark.usefixtures("clean_install")
 def test_msi_installs_vc_runtime_when_missing(installer: InstallerInfo) -> None:
     """Aggressive variant of test_vc_runtime_present_after_install: forcibly
-    remove every Visual C++ 2015-2022 x64 redistributable on the machine,
-    then install the MSI and verify the runtime is back at the required
-    version.
+    remove every Visual C++ 2015-2022 redistributable of the installer's
+    architecture from the machine, then install the MSI and verify the
+    runtime is back at the required version.
 
-    This proves the .aip's PreReqComponent actually downloads and installs
-    https://aka.ms/vs/17/release/vc_redist.x64.exe — not just relies on a
-    machine that happened to already have it.
+    This proves the .aip's PreReqComponent actually installs its bundled
+    VC_redist.<arch>.exe — not just relies on a machine that happened to
+    already have it.
 
     Gated by the `destructive` marker (run with `pytest -m destructive`)
     because it temporarily breaks any other software on the machine that
     depends on VC++ runtime. The MSI's prereq mechanism restores it.
     """
-    found = _find_vc_redist_x64_products()
+    found = _find_vc_redist_products(installer.arch)
     if not found:
-        pytest.skip("no VC++ 2015-2022 x64 redistributable present to remove; cannot verify download")
+        pytest.skip(f"no VC++ 2015-2022 {installer.arch} redistributable present to remove; cannot verify install")
 
     for product_code, display_name in found:
         print(f"removing {display_name} ({product_code})", flush=True)

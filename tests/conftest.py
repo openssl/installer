@@ -165,7 +165,8 @@ class InstallerInfo:
     patch: str  # "0"
     short: str  # "4.0" — also the registry_version
     flavor: str  # CRT flavor: "vs" (VC-WIN64A) or "hybrid" (VC-WIN64A-HYBRIDCRT)
-    arch: str  # target architecture as spelled in the artifact name and DLL suffix: "x64" or "arm64"
+    arch: str  # target architecture as spelled in the artifact name: "x64", "arm64" or "x86"
+    dll_suffix: str  # OpenSSL's multilib DLL name suffix for that arch: "-x64", "-arm64" or "" (x86)
 
 
 @pytest.fixture(scope="session")
@@ -284,18 +285,29 @@ def _detect_arch(filename: str) -> str:
     """Derive the target architecture from the installer filename.
 
     Artifacts are named OpenSSL-<arch>-<flavor>-<ver>.{exe,msi} with <arch>
-    being "x64" (VC-WIN64A[-HYBRIDCRT]) or "arm64" (VC-WIN64-ARM). The same
-    token is OpenSSL's `multilib` suffix, i.e. what the shipped DLLs are named
-    after (libcrypto-<major>-<arch>.dll), so it is used verbatim in expected
-    file names.
+    being "x64" (VC-WIN64A[-HYBRIDCRT]), "arm64" (VC-WIN64-ARM) or "x86"
+    (VC-WIN32[-HYBRIDCRT]).
     """
-    m = re.search(r"-(x64|arm64)-", filename, re.IGNORECASE)
+    m = re.search(r"-(x64|arm64|x86)-", filename, re.IGNORECASE)
     if m:
         return m.group(1).lower()
     pytest.exit(
-        f"Cannot determine architecture (expected '-x64-' or '-arm64-') from installer filename: {filename}",
+        f"Cannot determine architecture (expected '-x64-', '-arm64-' or '-x86-') from installer filename: {filename}",
         returncode=2,
     )
+
+
+def _dll_suffix(arch: str) -> str:
+    """OpenSSL's `multilib` DLL name suffix: libcrypto-<major>-x64.dll and
+    libcrypto-<major>-arm64.dll, but plain libcrypto-<major>.dll for 32-bit."""
+    return "" if arch == "x86" else f"-{arch}"
+
+
+def install_root(config: dict, info: InstallerInfo) -> Path:
+    """Per-architecture install root: 32-bit packages land in the 32-bit
+    Program Files (paths.install_root_x86), everything else in paths.install_root."""
+    key = "install_root_x86" if info.arch == "x86" else "install_root"
+    return Path(config["paths"][key])
 
 
 @pytest.fixture(scope="session")
@@ -342,12 +354,13 @@ def installer(request, tmp_path_factory) -> InstallerInfo:
         short=f"{major}.{minor}",
         flavor=flavor,
         arch=arch,
+        dll_suffix=_dll_suffix(arch),
     )
 
 
 @pytest.fixture(scope="session")
 def install_dir(installer, config) -> Path:
-    return Path(config["paths"]["install_root"]) / f"openssl-{installer.short}"
+    return install_root(config, installer) / f"openssl-{installer.short}"
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -482,12 +495,12 @@ def supported_fips_type(info: InstallerInfo) -> str:
 
 
 def _expand(name: str, info: InstallerInfo) -> str:
-    return name.format(major=info.major, minor=info.minor, patch=info.patch, arch=info.arch)
+    return name.format(major=info.major, minor=info.minor, patch=info.patch, arch=info.arch, dll_suffix=info.dll_suffix)
 
 
 def expected_files(config: dict, info: InstallerInfo, active_flags: tuple[str, ...]) -> tuple[list[Path], list[Path]]:
     """Return (should-exist, should-not-exist) absolute file paths."""
-    root = Path(config["paths"]["install_root"]) / f"openssl-{info.short}"
+    root = install_root(config, info) / f"openssl-{info.short}"
     flags = set(active_flags) | {"all"}
     yes: list[Path] = []
     no: list[Path] = []
@@ -636,7 +649,10 @@ def check_registry(config: dict, info: InstallerInfo, install_dir: Path):
         "install_dir": str(install_dir).rstrip("\\"),
     }
     expected_values = {k: v.format(**fmt) for k, v in config["registry"]["values"].items()}
-    for path_template in config["registry"]["paths"]:
+    # 32-bit packages have their HKLM\SOFTWARE writes redirected into Wow6432Node,
+    # so the expected key paths differ (registry.paths_x86).
+    path_templates = config["registry"]["paths_x86"] if info.arch == "x86" else config["registry"]["paths"]
+    for path_template in path_templates:
         path = path_template.format(**fmt)
         try:
             key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path)

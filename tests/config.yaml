@@ -7,7 +7,10 @@ fips:
   validated_versions: "3.1.2"
 
 paths:
+  # x64 and arm64 packages
   install_root: 'C:\Program Files\OpenSSL Library'
+  # x86 (32-bit) packages
+  install_root_x86: 'C:\Program Files (x86)\OpenSSL Library'
 
 registry:
   # Two key paths the installer writes; the second uses Wow6432Node directly
@@ -15,6 +18,11 @@ registry:
   # Placeholders: {registry_version} = "<major>.<minor>" (e.g. "4.0").
   paths:
     - 'SOFTWARE\OpenSSL Corporation\OpenSSL-{registry_version}-OpenSSLProject'
+    - 'SOFTWARE\Wow6432Node\OpenSSL-{registry_version}-OpenSSLProject'
+  # The same two writes made by a 32-bit package on 64-bit Windows: the
+  # registry redirector sends both into Wow6432Node (as seen from 64-bit Python).
+  paths_x86:
+    - 'SOFTWARE\Wow6432Node\OpenSSL Corporation\OpenSSL-{registry_version}-OpenSSLProject'
     - 'SOFTWARE\Wow6432Node\OpenSSL-{registry_version}-OpenSSLProject'
   values:
     # Expected REG_SZ values under each path. Paths are compared
@@ -26,21 +34,22 @@ registry:
 # Expected files. Keys are directories relative to {install_dir}; "" is the root.
 # Each entry's `flags` indicates which install configurations include it:
 #   all, app, sdk, fips, fips_sdk
-# Placeholders in `name`: {major}, {minor}, {patch}, {arch} ("x64" or "arm64",
-# taken from the installer filename; it is also OpenSSL's DLL name suffix).
+# Placeholders in `name`: {major}, {minor}, {patch}, {arch} ("x64", "arm64" or
+# "x86", taken from the installer filename) and {dll_suffix} (OpenSSL's DLL
+# name suffix for that arch: "-x64", "-arm64", or "" for x86).
 files:
   "":
     - { name: LICENSE.txt, flags: all }
     - { name: version.dat, flags: all }
   "bin":
-    - { name: openssl.exe,                    flags: app }
-    - { name: "libcrypto-{major}-{arch}.dll", flags: app }
-    - { name: "libssl-{major}-{arch}.dll",    flags: app }
+    - { name: openssl.exe,                          flags: app }
+    - { name: "libcrypto-{major}{dll_suffix}.dll", flags: app }
+    - { name: "libssl-{major}{dll_suffix}.dll",    flags: app }
   "lib":
-    - { name: "libcrypto-{major}-{arch}.dll", flags: sdk }
-    - { name: "libssl-{major}-{arch}.dll",    flags: sdk }
-    - { name: "libcrypto-{major}-{arch}.pdb", flags: sdk }
-    - { name: "libssl-{major}-{arch}.pdb",    flags: sdk }
+    - { name: "libcrypto-{major}{dll_suffix}.dll", flags: sdk }
+    - { name: "libssl-{major}{dll_suffix}.dll",    flags: sdk }
+    - { name: "libcrypto-{major}{dll_suffix}.pdb", flags: sdk }
+    - { name: "libssl-{major}{dll_suffix}.pdb",    flags: sdk }
     - { name: libcrypto.lib,               flags: sdk }
     - { name: libssl.lib,                  flags: sdk }
     - { name: libcrypto_static.lib,        flags: sdk }

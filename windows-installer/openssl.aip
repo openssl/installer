@@ -834,7 +834,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqSearchComponent">
     <ROW SearchKey="C4FE6FD5B7C4D07B3A313E754A9A6A8Vers" Prereq="C4FE6FD5B7C4D07B3A313E754A9A6A8" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_C4FE6FD5B7C4D07B3A313E" Platform="1"/>
-    <ROW SearchKey="VCRedistARM64Vers" Prereq="VCRedistARM64" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_VCRedistARM64" Platform="1"/>
+    <ROW SearchKey="VCRedistARM64Vers" Prereq="VCRedistARM64" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\arm64\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_VCRedistARM64"/>
     <ROW SearchKey="VCRedistX86Vers" Prereq="VCRedistX86" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_VCRedistX86"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">

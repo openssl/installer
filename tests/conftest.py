@@ -453,9 +453,7 @@ def _msiexec(args: list[str], check: bool) -> subprocess.CompletedProcess:
     of the failing test) — it is the only place Windows Installer explains
     codes like 1620 (package could not be opened) or 1633 (unsupported
     platform). Raises CalledProcessError when `check` is set, like before."""
-    fd, log_name = tempfile.mkstemp(prefix="msiexec-", suffix=".log")
-    os.close(fd)
-    log_path = Path(log_name)
+    log_path = _mkstemp_path("msiexec-", ".log")
     res = subprocess.run(
         ["msiexec", *args, "/l*v", str(log_path)],
         check=False,
@@ -478,6 +476,8 @@ def _msiexec_log_tail(log_path: Path, lines: int = 40) -> str:
         raw = log_path.read_bytes()
     except OSError as e:
         return f"<log not readable: {e}>"
+    if not raw:
+        return "<log is empty — the installer never wrote it>"
     text = raw.decode("utf-16") if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else raw.decode("mbcs", errors="replace")
     return "\n".join(text.splitlines()[-lines:])
 
@@ -485,13 +485,37 @@ def _msiexec_log_tail(log_path: Path, lines: int = 40) -> str:
 def install(info: InstallerInfo, properties: list[str] | None = None, check: bool = True):
     props = properties or []
     if info.path.suffix.lower() == ".exe":
-        return subprocess.run(
-            [str(info.path), "/exenoui", "/qn", *props],
-            check=check,
+        # Two logs: /exelog is the Advanced Installer bootstrapper's own log
+        # (prerequisite checks, extraction, how it launched the MSI); /l*v is
+        # passed through to the inner MSI like any msiexec option. Both tails are
+        # printed on failure, since the bootstrapper otherwise just returns
+        # msiexec's exit code (or -1 when a prerequisite is declined).
+        exe_log = _mkstemp_path("exe-bootstrapper-", ".log")
+        msi_log = _mkstemp_path("exe-msi-", ".log")
+        res = subprocess.run(
+            [str(info.path), "/exenoui", "/exelog", str(exe_log), "/qn", "/l*v", str(msi_log), *props],
+            check=False,
             capture_output=True,
             text=True,
         )
+        if res.returncode != 0:
+            print(f"{info.path.name} {' '.join(props)} exited with {res.returncode}", flush=True)
+            for label, log in (("bootstrapper log", exe_log), ("inner MSI log", msi_log)):
+                print(f"--- {label} tail ({log}):", flush=True)
+                print(_msiexec_log_tail(log), flush=True)
+            if check:
+                raise subprocess.CalledProcessError(res.returncode, res.args, output=res.stdout, stderr=res.stderr)
+        else:
+            exe_log.unlink(missing_ok=True)
+            msi_log.unlink(missing_ok=True)
+        return res
     return _msiexec(["/i", str(info.path), "/qn", *props], check=check)
+
+
+def _mkstemp_path(prefix: str, suffix: str) -> Path:
+    fd, name = tempfile.mkstemp(prefix=prefix, suffix=suffix)
+    os.close(fd)
+    return Path(name)
 
 
 def uninstall(info: InstallerInfo) -> None:

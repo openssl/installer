@@ -305,6 +305,24 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "" # disables lockfile requirement
 
+      # On the arm64 runner uv would otherwise pick an x86_64 CPython that runs
+      # under emulation, and the tests would drive Windows Installer from an
+      # emulated process. Use the image's native arm64 Python instead.
+      - name: Set up native arm64 Python
+        if: matrix.os == 'windows-11-arm'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          architecture: arm64
+
+      - name: Use native arm64 Python for uv
+        if: matrix.os == 'windows-11-arm'
+        shell: pwsh
+        run: |
+          $python = Join-Path $env:pythonLocation "python.exe"
+          & $python -c "import platform, sys; print(sys.executable, platform.machine())"
+          "UV_PYTHON=$python" >> $env:GITHUB_ENV
+
       - name: Install Python deps
         run: uv sync --frozen || uv sync
 

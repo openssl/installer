@@ -448,12 +448,38 @@ def clean_install(installer):
 
 
 def _msiexec(args: list[str], check: bool) -> subprocess.CompletedProcess:
-    return subprocess.run(
-        ["msiexec", *args],
-        check=check,
+    """Run msiexec with a verbose log. msiexec itself is silent, so on a
+    non-zero exit the log tail is printed (pytest shows it as captured stdout
+    of the failing test) — it is the only place Windows Installer explains
+    codes like 1620 (package could not be opened) or 1633 (unsupported
+    platform). Raises CalledProcessError when `check` is set, like before."""
+    fd, log_name = tempfile.mkstemp(prefix="msiexec-", suffix=".log")
+    os.close(fd)
+    log_path = Path(log_name)
+    res = subprocess.run(
+        ["msiexec", *args, "/l*v", str(log_path)],
+        check=False,
         capture_output=True,
         text=True,
     )
+    if res.returncode != 0:
+        print(f"msiexec {' '.join(args)} exited with {res.returncode}; log tail ({log_path}):", flush=True)
+        print(_msiexec_log_tail(log_path), flush=True)
+        if check:
+            raise subprocess.CalledProcessError(res.returncode, res.args, output=res.stdout, stderr=res.stderr)
+    else:
+        log_path.unlink(missing_ok=True)
+    return res
+
+
+def _msiexec_log_tail(log_path: Path, lines: int = 40) -> str:
+    """Verbose msiexec logs are UTF-16 with BOM on current Windows, ANSI on older ones."""
+    try:
+        raw = log_path.read_bytes()
+    except OSError as e:
+        return f"<log not readable: {e}>"
+    text = raw.decode("utf-16") if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else raw.decode("mbcs", errors="replace")
+    return "\n".join(text.splitlines()[-lines:])
 
 
 def install(info: InstallerInfo, properties: list[str] | None = None, check: bool = True):
@@ -713,8 +739,8 @@ def imported_dlls(binary: Path) -> set[str]:
 # win32com: MSI's parameterized StringData property is unreachable through
 # win32com's dynamic dispatch (it invokes the property-get as a method).
 
-HYBRID_BUILD_NAMES = ("ExeBuild_hybrid", "MsiBuild_hybrid")
-VS_BUILD_NAMES = ("ExeBuild", "MsiBuild")
+HYBRID_BUILD_NAMES = ("ExeBuild_hybrid", "MsiBuild_hybrid", "ExeBuild_x86_hybrid", "MsiBuild_x86_hybrid")
+VS_BUILD_NAMES = ("ExeBuild", "MsiBuild", "ExeBuild_arm64", "MsiBuild_arm64", "ExeBuild_x86", "MsiBuild_x86")
 
 _MSI_QUERY_SCRIPT = Path(__file__).parent / "msi_query.ps1"
 

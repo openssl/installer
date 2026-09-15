@@ -165,6 +165,8 @@ class InstallerInfo:
     patch: str  # "0"
     short: str  # "4.0" — also the registry_version
     flavor: str  # CRT flavor: "vs" (VC-WIN64A) or "hybrid" (VC-WIN64A-HYBRIDCRT)
+    arch: str  # target architecture as spelled in the artifact name: "x64", "arm64" or "x86"
+    dll_suffix: str  # OpenSSL's multilib DLL name suffix for that arch: "-x64", "-arm64" or "" (x86)
 
 
 @pytest.fixture(scope="session")
@@ -279,6 +281,35 @@ def _detect_flavor(filename: str) -> str:
     )
 
 
+def _detect_arch(filename: str) -> str:
+    """Derive the target architecture from the installer filename.
+
+    Artifacts are named OpenSSL-<arch>-<flavor>-<ver>.{exe,msi} with <arch>
+    being "x64" (VC-WIN64A[-HYBRIDCRT]), "arm64" (VC-WIN64-ARM) or "x86"
+    (VC-WIN32[-HYBRIDCRT]).
+    """
+    m = re.search(r"-(x64|arm64|x86)-", filename, re.IGNORECASE)
+    if m:
+        return m.group(1).lower()
+    pytest.exit(
+        f"Cannot determine architecture (expected '-x64-', '-arm64-' or '-x86-') from installer filename: {filename}",
+        returncode=2,
+    )
+
+
+def _dll_suffix(arch: str) -> str:
+    """OpenSSL's `multilib` DLL name suffix: libcrypto-<major>-x64.dll and
+    libcrypto-<major>-arm64.dll, but plain libcrypto-<major>.dll for 32-bit."""
+    return "" if arch == "x86" else f"-{arch}"
+
+
+def install_root(config: dict, info: InstallerInfo) -> Path:
+    """Per-architecture install root: 32-bit packages land in the 32-bit
+    Program Files (paths.install_root_x86), everything else in paths.install_root."""
+    key = "install_root_x86" if info.arch == "x86" else "install_root"
+    return Path(config["paths"][key])
+
+
 @pytest.fixture(scope="session")
 def installer(request, tmp_path_factory) -> InstallerInfo:
     arg = request.config.getoption("--installer")
@@ -301,6 +332,7 @@ def installer(request, tmp_path_factory) -> InstallerInfo:
     version = m.group(1)
     major, minor, patch = version.split(".")
     flavor = _detect_flavor(path.name)
+    arch = _detect_arch(path.name)
 
     # Isolation: copy ONLY this installer into an otherwise-empty directory and
     # test that copy. A non-self-contained .exe bootstrapper co-located with a
@@ -321,12 +353,14 @@ def installer(request, tmp_path_factory) -> InstallerInfo:
         patch=patch,
         short=f"{major}.{minor}",
         flavor=flavor,
+        arch=arch,
+        dll_suffix=_dll_suffix(arch),
     )
 
 
 @pytest.fixture(scope="session")
 def install_dir(installer, config) -> Path:
-    return Path(config["paths"]["install_root"]) / f"openssl-{installer.short}"
+    return install_root(config, installer) / f"openssl-{installer.short}"
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -414,24 +448,74 @@ def clean_install(installer):
 
 
 def _msiexec(args: list[str], check: bool) -> subprocess.CompletedProcess:
-    return subprocess.run(
-        ["msiexec", *args],
-        check=check,
+    """Run msiexec with a verbose log. msiexec itself is silent, so on a
+    non-zero exit the log tail is printed (pytest shows it as captured stdout
+    of the failing test) — it is the only place Windows Installer explains
+    codes like 1620 (package could not be opened) or 1633 (unsupported
+    platform). Raises CalledProcessError when `check` is set, like before."""
+    log_path = _mkstemp_path("msiexec-", ".log")
+    res = subprocess.run(
+        ["msiexec", *args, "/l*v", str(log_path)],
+        check=False,
         capture_output=True,
         text=True,
     )
+    if res.returncode != 0:
+        print(f"msiexec {' '.join(args)} exited with {res.returncode}; log tail ({log_path}):", flush=True)
+        print(_msiexec_log_tail(log_path), flush=True)
+        if check:
+            raise subprocess.CalledProcessError(res.returncode, res.args, output=res.stdout, stderr=res.stderr)
+    else:
+        log_path.unlink(missing_ok=True)
+    return res
+
+
+def _msiexec_log_tail(log_path: Path, lines: int = 40) -> str:
+    """Verbose msiexec logs are UTF-16 with BOM on current Windows, ANSI on older ones."""
+    try:
+        raw = log_path.read_bytes()
+    except OSError as e:
+        return f"<log not readable: {e}>"
+    if not raw:
+        return "<log is empty — the installer never wrote it>"
+    text = raw.decode("utf-16") if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else raw.decode("mbcs", errors="replace")
+    return "\n".join(text.splitlines()[-lines:])
 
 
 def install(info: InstallerInfo, properties: list[str] | None = None, check: bool = True):
     props = properties or []
     if info.path.suffix.lower() == ".exe":
-        return subprocess.run(
-            [str(info.path), "/exenoui", "/qn", *props],
-            check=check,
+        # Two logs: /exelog is the Advanced Installer bootstrapper's own log
+        # (prerequisite checks, extraction, how it launched the MSI); /l*v is
+        # passed through to the inner MSI like any msiexec option. Both tails are
+        # printed on failure, since the bootstrapper otherwise just returns
+        # msiexec's exit code (or -1 when a prerequisite is declined).
+        exe_log = _mkstemp_path("exe-bootstrapper-", ".log")
+        msi_log = _mkstemp_path("exe-msi-", ".log")
+        res = subprocess.run(
+            [str(info.path), "/exenoui", "/exelog", str(exe_log), "/qn", "/l*v", str(msi_log), *props],
+            check=False,
             capture_output=True,
             text=True,
         )
+        if res.returncode != 0:
+            print(f"{info.path.name} {' '.join(props)} exited with {res.returncode}", flush=True)
+            for label, log in (("bootstrapper log", exe_log), ("inner MSI log", msi_log)):
+                print(f"--- {label} tail ({log}):", flush=True)
+                print(_msiexec_log_tail(log), flush=True)
+            if check:
+                raise subprocess.CalledProcessError(res.returncode, res.args, output=res.stdout, stderr=res.stderr)
+        else:
+            exe_log.unlink(missing_ok=True)
+            msi_log.unlink(missing_ok=True)
+        return res
     return _msiexec(["/i", str(info.path), "/qn", *props], check=check)
+
+
+def _mkstemp_path(prefix: str, suffix: str) -> Path:
+    fd, name = tempfile.mkstemp(prefix=prefix, suffix=suffix)
+    os.close(fd)
+    return Path(name)
 
 
 def uninstall(info: InstallerInfo) -> None:
@@ -461,12 +545,12 @@ def supported_fips_type(info: InstallerInfo) -> str:
 
 
 def _expand(name: str, info: InstallerInfo) -> str:
-    return name.format(major=info.major, minor=info.minor, patch=info.patch)
+    return name.format(major=info.major, minor=info.minor, patch=info.patch, arch=info.arch, dll_suffix=info.dll_suffix)
 
 
 def expected_files(config: dict, info: InstallerInfo, active_flags: tuple[str, ...]) -> tuple[list[Path], list[Path]]:
     """Return (should-exist, should-not-exist) absolute file paths."""
-    root = Path(config["paths"]["install_root"]) / f"openssl-{info.short}"
+    root = install_root(config, info) / f"openssl-{info.short}"
     flags = set(active_flags) | {"all"}
     yes: list[Path] = []
     no: list[Path] = []
@@ -615,7 +699,10 @@ def check_registry(config: dict, info: InstallerInfo, install_dir: Path):
         "install_dir": str(install_dir).rstrip("\\"),
     }
     expected_values = {k: v.format(**fmt) for k, v in config["registry"]["values"].items()}
-    for path_template in config["registry"]["paths"]:
+    # 32-bit packages have their HKLM\SOFTWARE writes redirected into Wow6432Node,
+    # so the expected key paths differ (registry.paths_x86).
+    path_templates = config["registry"]["paths_x86"] if info.arch == "x86" else config["registry"]["paths"]
+    for path_template in path_templates:
         path = path_template.format(**fmt)
         try:
             key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path)
@@ -676,8 +763,8 @@ def imported_dlls(binary: Path) -> set[str]:
 # win32com: MSI's parameterized StringData property is unreachable through
 # win32com's dynamic dispatch (it invokes the property-get as a method).
 
-HYBRID_BUILD_NAMES = ("ExeBuild_hybrid", "MsiBuild_hybrid")
-VS_BUILD_NAMES = ("ExeBuild", "MsiBuild")
+HYBRID_BUILD_NAMES = ("ExeBuild_hybrid", "MsiBuild_hybrid", "ExeBuild_x86_hybrid", "MsiBuild_x86_hybrid")
+VS_BUILD_NAMES = ("ExeBuild", "MsiBuild", "ExeBuild_arm64", "MsiBuild_arm64", "ExeBuild_x86", "MsiBuild_x86")
 
 _MSI_QUERY_SCRIPT = Path(__file__).parent / "msi_query.ps1"
 

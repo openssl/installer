@@ -9,16 +9,30 @@ on:
   workflow_dispatch:
 
 env:
-  # VS 2022 Enterprise and Strawberry Perl are preinstalled on windows-2025.
-  VCVARS: 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Auxiliary\Build\vcvars64.bat'
-  # The NIST-validated FIPS module is built once from this ref (VC-WIN64A) and
-  # shared by every installer flavor via the `fips` job's artifact.
+  # The NIST-validated FIPS module is built once per architecture from this ref
+  # and shared by every installer flavor of that architecture via the `fips`
+  # job's artifact.
   FIPS_REF: openssl-3.1.2
 
+# Visual Studio Enterprise and Perl are preinstalled on the hosted Windows
+# runners, but the VS version and path differ between images (VS 2026 under
+# "Microsoft Visual Studio\18" on windows-2025, VS 2022 17.14 with the
+# VC.Tools.ARM64 component under "Microsoft Visual Studio\2022" on
+# windows-11-arm, see actions/runner-images' Windows11-Arm64-Readme.md), so
+# each job locates it with vswhere (the "Locate Visual Studio" steps) and picks
+# the vcvars script for its target architecture.
 jobs:
   fips:
-    name: Build FIPS module
-    runs-on: windows-2025
+    name: Build FIPS module (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: x64, runner: windows-2025, target: VC-WIN64A, vcvars: vcvars64.bat, configure_extra: "" }
+          # Native arm64-hosted toolset first, x86-hosted cross compiler as fallback.
+          # no-md4: MD4 does not build for VC-WIN64-ARM.
+          - { arch: arm64, runner: windows-11-arm, target: VC-WIN64-ARM, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", configure_extra: no-md4 }
     steps:
       - name: Checkout installer
         uses: actions/checkout@v7
@@ -28,7 +42,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: openssl-fips
-          key: openssl-fips-${{ runner.os }}-${{ env.FIPS_REF }}-v1
+          key: openssl-fips-${{ runner.os }}-${{ matrix.arch }}-${{ env.FIPS_REF }}-v1
 
       - name: Checkout OpenSSL for FIPS (${{ env.FIPS_REF }})
         if: steps.fips_cache.outputs.cache-hit != 'true'
@@ -50,8 +64,24 @@ jobs:
           git apply --verbose "$env:GITHUB_WORKSPACE\windows-installer\0001-3.1-Windows-Use-Z7-compiler-flag-to-enable-parallel-.patch"
           if ($LASTEXITCODE -ne 0) { throw "jom patch failed" }
 
-      - name: install nasm
+      - name: Locate Visual Studio
         if: steps.fips_cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vs = & $vswhere -latest -products * -property installationPath
+          if (-not $vs) { throw "Visual Studio not found" }
+          $script = "${{ matrix.vcvars }}".Split(' ') |
+              ForEach-Object { Join-Path $vs "VC\Auxiliary\Build\$_" } |
+              Where-Object { Test-Path $_ } |
+              Select-Object -First 1
+          if (-not $script) { throw "none of '${{ matrix.vcvars }}' found under $vs\VC\Auxiliary\Build" }
+          Write-Host "using $script"
+          "VCVARS=$script" >> $env:GITHUB_ENV
+
+      - name: install nasm
+        # x86-only assembler; the ARM64 target assembles with MSVC's armasm64.
+        if: steps.fips_cache.outputs.cache-hit != 'true' && matrix.arch == 'x64'
         shell: pwsh
         run: |
           $installer = "nasm-3.01-installer-x64.exe"
@@ -73,19 +103,19 @@ jobs:
           if ($actual -ne $expected) { throw "SHA256 mismatch for jom.exe (expected $expected, got $actual)" }
           "C:\jom" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 
-      - name: Build FIPS module (VC-WIN64A)
+      - name: Build FIPS module (${{ matrix.target }})
         if: steps.fips_cache.outputs.cache-hit != 'true'
         shell: cmd
         working-directory: openssl-fips
         run: |
           call "%VCVARS%"
-          perl Configure VC-WIN64A enable-fips no-makedepend
+          perl Configure ${{ matrix.target }} enable-fips no-makedepend ${{ matrix.configure_extra }}
           jom /j4 /S
 
       - name: Upload FIPS providers
         uses: actions/upload-artifact@v4
         with:
-          name: openssl-fips-providers
+          name: openssl-fips-providers-${{ matrix.arch }}
           path: |
             openssl-fips/providers/fips.dll
             openssl-fips/providers/fips.lib
@@ -93,16 +123,19 @@ jobs:
           if-no-files-found: error
 
   build:
-    name: Build ${{ matrix.crt.flavor }} installers (${{ matrix.openssl-ref }})
+    name: Build ${{ matrix.crt.arch }} ${{ matrix.crt.flavor }} installers (${{ matrix.openssl-ref }})
     needs: fips
-    runs-on: windows-2025
+    runs-on: ${{ matrix.crt.runner }}
     strategy:
       fail-fast: false
       matrix:
         openssl-ref: [openssl-4.0]
         crt:
-          - { flavor: vs, target: VC-WIN64A, exe_build: ExeBuild, msi_build: MsiBuild, keep: OpenSSL-x64-VS-* }
-          - { flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, exe_build: ExeBuild_hybrid, msi_build: MsiBuild_hybrid, keep: OpenSSL-x64-hybridCRT-* }
+          - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, configure_extra: "", flavor: vs, target: VC-WIN64A, exe_build: ExeBuild, msi_build: MsiBuild, keep: OpenSSL-x64-VS-* }
+          - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, configure_extra: "", flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, exe_build: ExeBuild_hybrid, msi_build: MsiBuild_hybrid, keep: OpenSSL-x64-hybridCRT-* }
+          # No hybrid flavor: OpenSSL has no VC-WIN64-ARM-HYBRIDCRT target.
+          # no-md4: MD4 does not build for VC-WIN64-ARM.
+          - { arch: arm64, runner: windows-11-arm, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", configure_extra: no-md4, flavor: vs, target: VC-WIN64-ARM, exe_build: ExeBuild_arm64, msi_build: MsiBuild_arm64, keep: OpenSSL-arm64-VS-* }
     steps:
       - name: Checkout installer
         uses: actions/checkout@v7
@@ -147,10 +180,26 @@ jobs:
         uses: actions/cache@v5
         with:
           path: openssl
-          key: openssl-build-${{ runner.os }}-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-v1
+          key: openssl-build-${{ runner.os }}-${{ matrix.crt.arch }}-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}-${{ steps.openssl_version.outputs.version }}-v1
+
+      - name: Locate Visual Studio
+        if: steps.openssl_cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vs = & $vswhere -latest -products * -property installationPath
+          if (-not $vs) { throw "Visual Studio not found" }
+          $script = "${{ matrix.crt.vcvars }}".Split(' ') |
+              ForEach-Object { Join-Path $vs "VC\Auxiliary\Build\$_" } |
+              Where-Object { Test-Path $_ } |
+              Select-Object -First 1
+          if (-not $script) { throw "none of '${{ matrix.crt.vcvars }}' found under $vs\VC\Auxiliary\Build" }
+          Write-Host "using $script"
+          "VCVARS=$script" >> $env:GITHUB_ENV
 
       - name: install nasm
-        if: steps.openssl_cache.outputs.cache-hit != 'true'
+        # x86-only assembler; the ARM64 target assembles with MSVC's armasm64.
+        if: steps.openssl_cache.outputs.cache-hit != 'true' && matrix.crt.arch == 'x64'
         shell: pwsh
         run: |
           $installer = "nasm-3.01-installer-x64.exe"
@@ -186,17 +235,18 @@ jobs:
         working-directory: openssl
         run: |
           call "%VCVARS%"
-          perl Configure ${{ matrix.crt.target }} enable-fips no-makedepend -DOSSL_WINCTX=OpenSSLProject
+          perl Configure ${{ matrix.crt.target }} enable-fips no-makedepend ${{ matrix.crt.configure_extra }} -DOSSL_WINCTX=OpenSSLProject
           jom /j4 /S
           jom build_docs
 
       - name: Download FIPS providers
         uses: actions/download-artifact@v4
         with:
-          name: openssl-fips-providers
+          name: openssl-fips-providers-${{ matrix.crt.arch }}
           path: openssl-fips/providers
 
       - name: Build installers
+        # Advanced Installer is an x86 application; on the arm64 runner it runs under emulation.
         uses: caphyon/advinst-github-action@7edde34c6ff935e53e3de72a5699efcfceb5f6c6  # v2.0.3 (current main HEAD)
         with:
           advinst-version: '23.8'
@@ -215,7 +265,7 @@ jobs:
       - name: Upload installers
         uses: actions/upload-artifact@v4
         with:
-          name: installers-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}
+          name: installers-${{ matrix.crt.arch }}-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}
           path: |
             build-target/Installer64/${{ matrix.crt.keep }}.exe
             build-target/Installer64/${{ matrix.crt.keep }}.msi
@@ -234,6 +284,10 @@ jobs:
           - OpenSSL-x64-VS-*.msi
           - OpenSSL-x64-hybridCRT-*.exe
           - OpenSSL-x64-hybridCRT-*.msi
+        include:
+          # ARM64 packages only install on ARM64 Windows.
+          - { os: windows-11-arm, openssl-ref: openssl-4.0, installer: OpenSSL-arm64-VS-*.exe }
+          - { os: windows-11-arm, openssl-ref: openssl-4.0, installer: OpenSSL-arm64-VS-*.msi }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
@@ -250,6 +304,24 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: "" # disables lockfile requirement
+
+      # On the arm64 runner uv would otherwise pick an x86_64 CPython that runs
+      # under emulation, and the tests would drive Windows Installer from an
+      # emulated process. Use the image's native arm64 Python instead.
+      - name: Set up native arm64 Python
+        if: matrix.os == 'windows-11-arm'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          architecture: arm64
+
+      - name: Use native arm64 Python for uv
+        if: matrix.os == 'windows-11-arm'
+        shell: pwsh
+        run: |
+          $python = Join-Path $env:pythonLocation "python.exe"
+          & $python -c "import platform, sys; print(sys.executable, platform.machine())"
+          "UV_PYTHON=$python" >> $env:GITHUB_ENV
 
       - name: Install Python deps
         run: uv sync --frozen || uv sync

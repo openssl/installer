@@ -10,7 +10,7 @@
     <ROW Property="AI_CLEAN_RESOURCES_USER_PROMPT_BASIC_UI" Value="0"/>
     <ROW Property="AI_CLEAN_RESOURCES_USER_PROMPT_FULL_UI" Value="0"/>
     <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
-    <ROW Property="AI_PREREQ_REPAIR_ENABLED" MultiBuildValue="DefaultBuild:1#Build:1#ExeBuild_arm64:1#MsiBuild_arm64:1#ExeBuild_x86:1#MsiBuild_x86:1"/>
+    <ROW Property="AI_PREREQ_REPAIR_ENABLED" MultiBuildValue="DefaultBuild:1#Build:1#ExeBuild_x86:1#MsiBuild_x86:1"/>
     <ROW Property="AI_UPGRADE" Value="No"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
@@ -25,7 +25,7 @@
     <ROW Property="AiWinUI" Value="1" MultiBuildValue="DefaultBuild:#Build:#MsiBuild_1:#ExeBuild_1:#ExeBuild_arm64:#MsiBuild_arm64:#ExeBuild_x86:#MsiBuild_x86:#ExeBuild_x86_hybrid:#MsiBuild_x86_hybrid:"/>
     <ROW Property="AppLogoIcon" Value="applogo.png" MultiBuildValue="DefaultBuild:logo.png#Build:logo.png#MsiBuild_1:logo.png#ExeBuild_1:logo.png#ExeBuild_arm64:logo.png#MsiBuild_arm64:logo.png#ExeBuild_x86:logo.png#MsiBuild_x86:logo.png#ExeBuild_x86_hybrid:logo.png#MsiBuild_x86_hybrid:logo.png" Type="1" MsiKey="AppLogoIcon"/>
     <ROW Property="FIPS_CONF" Value="openssl"/>
-    <ROW Property="FIPS_OPTION_TEXT" Value="Install FIPS provider" MultiBuildValue="MsiBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_x86_hybrid:Install FIPS provider ([|ProductVersion])#MsiBuild_x86_hybrid:Install FIPS provider ([|ProductVersion])"/>
+    <ROW Property="FIPS_OPTION_TEXT" Value="Install FIPS provider" MultiBuildValue="MsiBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_arm64:Install FIPS provider ([|ProductVersion])#MsiBuild_arm64:Install FIPS provider ([|ProductVersion])#ExeBuild_x86_hybrid:Install FIPS provider ([|ProductVersion])#MsiBuild_x86_hybrid:Install FIPS provider ([|ProductVersion])"/>
     <ROW Property="FIPS_VALIDATED" Value="fips"/>
     <ROW Property="INSTALL_APP" Value="1" Type="4"/>
     <ROW Property="INSTALL_FIPS_TYPE" Value="validated" Type="4"/>
@@ -147,7 +147,6 @@
     <ROW Component="openssl.cnf" ComponentId="{E87B8CA6-31C2-43A2-A7B0-69B2E521C791}" Directory_="config_Dir" Attributes="0" KeyPath="openssl.cnf"/>
     <ROW Component="openssl.exe" ComponentId="{9F3E76EE-03E3-4C93-A36A-AD78A16DAD0E}" Directory_="bin_Dir" Attributes="256" KeyPath="openssl.exe"/>
     <ROW Component="version.dat" ComponentId="{19EDED59-5672-45DD-8B53-F53EE433583C}" Directory_="APPDIR" Attributes="0" KeyPath="version.txt"/>
-    <ROW Component="VCRedistARM64" ComponentId="{C9F6A640-475C-49E8-970E-087CDBCF7737}" Directory_="APPDIR" Attributes="260" KeyPath="VCRedistARM64" Options="2"/>
     <ROW Component="libcrypto4arm64.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libcrypto4arm64.dll"/>
     <ROW Component="libcrypto4arm64.dll_1" Directory_="lib_Dir" Attributes="256" KeyPath="libcrypto4arm64.dll_1"/>
     <ROW Component="libssl4arm64.dll" Directory_="bin_Dir" Attributes="256" KeyPath="libssl4arm64.dll"/>
@@ -165,7 +164,6 @@
     <ROW Feature="Development" Title="Development" Description="Development" Display="9" Level="4" Directory_="APPDIR" Attributes="0"/>
     <ROW Feature="MainFeature" Title="Application" Display="1" Level="4" Directory_="APPDIR" Attributes="24"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
-    <ROW Feature="VCRedistARM64" Title="Visual C++ Redistributable for Visual Studio 2015-2022 arm64" Description="Visual C++ Redistributable for Visual Studio 2015-2022 arm64" Display="15" Level="1" Attributes="16" Builds="ExeBuild_arm64;MsiBuild_arm64"/>
     <ROW Feature="VCRedistX86" Title="Visual C++ Redistributable for Visual Studio 2015-2022 x86" Description="Visual C++ Redistributable for Visual Studio 2015-2022 x86" Display="17" Level="1" Attributes="16" Builds="ExeBuild_x86;MsiBuild_x86;ExeBuild_x86_hybrid;MsiBuild_x86_hybrid"/>
     <ROW Feature="MainFeature_x64" Feature_Parent="MainFeature" Title="MainFeature (x64)" Description="libcrypto/libssl x64 binaries" Display="0" Level="4" Directory_="APPDIR" Attributes="2" Builds="DefaultBuild;Build;MsiBuild_1;ExeBuild_1"/>
     <ROW Feature="MainFeature_arm64" Feature_Parent="MainFeature" Title="MainFeature (arm64)" Description="libcrypto/libssl arm64 binaries" Display="0" Level="4" Directory_="APPDIR" Attributes="2" Builds="ExeBuild_arm64;MsiBuild_arm64"/>
@@ -243,8 +241,8 @@
     <ROW BuildKey="DefaultBuild" BuildName="ExeBuild" BuildOrder="1" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x64-VS-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-x64-VS-[|ProductVersion]" MsiPackageType="x64"/>
     <ROW BuildKey="ExeBuild_1" BuildName="ExeBuild_hybrid" BuildOrder="4" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x64-hybridCRT-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" SummInfoMetadata="Page Count:450" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-x64-hybridCRT-[|ProductVersion]" MsiPackageType="x64"/>
     <ROW BuildKey="MsiBuild_1" BuildName="MsiBuild_hybrid" BuildOrder="3" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x64-hybridCRT-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" Unicode="true" MsiPackageType="x64"/>
-    <ROW BuildKey="ExeBuild_arm64" BuildName="ExeBuild_arm64" BuildOrder="5" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-arm64-VS-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" SummInfoMetadata="Page Count:500" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-arm64-VS-[|ProductVersion]" MsiPackageType="Arm64"/>
-    <ROW BuildKey="MsiBuild_arm64" BuildName="MsiBuild_arm64" BuildOrder="6" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-arm64-VS-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:500" UseLargeSchema="true" Unicode="true" MsiPackageType="Arm64"/>
+    <ROW BuildKey="ExeBuild_arm64" BuildName="ExeBuild_arm64_hybrid" BuildOrder="5" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-arm64-hybridCRT-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" SummInfoMetadata="Page Count:500" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-arm64-hybridCRT-[|ProductVersion]" MsiPackageType="Arm64"/>
+    <ROW BuildKey="MsiBuild_arm64" BuildName="MsiBuild_arm64_hybrid" BuildOrder="6" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-arm64-hybridCRT-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:500" UseLargeSchema="true" Unicode="true" MsiPackageType="Arm64"/>
     <ROW BuildKey="ExeBuild_x86" BuildName="ExeBuild_x86" BuildOrder="7" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x86-VS-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-x86-VS-[|ProductVersion]" MsiPackageType="x86"/>
     <ROW BuildKey="MsiBuild_x86" BuildName="MsiBuild_x86" BuildOrder="8" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x86-VS-[|ProductVersion]" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" Unicode="true" MsiPackageType="x86"/>
     <ROW BuildKey="ExeBuild_x86_hybrid" BuildName="ExeBuild_x86_hybrid" BuildOrder="9" BuildType="0" PackageFolder="..\build-target\Installer64" PackageFileName="OpenSSL-x86-hybridCRT-[|ProductVersion]" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="resources\logo.ico" SummInfoMetadata="Page Count:450" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" UseLargeSchema="true" Unicode="true" ExeName="OpenSSL-x86-hybridCRT-[|ProductVersion]" MsiPackageType="x86"/>
@@ -448,7 +446,7 @@
     <ROW Dialog_="OptionsDlg" Control_="RadioButtonGroup_1" Action="Disable" Condition="NOT INSTALL_FIPS"/>
     <ROW Dialog_="SDKDlg" Control_="Text_3" Action="Show" Condition="INSTALL_APP = &quot;1&quot; AND NOT INSTALL_VISUAL_STUDIO"/>
     <ROW Dialog_="SDKDlg" Control_="Text_3" Action="Hide" Condition="NOT INSTALL_APP = &quot;1&quot;"/>
-    <ROW Dialog_="OptionsDlg" Control_="RadioButtonGroup_1" Action="Hide" Condition="AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;ExeBuild_x86_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_x86_hybrid&quot;"/>
+    <ROW Dialog_="OptionsDlg" Control_="RadioButtonGroup_1" Action="Hide" Condition="AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;ExeBuild_arm64_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_arm64_hybrid&quot; OR AI_BUILD_NAME = &quot;ExeBuild_x86_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_x86_hybrid&quot;"/>
     <ATTRIBUTE name="DeletedRows" value="AboutDlg#Hyperlink#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR NOT AiReadmeLink@ExitDialog#ViewReadmeCheckBox#Hide#(((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 1) AND (CTRLS &lt;&gt; 3))) OR AiReadmeLink@ExitDialog#ViewReadmeText#Hide#(((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 1) AND (CTRLS &lt;&gt; 3))) OR AiReadmeLink@ProgressDlg#LaunchCheckBox#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 2) AND (CTRLS &lt;&gt; 3))@UI.aip@UpgradeDlg.aip@WelcomeDlg#LaunchCheckBox#Hide#((NOT AI_INSTALL) AND (NOT AI_PATCH)) OR ((CTRLS &lt;&gt; 2) AND (CTRLS &lt;&gt; 3))@WelcomeDlg.aip"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
@@ -530,7 +528,7 @@
     <ROW Dialog_="SpawnDialog_1" Control_="Ok" Event="EndDialog" Argument="Return" Condition="1" Ordering="100"/>
     <ROW Dialog_="SpawnDialog_1" Control_="AboutBtn" Event="SpawnDialog" Argument="AboutDlg" Condition="1" Ordering="1"/>
     <ROW Dialog_="OptionsDlg" Control_="Next" Event="SpawnDialog" Argument="SpawnDialog_1" Condition="(NOT INSTALL_APP = &quot;1&quot;) AND (INSTALL_FIPS = &quot;1&quot;)" Ordering="1"/>
-    <ROW Dialog_="OptionsDlg" Control_="OptionsDlgDialogInitializer" Event="[INSTALL_FIPS_TYPE]" Argument="current" Condition="( AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;ExeBuild_x86_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_x86_hybrid&quot; )" Ordering="0"/>
+    <ROW Dialog_="OptionsDlg" Control_="OptionsDlgDialogInitializer" Event="[INSTALL_FIPS_TYPE]" Argument="current" Condition="( AI_BUILD_NAME = &quot;ExeBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_hybrid&quot; OR AI_BUILD_NAME = &quot;ExeBuild_arm64_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_arm64_hybrid&quot; OR AI_BUILD_NAME = &quot;ExeBuild_x86_hybrid&quot; OR AI_BUILD_NAME = &quot;MsiBuild_x86_hybrid&quot; )" Ordering="0"/>
     <ATTRIBUTE name="DeletedRows" value="ExitDialog#LaunchBtn#DoAction#AI_LaunchApp#(AI_INSTALL OR AI_PATCH OR AI_MAINT)@ExitDialog#LaunchBtn#EndDialog#Exit#1@MaintenanceWelcomeDlg#LaunchButton#EndDialog#Exit#1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
@@ -685,7 +683,6 @@
     <ROW Feature_="Development" Component_="libcrypto.lib"/>
     <ROW Feature_="Development_x64" Component_="libssl4x64.dll_1"/>
     <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
-    <ROW Feature_="VCRedistARM64" Component_="VCRedistARM64"/>
     <ROW Feature_="MainFeature_arm64" Component_="libcrypto4arm64.dll"/>
     <ROW Feature_="MainFeature_arm64" Component_="libssl4arm64.dll"/>
     <ROW Feature_="Development_arm64" Component_="libcrypto4arm64.dll_1"/>
@@ -797,7 +794,6 @@
     <ROW Registry="ProductVersion_1" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
     <ROW Registry="Wow6432Node" Root="-1" Key="Software\Wow6432Node" Name="+" Component_="RegistryKeys"/>
-    <ROW Registry="VCRedistARM64" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="VCRedistARM64" Value="1" Component_="VCRedistARM64"/>
     <ROW Registry="VCRedistX86" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="VCRedistX86" Value="1" Component_="VCRedistX86"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRemoveFileComponent">
@@ -828,13 +824,11 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqComponent">
     <ROW PrereqKey="C4FE6FD5B7C4D07B3A313E754A9A6A8" DisplayName="Visual C++ Redistributable for Visual Studio 2015-2022 x64" VersionMin="14.40" SetupFileUrl="Prerequisites\Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x64.exe" Location="0" ExactSize="0" WinNTVersions="Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" WinNT64Versions="Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64" Operator="1" ComLine="/q /norestart" NoUiComLine="/q /norestart" Options="xfm" TargetName="Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x64.exe" Builds="DefaultBuild;Build" Feature="C4FE6FD5B7C4D07B3A313E754A9A6A8" RetValPropName="INSTALL_VISUAL_STUDIO" InstallCondition="INSTALL_APP"/>
-    <ROW PrereqKey="VCRedistARM64" DisplayName="Visual C++ Redistributable for Visual Studio 2015-2022 arm64" VersionMin="14.40" SetupFileUrl="Prerequisites\Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.arm64.exe" Location="0" ExactSize="0" WinNTVersions="Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" WinNT64Versions="Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64" Operator="1" ComLine="/q /norestart" NoUiComLine="/q /norestart" Options="xfm" TargetName="Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.arm64.exe" Builds="ExeBuild_arm64;MsiBuild_arm64" Feature="VCRedistARM64" RetValPropName="INSTALL_VISUAL_STUDIO" InstallCondition="INSTALL_APP"/>
     <ROW PrereqKey="VCRedistX86" DisplayName="Visual C++ Redistributable for Visual Studio 2015-2022 x86" VersionMin="14.40" SetupFileUrl="Prerequisites\Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x86.exe" Location="0" ExactSize="0" WinNTVersions="Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" WinNT64Versions="Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64" Operator="1" ComLine="/q /norestart" NoUiComLine="/q /norestart" Options="xfm" TargetName="Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x86.exe" Builds="ExeBuild_x86;MsiBuild_x86" Feature="VCRedistX86" RetValPropName="INSTALL_VISUAL_STUDIO" InstallCondition="INSTALL_APP"/>
-    <ATTRIBUTE name="PrereqsOrder" value="C4FE6FD5B7C4D07B3A313E754A9A6A8 VCRedistARM64 VCRedistX86"/>
+    <ATTRIBUTE name="PrereqsOrder" value="C4FE6FD5B7C4D07B3A313E754A9A6A8 VCRedistX86"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqSearchComponent">
     <ROW SearchKey="C4FE6FD5B7C4D07B3A313E754A9A6A8Vers" Prereq="C4FE6FD5B7C4D07B3A313E754A9A6A8" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_C4FE6FD5B7C4D07B3A313E" Platform="1"/>
-    <ROW SearchKey="VCRedistARM64Vers" Prereq="VCRedistARM64" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\arm64\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_VCRedistARM64"/>
     <ROW SearchKey="VCRedistX86Vers" Prereq="VCRedistX86" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.40.33816" Order="1" Property="PreReqSearch_VCRedistX86"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">

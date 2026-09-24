@@ -12,16 +12,21 @@ The installer comes in two variants: EXE and MSI.
 
 ### Naming
 
-* `OpenSSL-x64-VS-<version>` — includes the Microsoft Visual Studio redistributable required for `openssl.exe` to function.
+`<arch>` is `x64`, `x86` or `arm64`.
+
+* `OpenSSL-<arch>-VS-<version>` (x64, x86) — includes the Microsoft Visual Studio redistributable required for `openssl.exe` to function.
   The redistributable package is installed only if it is not already present on the machine.
 
-* `OpenSSL-x64-hybridCRT-<version>` — contains OpenSSL built using the Hybrid CRT method, so it does not depend on the Visual Studio redistributable.
+* `OpenSSL-<arch>-hybridCRT-<version>` (x64, x86, arm64) — contains OpenSSL built using the Hybrid CRT method, so it does not depend on the Visual Studio redistributable.
   For more information, see [Hybrid CRT documentation](https://github.com/microsoft/WindowsAppSDK/blob/77761e244289fda6b3d5f14c7bded189fed4fb89/docs/Coding-Guidelines/HybridCRT.md).
 
 ## Supported Windows versions and platforms
 
-The installer supports x64 platform builds only and can be run on Windows 7 / Windows Server 2008 R2 or more recent versions.
-The Visual Studio redistributable is installed in its x64 version only.
+* **x64 and x86** — Windows 7 / Windows Server 2008 R2 or more recent versions.
+  The x86 installer installs into `Program Files (x86)`.
+  The VS flavour installs the Visual Studio redistributable matching the installer's architecture.
+* **arm64** — Windows 10, Windows 11 and Windows Server. Available in the Hybrid CRT flavour only.
+
 For HybridCRT flavour to work on older versions than Windows 10, the Universal CRT has to be updated, [see](https://support.microsoft.com/en-us/servicing/os/windows/2020/06/update-for-universal-c-runtime-in-windows).
 
 ## Installation options

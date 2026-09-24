@@ -30,6 +30,8 @@ jobs:
       matrix:
         include:
           - { arch: x64, runner: windows-2025, target: VC-WIN64A, vcvars: vcvars64.bat }
+          # x64-hosted cross compiler first, x86-hosted toolset as fallback.
+          - { arch: x86, runner: windows-2025, target: VC-WIN32, vcvars: "vcvarsamd64_x86.bat vcvars32.bat" }
           # Native arm64-hosted toolset first, x86-hosted cross compiler as fallback.
           - { arch: arm64, runner: windows-11-arm, target: VC-WIN64-ARM, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat" }
     steps:
@@ -80,7 +82,7 @@ jobs:
 
       - name: install nasm
         # x86-only assembler; the ARM64 target assembles with MSVC's armasm64.
-        if: steps.fips_cache.outputs.cache-hit != 'true' && matrix.arch == 'x64'
+        if: steps.fips_cache.outputs.cache-hit != 'true' && matrix.arch != 'arm64'
         shell: pwsh
         run: |
           $installer = "nasm-3.01-installer-x64.exe"
@@ -132,6 +134,8 @@ jobs:
         crt:
           - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, flavor: vs, target: VC-WIN64A, exe_build: ExeBuild, msi_build: MsiBuild, keep: OpenSSL-x64-VS-* }
           - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, exe_build: ExeBuild_hybrid, msi_build: MsiBuild_hybrid, keep: OpenSSL-x64-hybridCRT-* }
+          - { arch: x86, runner: windows-2025, vcvars: "vcvarsamd64_x86.bat vcvars32.bat", flavor: vs, target: VC-WIN32, exe_build: ExeBuild_x86, msi_build: MsiBuild_x86, keep: OpenSSL-x86-VS-* }
+          - { arch: x86, runner: windows-2025, vcvars: "vcvarsamd64_x86.bat vcvars32.bat", flavor: hybrid, target: VC-WIN32-HYBRIDCRT, exe_build: ExeBuild_x86_hybrid, msi_build: MsiBuild_x86_hybrid, keep: OpenSSL-x86-hybridCRT-* }
           # Hybrid flavor only: every arm64 Windows release ships the Universal CRT.
           - { arch: arm64, runner: windows-11-arm, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", flavor: hybrid, target: VC-WIN64-ARM-HYBRIDCRT, exe_build: ExeBuild_arm64_hybrid, msi_build: MsiBuild_arm64_hybrid, keep: OpenSSL-arm64-hybridCRT-* }
     steps:
@@ -199,7 +203,7 @@ jobs:
 
       - name: install nasm
         # x86-only assembler; the ARM64 target assembles with MSVC's armasm64.
-        if: steps.openssl_cache.outputs.cache-hit != 'true' && matrix.crt.arch == 'x64'
+        if: steps.openssl_cache.outputs.cache-hit != 'true' && matrix.crt.arch != 'arm64'
         shell: pwsh
         run: |
           $installer = "nasm-3.01-installer-x64.exe"
@@ -276,6 +280,10 @@ jobs:
           - OpenSSL-x64-VS-*.msi
           - OpenSSL-x64-hybridCRT-*.exe
           - OpenSSL-x64-hybridCRT-*.msi
+          - OpenSSL-x86-VS-*.exe
+          - OpenSSL-x86-VS-*.msi
+          - OpenSSL-x86-hybridCRT-*.exe
+          - OpenSSL-x86-hybridCRT-*.msi
         include:
           # ARM64 packages only install on ARM64 Windows.
           - { os: windows-11-arm, openssl-ref: openssl-4.1, installer: OpenSSL-arm64-hybridCRT-*.exe }

@@ -285,7 +285,7 @@ def _detect_arch(filename: str) -> str:
     """Derive the target architecture from the installer filename.
 
     Artifacts are named OpenSSL-<arch>-<flavor>-<ver>.{exe,msi} with <arch>
-    being "x64" (VC-WIN64A[-HYBRIDCRT]), "arm64" (VC-WIN64-ARM) or "x86"
+    being "x64" (VC-WIN64A[-HYBRIDCRT]), "arm64" (VC-WIN64-ARM-HYBRIDCRT) or "x86"
     (VC-WIN32[-HYBRIDCRT]).
     """
     m = re.search(r"-(x64|arm64|x86)-", filename, re.IGNORECASE)
@@ -763,8 +763,15 @@ def imported_dlls(binary: Path) -> set[str]:
 # win32com: MSI's parameterized StringData property is unreachable through
 # win32com's dynamic dispatch (it invokes the property-get as a method).
 
-HYBRID_BUILD_NAMES = ("ExeBuild_hybrid", "MsiBuild_hybrid", "ExeBuild_x86_hybrid", "MsiBuild_x86_hybrid")
-VS_BUILD_NAMES = ("ExeBuild", "MsiBuild", "ExeBuild_arm64", "MsiBuild_arm64", "ExeBuild_x86", "MsiBuild_x86")
+HYBRID_BUILD_NAMES = (
+    "ExeBuild_hybrid",
+    "MsiBuild_hybrid",
+    "ExeBuild_arm64_hybrid",
+    "MsiBuild_arm64_hybrid",
+    "ExeBuild_x86_hybrid",
+    "MsiBuild_x86_hybrid",
+)
+VS_BUILD_NAMES = ("ExeBuild", "MsiBuild", "ExeBuild_x86", "MsiBuild_x86")
 
 _MSI_QUERY_SCRIPT = Path(__file__).parent / "msi_query.ps1"
 

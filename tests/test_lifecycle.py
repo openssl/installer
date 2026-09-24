@@ -125,12 +125,19 @@ def _version_tuple(s: str, length: int) -> tuple[int, ...]:
     return tuple(parts[:length])
 
 
+# Hybrid builds link vcruntime statically and use the OS Universal CRT, so the
+# .aip gives them no VC++ redistributable prerequisite to verify.
+_HYBRID_NO_VC_RUNTIME = "hybridCRT installers do not depend on or bundle the VC++ runtime"
+
+
 @pytest.mark.usefixtures("clean_install")
 def test_vc_runtime_present_after_install(installer: InstallerInfo) -> None:
     """After install, the VC++ 2015-2022 runtime for the installer's
     architecture must satisfy the .aip's declared minimum (>= 14.40.33816).
     The MSI either uses an already-installed runtime or installs its bundled
     VC_redist.<arch>.exe during install."""
+    if installer.flavor == "hybrid":
+        pytest.skip(_HYBRID_NO_VC_RUNTIME)
     install(installer)
     _assert_vc_runtime_meets_minimum(installer.arch)
 
@@ -221,6 +228,8 @@ def test_msi_installs_vc_runtime_when_missing(installer: InstallerInfo) -> None:
     because it temporarily breaks any other software on the machine that
     depends on VC++ runtime. The MSI's prereq mechanism restores it.
     """
+    if installer.flavor == "hybrid":
+        pytest.skip(_HYBRID_NO_VC_RUNTIME)
     found = _find_vc_redist_products(installer.arch)
     if not found:
         pytest.skip(f"no VC++ 2015-2022 {installer.arch} redistributable present to remove; cannot verify install")

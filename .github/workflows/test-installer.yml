@@ -134,8 +134,7 @@ jobs:
           - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, configure_extra: "", flavor: vs, target: VC-WIN64A, exe_build: ExeBuild, msi_build: MsiBuild, keep: OpenSSL-x64-VS-* }
           - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, configure_extra: "", flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, exe_build: ExeBuild_hybrid, msi_build: MsiBuild_hybrid, keep: OpenSSL-x64-hybridCRT-* }
           # Hybrid flavor only: every arm64 Windows release ships the Universal CRT.
-          # no-md4: MD4 does not build for VC-WIN64-ARM.
-          - { arch: arm64, runner: windows-11-arm, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", configure_extra: no-md4, flavor: hybrid, target: VC-WIN64-ARM-HYBRIDCRT, exe_build: ExeBuild_arm64_hybrid, msi_build: MsiBuild_arm64_hybrid, keep: OpenSSL-arm64-hybridCRT-* }
+          - { arch: arm64, runner: windows-11-arm, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", configure_extra: "", flavor: hybrid, target: VC-WIN64-ARM-HYBRIDCRT, exe_build: ExeBuild_arm64_hybrid, msi_build: MsiBuild_arm64_hybrid, keep: OpenSSL-arm64-hybridCRT-* }
     steps:
       - name: Checkout installer
         uses: actions/checkout@v7

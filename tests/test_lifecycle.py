@@ -94,43 +94,75 @@ def test_upgrade_from_previous_version(installer: InstallerInfo) -> None:
 # Minimum VC++ runtime version the .aip's PreReqSearch enforces. If the
 # installer's prereq mechanism works, this version (or newer) is on the
 # machine after install — either because it was already there or because
-# the MSI downloaded https://aka.ms/vs/17/release/vc_redist.x64.exe and
-# installed it silently.
-_VCRUNTIME_KEY = r"SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum"
+# the MSI installed its bundled VC_redist.<arch>.exe silently.
 _VCRUNTIME_MIN = (14, 40, 33816)
+
+# Where the VC++ 2015-2022 runtime records its version, per architecture, as
+# (registry view, key). Microsoft's documented detection key is
+# SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\<arch> (Version = "v14.x.y.z"),
+# written for x86/x64/arm64 and read through the 32-bit view (Wow6432Node); the
+# native view is tried too. The DevDiv servicing key is what the x64 .aip
+# prerequisite search uses, and is only known to exist for x86/x64 runtimes
+# (the arm64 runtime does not write it), so it stays as a fallback.
+_VCRUNTIME_RUNTIMES_KEY = r"SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes"
+_VCRUNTIME_DEVDIV_KEY = r"SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum"
+
+
+def _vc_runtime_keys(arch: str) -> list[tuple[int, str]]:
+    runtimes = rf"{_VCRUNTIME_RUNTIMES_KEY}\{arch}"
+    devdiv_view = winreg.KEY_WOW64_32KEY if arch == "x86" else winreg.KEY_WOW64_64KEY
+    return [
+        (winreg.KEY_WOW64_32KEY, runtimes),
+        (winreg.KEY_WOW64_64KEY, runtimes),
+        (devdiv_view, _VCRUNTIME_DEVDIV_KEY),
+    ]
 
 
 def _version_tuple(s: str, length: int) -> tuple[int, ...]:
-    parts = [int(p) for p in s.split(".")]
+    parts = [int(p) for p in s.lstrip("vV").split(".")]
     while len(parts) < length:
         parts.append(0)
     return tuple(parts[:length])
 
 
+# Hybrid builds link vcruntime statically and use the OS Universal CRT, so the
+# .aip gives them no VC++ redistributable prerequisite to verify.
+_HYBRID_NO_VC_RUNTIME = "hybridCRT installers do not depend on or bundle the VC++ runtime"
+
+
 @pytest.mark.usefixtures("clean_install")
 def test_vc_runtime_present_after_install(installer: InstallerInfo) -> None:
-    """After install, the VC++ 2015-2022 x64 runtime must satisfy the .aip's
-    declared minimum (>= 14.40.33816). The MSI either uses an already-installed
-    runtime or downloads + installs vc_redist.x64.exe during install."""
+    """After install, the VC++ 2015-2022 runtime for the installer's
+    architecture must satisfy the .aip's declared minimum (>= 14.40.33816).
+    The MSI either uses an already-installed runtime or installs its bundled
+    VC_redist.<arch>.exe during install."""
+    if installer.flavor == "hybrid":
+        pytest.skip(_HYBRID_NO_VC_RUNTIME)
     install(installer)
-    _assert_vc_runtime_meets_minimum()
+    _assert_vc_runtime_meets_minimum(installer.arch)
 
 
-def _read_vc_runtime_version() -> str | None:
-    """Return the VC++ runtime version string, or None if not installed."""
-    try:
-        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, _VCRUNTIME_KEY)
-    except FileNotFoundError:
-        return None
-    with key:
-        return winreg.QueryValueEx(key, "Version")[0]
+def _read_vc_runtime_version(arch: str) -> str | None:
+    """Return the VC++ runtime version string for `arch`, or None if not installed."""
+    for view, key_path in _vc_runtime_keys(arch):
+        try:
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path, 0, winreg.KEY_READ | view)
+        except FileNotFoundError:
+            continue
+        with key:
+            try:
+                return winreg.QueryValueEx(key, "Version")[0]
+            except FileNotFoundError:
+                continue
+    return None
 
 
-def _assert_vc_runtime_meets_minimum() -> None:
-    version = _read_vc_runtime_version()
+def _assert_vc_runtime_meets_minimum(arch: str) -> None:
+    version = _read_vc_runtime_version(arch)
     if version is None:
+        keys = ", ".join(f"HKLM\\{k}" for _, k in _vc_runtime_keys(arch))
         raise AssertionError(
-            f"VC++ runtime registry key missing: HKLM\\{_VCRUNTIME_KEY}.\n"
+            f"VC++ {arch} runtime registry key missing (looked at {keys}).\n"
             "The MSI's prereq should have installed VC++ Redistributable."
         )
     actual = _version_tuple(version, len(_VCRUNTIME_MIN))
@@ -138,16 +170,19 @@ def _assert_vc_runtime_meets_minimum() -> None:
     assert actual >= _VCRUNTIME_MIN, f"VC++ runtime version {version!r} < required {required_str!r}"
 
 
-# Matches "Microsoft Visual C++ 2015/2017/2019/2022 (- ... -)? Redistributable (x64) ..."
+# Matches "Microsoft Visual C++ 2015/2017/2019/2022 (- ... -)? Redistributable (<arch>) ..."
 # in DisplayName. Older Visual C++ families (2008/2010/2012/2013) live on
 # different servicing branches and aren't what our installer requires, so
 # we leave them alone.
-_VC_REDIST_X64_PATTERN = re.compile(r"visual c\+\+ 20(15|17|19|22).*x64", re.IGNORECASE)
+def _vc_redist_pattern(arch: str) -> re.Pattern[str]:
+    return re.compile(r"visual c\+\+ 20(15|17|19|22).*" + re.escape(arch), re.IGNORECASE)
 
 
-def _find_vc_redist_x64_products() -> list[tuple[str, str]]:
-    """Return [(product_code, display_name)] for installed VC++ 2015-2022 x64
-    redistributables — the family our MSI's prereq targets."""
+def _find_vc_redist_products(arch: str) -> list[tuple[str, str]]:
+    """Return [(product_code, display_name)] for installed VC++ 2015-2022
+    redistributables of the given architecture — the family our MSI's prereq
+    targets."""
+    pattern = _vc_redist_pattern(arch)
     results: list[tuple[str, str]] = []
     for hive_path in (
         r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
@@ -172,7 +207,7 @@ def _find_vc_redist_x64_products() -> list[tuple[str, str]]:
                         display_name = winreg.QueryValueEx(subkey, "DisplayName")[0]
                     except FileNotFoundError:
                         continue
-                    if _VC_REDIST_X64_PATTERN.search(display_name):
+                    if pattern.search(display_name):
                         results.append((subkey_name, display_name))
     return results
 
@@ -181,21 +216,23 @@ def _find_vc_redist_x64_products() -> list[tuple[str, str]]:
 @pytest.mark.usefixtures("clean_install")
 def test_msi_installs_vc_runtime_when_missing(installer: InstallerInfo) -> None:
     """Aggressive variant of test_vc_runtime_present_after_install: forcibly
-    remove every Visual C++ 2015-2022 x64 redistributable on the machine,
-    then install the MSI and verify the runtime is back at the required
-    version.
+    remove every Visual C++ 2015-2022 redistributable of the installer's
+    architecture from the machine, then install the MSI and verify the
+    runtime is back at the required version.
 
-    This proves the .aip's PreReqComponent actually downloads and installs
-    https://aka.ms/vs/17/release/vc_redist.x64.exe — not just relies on a
-    machine that happened to already have it.
+    This proves the .aip's PreReqComponent actually installs its bundled
+    VC_redist.<arch>.exe — not just relies on a machine that happened to
+    already have it.
 
     Gated by the `destructive` marker (run with `pytest -m destructive`)
     because it temporarily breaks any other software on the machine that
     depends on VC++ runtime. The MSI's prereq mechanism restores it.
     """
-    found = _find_vc_redist_x64_products()
+    if installer.flavor == "hybrid":
+        pytest.skip(_HYBRID_NO_VC_RUNTIME)
+    found = _find_vc_redist_products(installer.arch)
     if not found:
-        pytest.skip("no VC++ 2015-2022 x64 redistributable present to remove; cannot verify download")
+        pytest.skip(f"no VC++ 2015-2022 {installer.arch} redistributable present to remove; cannot verify install")
 
     for product_code, display_name in found:
         print(f"removing {display_name} ({product_code})", flush=True)
@@ -210,7 +247,7 @@ def test_msi_installs_vc_runtime_when_missing(installer: InstallerInfo) -> None:
 
     # Confirm the runtime is genuinely absent (or below the minimum) before
     # we install our MSI — otherwise the test wouldn't prove anything.
-    version = _read_vc_runtime_version()
+    version = _read_vc_runtime_version(installer.arch)
     if version is not None:
         actual = _version_tuple(version, len(_VCRUNTIME_MIN))
         if actual >= _VCRUNTIME_MIN:
@@ -219,7 +256,7 @@ def test_msi_installs_vc_runtime_when_missing(installer: InstallerInfo) -> None:
                 "system component or a newer redistributable kept it. Cannot verify the prereq download."
             )
 
-    # Install our MSI. The PreReqComponent should download + install VC++ redist.
+    # Install our MSI. The PreReqComponent should install the bundled VC++ redist.
     install(installer)
 
-    _assert_vc_runtime_meets_minimum()
+    _assert_vc_runtime_meets_minimum(installer.arch)

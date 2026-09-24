@@ -845,6 +845,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.TempFileComponent">
     <ROW FileId="vcruntime140.dll" Name="VCRUNT~1.DLL|vcruntime140.dll" Directory_="bin_Dir" Property="AI_VCRUNTIME140.DLL" Condition="INSTALL_FIPS = &quot;1&quot; AND UILevel = 2 AND AI_BUILD_NAME = &quot;MsiBuild&quot;" Options="0" Data="resources\vcruntime140.dll"/>
+    <ROW FileId="vcruntime140.dll_1" Name="VCRUNT~1.DLL|vcruntime140.dll" Directory_="bin_Dir" Property="AI_VCRUNTIME140.DLL_1" Condition="INSTALL_FIPS = &quot;1&quot; AND UILevel = 2 AND AI_BUILD_NAME = &quot;MsiBuild_x86&quot;" Options="0" Data="resources\x86\vcruntime140.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.TxtUpdateComponent">
     <ROW Name="Replace_include" TxtUpdateSet="openssl.cnf" FindPattern="# .include fipsmodule.cnf" ReplacePattern=".include [config_Dir]fipsmodule.cnf" Options="2" Order="0" FileEncoding="-1"/>

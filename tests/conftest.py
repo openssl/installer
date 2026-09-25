@@ -616,12 +616,8 @@ def check_openssl_crypto(install_dir: Path):
 
     # AES-256-CBC encrypt → decrypt must round-trip.
     pass_args = ["-aes-256-cbc", "-pbkdf2", "-pass", "pass:installer-test"]
-    ciphertext = subprocess.run(
-        [str(exe), "enc", "-e", *pass_args], input=data, check=True, capture_output=True
-    ).stdout
-    roundtrip = subprocess.run(
-        [str(exe), "enc", "-d", *pass_args], input=ciphertext, check=True, capture_output=True
-    ).stdout
+    ciphertext = subprocess.run([str(exe), "enc", "-e", *pass_args], input=data, check=True, capture_output=True).stdout
+    roundtrip = subprocess.run([str(exe), "enc", "-d", *pass_args], input=ciphertext, check=True, capture_output=True).stdout
     assert roundtrip == data, "AES-256-CBC encrypt/decrypt did not round-trip to the original plaintext"
 
 
@@ -821,3 +817,49 @@ def validated_option_disabled(facts: dict[str, str | None]) -> bool:
     """
     quoted = f'"{facts["build_name"]}"'
     return quoted in (facts["hide_condition"] or "")
+
+
+# --- MSI package structure (platform, bitness, upgrades, SDK dialog) --------
+#
+# Facts a silent install can't observe, read straight from the package's MSI
+# database by msi_package.ps1 (see test_package.py). An .exe bootstrapper's
+# inner MSI is pulled out with the bootstrapper's own `/extract <folder>`
+# switch, so these tests never install anything.
+
+_MSI_PACKAGE_SCRIPT = Path(__file__).parent / "msi_package.ps1"
+
+
+@pytest.fixture(scope="session")
+def package_msi(installer: InstallerInfo, tmp_path_factory) -> Path:
+    """The installer's MSI database: the .msi itself, or the MSI extracted from
+    the .exe bootstrapper."""
+    if installer.path.suffix.lower() == ".msi":
+        return installer.path
+    folder = tmp_path_factory.mktemp("extracted-msi")
+    subprocess.run([str(installer.path), "/extract", str(folder)], check=True, capture_output=True, text=True)
+    msis = sorted(folder.glob("*.msi"))
+    if len(msis) != 1:
+        pytest.fail(f"expected one MSI from '{installer.path.name} /extract', found {[m.name for m in msis]}")
+    return msis[0]
+
+
+@pytest.fixture(scope="session")
+def package_facts(package_msi: Path) -> dict:
+    """Template, component bitness, Upgrade rows, features with conditions and
+    the SDK dialog's feature list, as reported by msi_package.ps1."""
+    res = subprocess.run(
+        [
+            "powershell",
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            str(_MSI_PACKAGE_SCRIPT),
+            "-MsiPath",
+            str(package_msi),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return json.loads(res.stdout)

@@ -81,8 +81,7 @@
     <ROW Directory="x86validated_Dir" Directory_Parent="osslmodules_Dir" DefaultDir=".:X86-VA~1|x86-validated"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="AI_ExePath" ComponentId="{6F396ED5-F66D-4150-A035-B5C6F152123F}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
-    <ROW Component="AI_ExePath_1" ComponentId="{66C6C29B-7150-491A-860A-0F113B99FCDD}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath_1"/>
+    <ROW Component="AI_ExePath" ComponentId="{6F396ED5-F66D-4150-A035-B5C6F152123F}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
     <ROW Component="APPDIR" ComponentId="{F369CD1C-0EC1-4A1C-9046-106AEB18F4CD}" Directory_="APPDIR" Attributes="0"/>
     <ROW Component="C4FE6FD5B7C4D07B3A313E754A9A6A8" ComponentId="{1961A149-0B14-467E-B7C1-B4ABB0DF134C}" Directory_="APPDIR" Attributes="260" KeyPath="C4FE6FD5B7C4D07B3A313E754A9A6A8" Options="2"/>
     <ROW Component="EnvPath" ComponentId="{755FEA08-4B5E-463C-BF5E-1FD8250A0EB8}" Directory_="APPDIR" Attributes="0" Condition="ADJUSTSYSTEMPATHENV=&quot;1&quot;"/>
@@ -678,7 +677,6 @@
     <ROW Feature_="DebugFiles_64bit" Component_="fips.pdb"/>
     <ROW Feature_="DebugFiles_64bit" Component_="FIPS_VALIDATED.pdb"/>
     <ROW Feature_="DebugFiles_64bit" Component_="legacy.pdb"/>
-    <ROW Feature_="MainFeature_arm64" Component_="AI_ExePath"/>
     <ROW Feature_="MainFeature_x64" Component_="openssl.exe"/>
     <ROW Feature_="MainFeature_arm64" Component_="openssl.exe"/>
     <ROW Feature_="Development_x64" Component_="fips.lib"/>
@@ -694,7 +692,7 @@
     <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf"/>
     <ROW Feature_="AlwaysInstalled" Component_="ct_log_list.cnf.dist"/>
     <ROW Feature_="Development_x86" Component_="libcrypto4.dll_1"/>
-    <ROW Feature_="MainFeature_x64" Component_="AI_ExePath"/>
+    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
     <ROW Feature_="Development_x86" Component_="fips.lib_2"/>
     <ROW Feature_="MainFeature_x86" Component_="openssl.exe_1"/>
     <ROW Feature_="AlwaysInstalled_x86" Component_="fips.dll_3"/>
@@ -716,7 +714,6 @@
     <ROW Feature_="AlwaysInstalled_x86" Component_="EnvPath_2"/>
     <ROW Feature_="AlwaysInstalled_x86" Component_="MODULESDIR_1"/>
     <ROW Feature_="AlwaysInstalled_x86" Component_="OPENSSLDIR_1"/>
-    <ROW Feature_="MainFeature_x86" Component_="AI_ExePath_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="logo.exe" SourcePath="resources\logo.ico" Index="0"/>
@@ -800,18 +797,14 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
     <ROW Registry="AI_ExePath" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath"/>
-    <ROW Registry="AI_ExePath_1" Root="2" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath_1"/>
     <ROW Registry="AdvancedInstaller" Root="-1" Key="Software\Caphyon\Advanced Installer" Name="\"/>
-    <ROW Registry="AdvancedInstaller_1" Root="2" Key="Software\Caphyon\Advanced Installer" Name="\"/>
     <ROW Registry="C4FE6FD5B7C4D07B3A313E754A9A6A8" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="C4FE6FD5B7C4D07B3A313E754A9A6A8" Value="1" Component_="C4FE6FD5B7C4D07B3A313E754A9A6A8"/>
     <ROW Registry="Caphyon" Root="-1" Key="Software\Caphyon" Name="\"/>
-    <ROW Registry="Caphyon_1" Root="2" Key="Software\Caphyon" Name="\"/>
     <ROW Registry="EnvPath" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="EnvPath" Value="[bin_Dir]" Component_="RegistryKeys"/>
     <ROW Registry="EnvPath_1" Root="-1" Key="Software\Wow6432Node\OpenSSL-[VERSION_REGISTRY]" Name="EnvPath" Value="[bin_Dir]" Component_="RegistryKeys"/>
     <ROW Registry="EnvPath_2" Root="2" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="EnvPath" Value="[bin_Dir]" Component_="EnvPath_1"/>
     <ROW Registry="EnvPath_3" Root="2" Key="Software\Wow6432Node\OpenSSL-[VERSION_REGISTRY]" Name="EnvPath" Value="[bin_Dir]" Component_="EnvPath_2"/>
     <ROW Registry="LZMA" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA" Name="\"/>
-    <ROW Registry="LZMA_1" Root="2" Key="Software\Caphyon\Advanced Installer\LZMA" Name="\"/>
     <ROW Registry="MODULESDIR" Root="-1" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="MODULESDIR" Value="[lib_Dir]ossl-modules" Component_="RegistryKeys"/>
     <ROW Registry="MODULESDIR_1" Root="-1" Key="Software\Wow6432Node\OpenSSL-[VERSION_REGISTRY]" Name="MODULESDIR" Value="[lib_Dir]ossl-modules" Component_="RegistryKeys"/>
     <ROW Registry="MODULESDIR_2" Root="2" Key="Software\[Manufacturer]\OpenSSL-[VERSION_REGISTRY]" Name="MODULESDIR" Value="[lib_Dir]ossl-modules" Component_="MODULESDIR"/>
@@ -829,10 +822,8 @@
     <ROW Registry="Prereqs" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs" Name="\"/>
     <ROW Registry="ProductCode" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]" Name="\"/>
     <ROW Registry="ProductCode_1" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]" Name="\"/>
-    <ROW Registry="ProductCode_2" Root="2" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]" Name="\"/>
     <ROW Registry="ProductVersion" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="\"/>
     <ROW Registry="ProductVersion_1" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
-    <ROW Registry="ProductVersion_2" Root="2" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
     <ROW Registry="Software_1" Root="2" Key="Software" Name="\"/>
     <ROW Registry="VCRedistX86" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="VCRedistX86" Value="1" Component_="VCRedistX86"/>

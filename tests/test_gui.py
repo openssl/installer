@@ -228,8 +228,9 @@ def _wait_until(predicate: Any, *, timeout: float, what: str, poll: float = 2.0)
         time.sleep(poll)
     raise AssertionError(f"timed out after {timeout:.0f}s waiting for {what}")
 
+
 @pytest.mark.skipif(os.getenv("CI") == "true", reason="GUI tests require interactive session")
-def test_wizard_dialog_walk(wizard: Wizard, installer: InstallerInfo) -> None:
+def test_wizard_dialog_walk(wizard: Wizard, installer: InstallerInfo, install_dir: Path) -> None:
     """Walk the wizard from license through the additional-options dialog,
     asserting expected state (defaults, path, the 'at least one option'
     validation popup) at each step.
@@ -245,7 +246,8 @@ def test_wizard_dialog_walk(wizard: Wizard, installer: InstallerInfo) -> None:
 
     # ---- 2. Install path ----
     assert _current_static(dlg) == "Choose install location", f"unexpected dialog title: {_current_static(dlg)!r}"
-    expected_path = f"C:\\Program Files\\OpenSSL Library\\openssl-{installer.short}\\"
+    # Per-architecture default: x86 packages offer Program Files (x86).
+    expected_path = f"{install_dir}\\"
     actual_path = dlg.Edit.get_value()
     assert actual_path == expected_path, f"install path: expected {expected_path!r}, got {actual_path!r}"
     dlg = _click_and_advance(dlg, app)

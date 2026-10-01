@@ -26,7 +26,6 @@
     <ROW Property="AppLogoIcon" Value="applogo.png" MultiBuildValue="DefaultBuild:logo.png#Build:logo.png#MsiBuild_1:logo.png#ExeBuild_1:logo.png#ExeBuild_arm64:logo.png#MsiBuild_arm64:logo.png#ExeBuild_x86:logo.png#MsiBuild_x86:logo.png#ExeBuild_x86_hybrid:logo.png#MsiBuild_x86_hybrid:logo.png" Type="1" MsiKey="AppLogoIcon"/>
     <ROW Property="FIPS_CONF" Value="openssl"/>
     <ROW Property="FIPS_OPTION_TEXT" Value="Install FIPS provider" MultiBuildValue="MsiBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_1:Install FIPS provider ([|ProductVersion])#ExeBuild_arm64:Install FIPS provider ([|ProductVersion])#MsiBuild_arm64:Install FIPS provider ([|ProductVersion])#ExeBuild_x86_hybrid:Install FIPS provider ([|ProductVersion])#MsiBuild_x86_hybrid:Install FIPS provider ([|ProductVersion])"/>
-    <ROW Property="FIPS_VALIDATED" Value="fips"/>
     <ROW Property="INSTALL_APP" Value="1" Type="4"/>
     <ROW Property="INSTALL_FIPS_TYPE" Value="validated" Type="4"/>
     <ROW Property="INSTALL_SDK" Value="1" Type="4"/>
@@ -75,6 +74,7 @@
     <ROW Directory="man7_Dir" Directory_Parent="html_Dir" DefaultDir="man7"/>
     <ROW Directory="openssl_Dir" Directory_Parent="include_Dir" DefaultDir="openssl"/>
     <ROW Directory="osslmodules_Dir" Directory_Parent="lib_Dir" DefaultDir="OSSL-M~1|ossl-modules"/>
+    <ROW Directory="validated_Dir" Directory_Parent="osslmodules_Dir" DefaultDir=".:VALIDA~1|validated"/>
     <ROW Directory="x86_1_Dir" Directory_Parent="osslmodules_Dir" DefaultDir=".:x86"/>
     <ROW Directory="x86_2_Dir" Directory_Parent="APPDIR" DefaultDir=".:x86"/>
     <ROW Directory="x86_Dir" Directory_Parent="bin_Dir" DefaultDir=".:x86"/>
@@ -87,7 +87,7 @@
     <ROW Component="EnvPath" ComponentId="{755FEA08-4B5E-463C-BF5E-1FD8250A0EB8}" Directory_="APPDIR" Attributes="0" Condition="ADJUSTSYSTEMPATHENV=&quot;1&quot;"/>
     <ROW Component="EnvPath_1" ComponentId="{33B8A2EB-818C-4B0B-BFA1-088B7EBED793}" Directory_="APPDIR" Attributes="4" KeyPath="EnvPath_2"/>
     <ROW Component="EnvPath_2" ComponentId="{56BC03DB-19BE-49B7-A8A7-B081AF187BC3}" Directory_="APPDIR" Attributes="4" KeyPath="EnvPath_3"/>
-    <ROW Component="FIPS_VALIDATED.pdb" ComponentId="{5E5DDCDB-8BA7-4C8C-A5E0-126BD5EC81CD}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.pdb" Type="4"/>
+    <ROW Component="fips.pdb_3" ComponentId="{5E5DDCDB-8BA7-4C8C-A5E0-126BD5EC81CD}" Directory_="validated_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.pdb" Type="4"/>
     <ROW Component="LICENSE.txt" ComponentId="{0ED15AA5-24CA-4150-9F72-CFD919E73E78}" Directory_="APPDIR" Attributes="0" KeyPath="LICENSE.txt" Type="0"/>
     <ROW Component="MODULESDIR" ComponentId="{44330149-EFFB-49D5-80FF-CB78669FDB93}" Directory_="APPDIR" Attributes="4" KeyPath="MODULESDIR_2"/>
     <ROW Component="MODULESDIR_1" ComponentId="{012AA5B3-7BEE-4C26-B72F-520231F69D4A}" Directory_="APPDIR" Attributes="4" KeyPath="MODULESDIR_3"/>
@@ -98,16 +98,16 @@
     <ROW Component="config_files" ComponentId="{9FB8D450-DC0B-468A-BCE4-3ADBB0795CD7}" Directory_="config_Dir" Attributes="0" KeyPath="openssl.cnf.dist" Type="0"/>
     <ROW Component="ct_log_list.cnf" ComponentId="{7DBDF570-8985-4B3A-BF0C-FBBBA87E46F1}" Directory_="config_Dir" Attributes="0" KeyPath="ct_log_list.cnf"/>
     <ROW Component="ct_log_list.cnf.dist" ComponentId="{89228605-D376-4DC9-BCA2-29333EAA1EAD}" Directory_="config_Dir" Attributes="0" KeyPath="ct_log_list.cnf.dist"/>
-    <ROW Component="fips.dll" ComponentId="{74238794-2C7D-41FB-84BE-7D77D4821258}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.dll"/>
+    <ROW Component="fips.dll" ComponentId="{74238794-2C7D-41FB-84BE-7D77D4821258}" Directory_="validated_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.dll"/>
     <ROW Component="fips.dll_1" ComponentId="{060B11DE-A233-4054-AF4F-6937B2CA4113}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.dll_1"/>
-    <ROW Component="fips.dll_2" ComponentId="{E4A95314-DA85-4916-9CD2-EFD8A6CA3C94}" Directory_="x86validated_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="FIPS_VALIDATED.dll"/>
+    <ROW Component="fips.dll_2" ComponentId="{E4A95314-DA85-4916-9CD2-EFD8A6CA3C94}" Directory_="x86validated_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.dll_2"/>
     <ROW Component="fips.dll_3" ComponentId="{845BF458-4654-4997-9A6E-807B139182E4}" Directory_="x86_1_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.dll_3"/>
-    <ROW Component="fips.lib" ComponentId="{6B240DF0-B439-407E-80D0-838006599EF3}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.lib"/>
+    <ROW Component="fips.lib" ComponentId="{6B240DF0-B439-407E-80D0-838006599EF3}" Directory_="validated_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.lib"/>
     <ROW Component="fips.lib_1" ComponentId="{CB850141-00A1-46D8-BEE8-4EF8016FA38D}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.lib_1"/>
     <ROW Component="fips.lib_2" ComponentId="{04F98579-C3FF-4CF1-9DEF-B30DBF06359D}" Directory_="x86_1_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.lib_2" Type="0"/>
-    <ROW Component="fips.lib_3" ComponentId="{0119321B-F60F-41AD-B760-7F9CCA5068A3}" Directory_="x86validated_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="FIPS_VALIDATED.lib" Type="0"/>
+    <ROW Component="fips.lib_3" ComponentId="{0119321B-F60F-41AD-B760-7F9CCA5068A3}" Directory_="x86validated_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.lib_3" Type="0"/>
     <ROW Component="fips.pdb" ComponentId="{F1ABD118-B6E1-4320-8BE6-7A2CDF7ABA3E}" Directory_="osslmodules_Dir" Attributes="256" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.pdb_1" Type="4"/>
-    <ROW Component="fips.pdb_1" ComponentId="{162E72E3-9047-4698-80EF-F0DB4221BCB4}" Directory_="x86validated_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="FIPS_VALIDATED.pdb" Type="4"/>
+    <ROW Component="fips.pdb_1" ComponentId="{162E72E3-9047-4698-80EF-F0DB4221BCB4}" Directory_="x86validated_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;validated&quot;" KeyPath="fips.pdb_2" Type="4"/>
     <ROW Component="fips.pdb_2" ComponentId="{3CF20456-4AA9-4B92-BBF2-0795F0BEE922}" Directory_="x86_1_Dir" Attributes="0" Condition="INSTALL_FIPS = &quot;1&quot; AND INSTALL_FIPS_TYPE = &quot;current&quot;" KeyPath="fips.pdb_3" Type="4"/>
     <ROW Component="legacy.dll" ComponentId="{B87AC24D-0771-4CDC-8032-13D7E624A090}" Directory_="osslmodules_Dir" Attributes="256" KeyPath="legacy.dll"/>
     <ROW Component="legacy.dll_1" ComponentId="{FE62BA89-FB53-438B-B8E6-47B55886F4F8}" Directory_="x86_1_Dir" Attributes="0" KeyPath="legacy.dll_1"/>
@@ -165,9 +165,9 @@
     <ROW File="LICENSE.txt" Component_="LICENSE.txt" FileName="LICENSE.txt" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;LICENSE.txt" SelfReg="false"/>
     <ROW File="version.txt" Component_="version.dat" FileName="version.dat" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;VERSION.dat" SelfReg="false"/>
     <ROW File="legacy.lib" Component_="legacy.lib" FileName="legacy.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.lib" SelfReg="false"/>
-    <ROW File="fips.dll" Component_="fips.dll" FileName="[|FIPS_VALIDATED].dll" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.dll" SelfReg="false" DigSign="true"/>
-    <ROW File="fips.lib" Component_="fips.lib" FileName="[|FIPS_VALIDATED].lib" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.lib" SelfReg="false"/>
-    <ROW File="fips.pdb" Component_="FIPS_VALIDATED.pdb" FileName="[|FIPS_VALIDATED].pdb" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.pdb" SelfReg="false"/>
+    <ROW File="fips.dll" Component_="fips.dll" FileName="fips.dll" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="fips.lib" Component_="fips.lib" FileName="fips.lib" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.lib" SelfReg="false"/>
+    <ROW File="fips.pdb" Component_="fips.pdb_3" FileName="fips.pdb" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.pdb" SelfReg="false"/>
     <ROW File="fips.dll_1" Component_="fips.dll_1" FileName="fips.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.dll" SelfReg="false" DigSign="true"/>
     <ROW File="fips.lib_1" Component_="fips.lib_1" FileName="fips.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.lib" SelfReg="false"/>
     <ROW File="fips.pdb_1" Component_="fips.pdb" FileName="fips.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.pdb" SelfReg="false"/>
@@ -198,13 +198,13 @@
     <ROW File="libssl4x86.dll_1" Component_="libssl4x86.dll_1" FileName="LIBSSL~3.DLL|libssl-4.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4.dll" SelfReg="false" DigSign="true"/>
     <ROW File="libssl4x86.pdb" Component_="libssl4x86.dll_1" FileName="LIBSSL~3.PDB|libssl-4.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;libssl-4.pdb" SelfReg="false"/>
     <ROW File="openssl.exe_1" Component_="openssl.exe_1" FileName="openssl.exe" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;apps\openssl.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="FIPS_VALIDATED.dll" Component_="fips.dll_2" FileName="[|FIPS_VALIDATED].dll" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.dll" SelfReg="false" DigSign="true"/>
+    <ROW File="fips.dll_2" Component_="fips.dll_2" FileName="fips.dll" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.dll" SelfReg="false" DigSign="true"/>
     <ROW File="fips.dll_3" Component_="fips.dll_3" FileName="fips.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.dll" SelfReg="false" DigSign="true"/>
     <ROW File="legacy.dll_1" Component_="legacy.dll_1" FileName="legacy.dll" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.dll" SelfReg="false" DigSign="true"/>
     <ROW File="fips.lib_2" Component_="fips.lib_2" FileName="fips.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.lib" SelfReg="false"/>
     <ROW File="legacy.lib_1" Component_="legacy.lib_1" FileName="legacy.lib" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.lib" SelfReg="false"/>
-    <ROW File="FIPS_VALIDATED.lib" Component_="fips.lib_3" FileName="[|FIPS_VALIDATED].lib" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.lib" SelfReg="false"/>
-    <ROW File="FIPS_VALIDATED.pdb" Component_="fips.pdb_1" FileName="[|FIPS_VALIDATED].pdb" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.pdb" SelfReg="false"/>
+    <ROW File="fips.lib_3" Component_="fips.lib_3" FileName="fips.lib" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.lib" SelfReg="false"/>
+    <ROW File="fips.pdb_2" Component_="fips.pdb_1" FileName="fips.pdb" Attributes="0" SourcePath="&lt;OPENSSL_FIPS_SOURCE_DIR&gt;fips.pdb" SelfReg="false"/>
     <ROW File="fips.pdb_3" Component_="fips.pdb_2" FileName="fips.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\fips.pdb" SelfReg="false"/>
     <ROW File="legacy.pdb_1" Component_="legacy.pdb_1" FileName="legacy.pdb" Attributes="0" SourcePath="&lt;OPENSSL_SOURCE_DIR&gt;providers\legacy.pdb" SelfReg="false"/>
   </COMPONENT>
@@ -675,7 +675,7 @@
     <ROW Feature_="AlwaysInstalled_64bit" Component_="legacy.dll"/>
     <ROW Feature_="AlwaysInstalled_64bit" Component_="RegistryKeys"/>
     <ROW Feature_="DebugFiles_64bit" Component_="fips.pdb"/>
-    <ROW Feature_="DebugFiles_64bit" Component_="FIPS_VALIDATED.pdb"/>
+    <ROW Feature_="DebugFiles_64bit" Component_="fips.pdb_3"/>
     <ROW Feature_="DebugFiles_64bit" Component_="legacy.pdb"/>
     <ROW Feature_="MainFeature_x64" Component_="openssl.exe"/>
     <ROW Feature_="MainFeature_arm64" Component_="openssl.exe"/>

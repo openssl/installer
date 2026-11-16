@@ -1,0 +1,36 @@
+{
+  "fips": {
+    "include": [
+      { "arch": "x64", "runner": "windows-2025", "target": "VC-WIN64A", "vcvars": "vcvars64.bat" },
+      { "arch": "x86", "runner": "windows-2025", "target": "VC-WIN32", "vcvars": "vcvarsamd64_x86.bat vcvars32.bat" },
+      { "arch": "arm64", "runner": "windows-11-arm", "target": "VC-WIN64-ARM", "vcvars": "vcvarsarm64.bat vcvarsx86_arm64.bat" }
+    ]
+  },
+  "build": {
+    "openssl-ref": ["openssl-4.1"],
+    "crt": [
+      { "arch": "x64", "flavor": "vs", "runner": "windows-2025", "vcvars": "vcvars64.bat", "target": "VC-WIN64A", "exe_build": "ExeBuild", "msi_build": "MsiBuild", "package": "OpenSSL-x64-VS-*" },
+      { "arch": "x64", "flavor": "hybrid", "runner": "windows-2025", "vcvars": "vcvars64.bat", "target": "VC-WIN64A-HYBRIDCRT", "exe_build": "ExeBuild_hybrid", "msi_build": "MsiBuild_hybrid", "package": "OpenSSL-x64-hybridCRT-*" },
+      { "arch": "x86", "flavor": "vs", "runner": "windows-2025", "vcvars": "vcvarsamd64_x86.bat vcvars32.bat", "target": "VC-WIN32", "exe_build": "ExeBuild_x86", "msi_build": "MsiBuild_x86", "package": "OpenSSL-x86-VS-*" },
+      { "arch": "x86", "flavor": "hybrid", "runner": "windows-2025", "vcvars": "vcvarsamd64_x86.bat vcvars32.bat", "target": "VC-WIN32-HYBRIDCRT", "exe_build": "ExeBuild_x86_hybrid", "msi_build": "MsiBuild_x86_hybrid", "package": "OpenSSL-x86-hybridCRT-*" },
+      { "arch": "arm64", "flavor": "hybrid", "runner": "windows-11-arm", "vcvars": "vcvarsarm64.bat vcvarsx86_arm64.bat", "target": "VC-WIN64-ARM-HYBRIDCRT", "exe_build": "ExeBuild_arm64_hybrid", "msi_build": "MsiBuild_arm64_hybrid", "package": "OpenSSL-arm64-hybridCRT-*" }
+    ]
+  },
+  "test": {
+    "openssl-ref": ["openssl-4.1"],
+    "package": ["OpenSSL-x64-VS-*", "OpenSSL-x64-hybridCRT-*", "OpenSSL-x86-VS-*", "OpenSSL-x86-hybridCRT-*", "OpenSSL-arm64-hybridCRT-*"],
+    "format": ["exe", "msi"],
+    "os": ["windows-2022", "windows-2025", "windows-11-arm"],
+    "exclude": [
+      { "package": "OpenSSL-arm64-hybridCRT-*", "os": "windows-2022" },
+      { "package": "OpenSSL-arm64-hybridCRT-*", "os": "windows-2025" },
+      { "package": "OpenSSL-x64-VS-*", "os": "windows-11-arm" },
+      { "package": "OpenSSL-x64-hybridCRT-*", "os": "windows-11-arm" },
+      { "package": "OpenSSL-x86-VS-*", "os": "windows-11-arm" },
+      { "package": "OpenSSL-x86-hybridCRT-*", "os": "windows-11-arm" }
+    ]
+  },
+  "extra": {
+    "openssl-ref": ["openssl-3.5", "openssl-3.6", "openssl-4.0"]
+  }
+}

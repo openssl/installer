@@ -31,6 +31,6 @@
     ]
   },
   "extra": {
-    "openssl-ref": ["openssl-3.5", "openssl-3.6", "openssl-4.0"]
+    "openssl-ref": ["openssl-3.5", "openssl-4.0"]
   }
 }

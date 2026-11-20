@@ -7,6 +7,45 @@ on:
   schedule:
     - cron: '0 4 * * *'
   workflow_dispatch:
+    inputs:
+      pr:
+        description: 'Internal: openssl-ci-bot PR number. Leave empty for a normal manual run.'
+        required: false
+        type: string
+      head_sha:
+        description: 'Internal: openssl-ci-bot commit SHA. Leave empty for a normal manual run.'
+        required: false
+        type: string
+      check_run_id:
+        description: 'Internal: openssl-ci-bot check-run ID. Leave empty for a normal manual run.'
+        required: false
+        type: string
+      selection:
+        description: 'Internal: openssl-ci-bot normalised /ci selection.'
+        required: false
+        type: string
+      fips:
+        description: 'Internal: openssl-ci-bot FIPS module matrix (JSON strategy.matrix).'
+        required: false
+        type: string
+      build:
+        description: 'Internal: openssl-ci-bot installer build matrix (JSON strategy.matrix).'
+        required: false
+        type: string
+      test:
+        description: 'Internal: openssl-ci-bot install test matrix (JSON strategy.matrix).'
+        required: false
+        type: string
+
+run-name: >-
+  ${{ inputs.pr && format('ci-dispatch pr={0} head={1} check_run_id={2}', inputs.pr, inputs.head_sha, inputs.check_run_id) || github.workflow }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.pr && format('pr-{0}-{1}', inputs.pr, inputs.selection) || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 env:
   # The NIST-validated FIPS module is built once per architecture from this ref
@@ -22,25 +61,48 @@ env:
 # each job locates it with vswhere (the "Locate Visual Studio" steps) and picks
 # the vcvars script for its target architecture.
 jobs:
-  fips:
-    name: Build FIPS module (${{ matrix.arch }})
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { arch: x64, runner: windows-2025, target: VC-WIN64A, vcvars: vcvars64.bat }
-          # x64-hosted cross compiler first, x86-hosted toolset as fallback.
-          - { arch: x86, runner: windows-2025, target: VC-WIN32, vcvars: "vcvarsamd64_x86.bat vcvars32.bat" }
-          # Native arm64-hosted toolset first, x86-hosted cross compiler as fallback.
-          - { arch: arm64, runner: windows-11-arm, target: VC-WIN64-ARM, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat" }
+  plan:
+    name: Plan matrices
+    # A fork's pull request runs only through a writer's openssl-ci-bot `/ci`. A head branch
+    # in this repo took write access to push, so its pull request runs here; every other job
+    # needs this one, so skipping it skips the run.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      fips: ${{ steps.plan.outputs.fips }}
+      build: ${{ steps.plan.outputs.build }}
+      test: ${{ steps.plan.outputs.test }}
     steps:
       - name: Checkout installer
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          sparse-checkout: .github
+
+      - name: Read default matrices
+        id: plan
+        run: |
+          for kind in fips build test; do
+            echo "$kind=$(jq -c --arg kind "$kind" '.[$kind]' .github/ci-matrix.json)" >> "$GITHUB_OUTPUT"
+          done
+
+  fips:
+    name: "Build FIPS module (${{ matrix.arch }})"
+    needs: plan
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.pr && inputs.fips || needs.plan.outputs.fips) }}
+    steps:
+      - name: Checkout installer
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          ref: ${{ inputs.head_sha || github.sha }}
 
       - name: Restore FIPS build cache
         id: fips_cache
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
           path: openssl-fips
           key: openssl-fips-${{ runner.os }}-${{ matrix.arch }}-${{ env.FIPS_REF }}-v1
@@ -52,6 +114,7 @@ jobs:
           repository: openssl/openssl
           ref: ${{ env.FIPS_REF }}
           path: openssl-fips
+          persist-credentials: false
 
       - name: Apply Windows build patches to FIPS source
         if: steps.fips_cache.outputs.cache-hit != 'true' && env.FIPS_REF == 'openssl-3.1.2'
@@ -113,6 +176,13 @@ jobs:
           perl Configure ${{ matrix.target }} enable-fips no-makedepend
           jom /j4 /S
 
+      - name: Save FIPS build cache
+        if: steps.fips_cache.outputs.cache-hit != 'true' && inputs.pr == ''
+        uses: actions/cache/save@v5
+        with:
+          path: openssl-fips
+          key: ${{ steps.fips_cache.outputs.cache-primary-key }}
+
       - name: Upload FIPS providers
         uses: actions/upload-artifact@v4
         with:
@@ -124,23 +194,18 @@ jobs:
           if-no-files-found: error
 
   build:
-    name: Build ${{ matrix.crt.arch }} ${{ matrix.crt.flavor }} installers (${{ matrix.openssl-ref }})
-    needs: fips
+    name: "Build ${{ matrix.crt.arch }} ${{ matrix.crt.flavor }} installers (${{ matrix.openssl-ref }})"
+    needs: [plan, fips]
     runs-on: ${{ matrix.crt.runner }}
     strategy:
       fail-fast: false
-      matrix:
-        openssl-ref: [openssl-4.1]
-        crt:
-          - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, flavor: vs, target: VC-WIN64A, exe_build: ExeBuild, msi_build: MsiBuild, keep: OpenSSL-x64-VS-* }
-          - { arch: x64, runner: windows-2025, vcvars: vcvars64.bat, flavor: hybrid, target: VC-WIN64A-HYBRIDCRT, exe_build: ExeBuild_hybrid, msi_build: MsiBuild_hybrid, keep: OpenSSL-x64-hybridCRT-* }
-          - { arch: x86, runner: windows-2025, vcvars: "vcvarsamd64_x86.bat vcvars32.bat", flavor: vs, target: VC-WIN32, exe_build: ExeBuild_x86, msi_build: MsiBuild_x86, keep: OpenSSL-x86-VS-* }
-          - { arch: x86, runner: windows-2025, vcvars: "vcvarsamd64_x86.bat vcvars32.bat", flavor: hybrid, target: VC-WIN32-HYBRIDCRT, exe_build: ExeBuild_x86_hybrid, msi_build: MsiBuild_x86_hybrid, keep: OpenSSL-x86-hybridCRT-* }
-          # Hybrid flavor only: every arm64 Windows release ships the Universal CRT.
-          - { arch: arm64, runner: windows-11-arm, vcvars: "vcvarsarm64.bat vcvarsx86_arm64.bat", flavor: hybrid, target: VC-WIN64-ARM-HYBRIDCRT, exe_build: ExeBuild_arm64_hybrid, msi_build: MsiBuild_arm64_hybrid, keep: OpenSSL-arm64-hybridCRT-* }
+      matrix: ${{ fromJSON(inputs.pr && inputs.build || needs.plan.outputs.build) }}
     steps:
       - name: Checkout installer
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          ref: ${{ inputs.head_sha || github.sha }}
 
       - name: Checkout OpenSSL (${{ matrix.openssl-ref }})
         uses: actions/checkout@v7
@@ -149,6 +214,7 @@ jobs:
           ref: ${{ matrix.openssl-ref }}
           path: openssl
           fetch-tags: true
+          persist-credentials: false
 
       - name: Detect OpenSSL version from latest tag
         id: openssl_version
@@ -181,7 +247,7 @@ jobs:
 
       - name: Restore OpenSSL build cache
         id: openssl_cache
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
           path: openssl
           key: openssl-build-${{ runner.os }}-${{ matrix.crt.arch }}-${{ matrix.crt.flavor }}-${{ steps.openssl_version.outputs.tag }}-v1
@@ -235,6 +301,13 @@ jobs:
           jom /j4 /S
           jom build_docs
 
+      - name: Save OpenSSL build cache
+        if: steps.openssl_cache.outputs.cache-hit != 'true' && inputs.pr == ''
+        uses: actions/cache/save@v5
+        with:
+          path: openssl
+          key: ${{ steps.openssl_cache.outputs.cache-primary-key }}
+
       - name: Download FIPS providers
         uses: actions/download-artifact@v4
         with:
@@ -263,34 +336,23 @@ jobs:
         with:
           name: installers-${{ matrix.crt.arch }}-${{ matrix.crt.flavor }}-${{ matrix.openssl-ref }}
           path: |
-            build-target/Installer64/${{ matrix.crt.keep }}.exe
-            build-target/Installer64/${{ matrix.crt.keep }}.msi
+            build-target/Installer64/${{ matrix.crt.package }}.exe
+            build-target/Installer64/${{ matrix.crt.package }}.msi
           if-no-files-found: error
 
   test:
-    name: Test ${{ matrix.installer }} on ${{ matrix.os }}
-    needs: build
+    name: "Test ${{ matrix.package }}.${{ matrix.format }} on ${{ matrix.os }}${{ inputs.pr && format(' ({0})', matrix.openssl-ref) || '' }}"
+    needs: [plan, build]
+    if: inputs.pr == '' || inputs.test != ''
     strategy:
       fail-fast: false
-      matrix:
-        os: [windows-2022, windows-2025]
-        openssl-ref: [openssl-4.1]
-        installer:
-          - OpenSSL-x64-VS-*.exe
-          - OpenSSL-x64-VS-*.msi
-          - OpenSSL-x64-hybridCRT-*.exe
-          - OpenSSL-x64-hybridCRT-*.msi
-          - OpenSSL-x86-VS-*.exe
-          - OpenSSL-x86-VS-*.msi
-          - OpenSSL-x86-hybridCRT-*.exe
-          - OpenSSL-x86-hybridCRT-*.msi
-        include:
-          # ARM64 packages only install on ARM64 Windows.
-          - { os: windows-11-arm, openssl-ref: openssl-4.1, installer: OpenSSL-arm64-hybridCRT-*.exe }
-          - { os: windows-11-arm, openssl-ref: openssl-4.1, installer: OpenSSL-arm64-hybridCRT-*.msi }
+      matrix: ${{ fromJSON(inputs.pr && inputs.test || needs.plan.outputs.test) }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          ref: ${{ inputs.head_sha || github.sha }}
 
       - name: Download installers
         uses: actions/download-artifact@v4
@@ -302,7 +364,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39  # v3 (= release v3.2.4)
         with:
-          enable-cache: true
+          enable-cache: ${{ inputs.pr == '' }}
           cache-dependency-glob: "" # disables lockfile requirement
 
       # On the arm64 runner uv would otherwise pick an x86_64 CPython that runs
@@ -330,7 +392,7 @@ jobs:
         id: installer
         shell: pwsh
         run: |
-          $pattern = '${{ matrix.installer }}'
+          $pattern = '${{ matrix.package }}.${{ matrix.format }}'
           $file = Get-ChildItem build -Recurse -File |
               Where-Object { $_.Name -like $pattern } |
               Select-Object -First 1

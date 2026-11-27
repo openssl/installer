@@ -36,6 +36,10 @@ on:
         description: 'Internal: openssl-ci-bot install test matrix (JSON strategy.matrix).'
         required: false
         type: string
+      fork:
+        description: 'Internal: openssl-ci-bot fork head (owner:branch), empty for a branch in this repo.'
+        required: false
+        type: string
 
 run-name: >-
   ${{ inputs.pr && format('ci-dispatch pr={0} head={1} check_run_id={2}', inputs.pr, inputs.head_sha, inputs.check_run_id) || github.workflow }}
@@ -68,6 +72,7 @@ jobs:
     # needs this one, so skipping it skips the run.
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    environment: ${{ inputs.fork && 'fork-ci' || '' }}
     outputs:
       fips: ${{ steps.plan.outputs.fips }}
       build: ${{ steps.plan.outputs.build }}
